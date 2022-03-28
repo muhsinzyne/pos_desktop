@@ -1,0 +1,225 @@
+import 'package:bluetooth_print/bluetooth_print_model.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:posdelivery/app/modules/print-view/controllers/print_screen_controller.dart';
+import 'package:posdelivery/app/ui/theme/app_colors.dart';
+import 'package:posdelivery/app/ui/theme/styles.dart';
+import 'package:posdelivery/models/constants.dart';
+
+class PrintScreen extends GetView<PrintScreenController> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.bgLight,
+      appBar: AppBar(
+        title: Text('print_invoice'.tr),
+        centerTitle: true,
+      ),
+      body: Obx(
+        () => RefreshIndicator(
+          onRefresh: () => controller.refreshBluetoothScan(),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: Constants.pagePadding, vertical: Constants.pagePadding5),
+                          color: controller.printerConn ? Colors.green : Colors.red,
+                          child: Text(
+                            controller.conMsg.value,
+                            style: kBaseTextStyle.copyWith(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: Constants.pagePadding, vertical: Constants.pagePadding5),
+                          child: StreamBuilder<List<BluetoothDevice>>(
+                            initialData: [],
+                            stream: controller.bluetoothPrint.scanResults,
+                            builder: (c, snapshot) => Column(
+                              children: snapshot.data
+                                  .map(
+                                    (device) => ListTile(
+                                      leading: Icon(
+                                        Icons.bluetooth_connected_sharp,
+                                        color: Colors.blue,
+                                      ),
+                                      title: Text(device.name ?? ''),
+                                      subtitle: Text(device.address),
+                                      onTap: () async {
+                                        controller.setDevice(device);
+                                      },
+                                      trailing: controller.device != null && controller.device.address == device.address
+                                          ? Icon(
+                                              Icons.check,
+                                              color: Colors.green,
+                                            )
+                                          : null,
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(),
+                  Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.fromLTRB(20, 5, 20, 10),
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                OutlinedButton(
+                                    child: Text('print'),
+                                    onPressed: () {
+                                      controller.testPrintA();
+                                    }
+                                    // onPressed: _connected
+                                    //     ? null
+                                    //     : () async {
+                                    //   if (_device != null && _device.address != null) {
+                                    //     await bluetoothPrint.connect(_device);
+                                    //   } else {
+                                    //     setState(() {
+                                    //       tips = 'please select device';
+                                    //     });
+                                    //     print('please select device');
+                                    //   }
+                                    // },
+                                    ),
+                                SizedBox(width: 10.0),
+                                OutlinedButton(
+                                  child: Text('disconnect'),
+                                  // onPressed: _connected
+                                  //     ? () async {
+                                  //   await bluetoothPrint.disconnect();
+                                  // }
+                                  //     : null,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+// final RxBool connectionTry = RxBool(true);
+  // final RxString conMsg = RxString('no_connected_devise'.tr);
+  // BluetoothDevice device;
+  // BluetoothPrint bluetoothPrint = BluetoothPrint.instance;
+  // TestPrint testPrint;
+  //
+  // bool get printerConn => _printerConn.value;
+  //
+
+  //
+  // @override
+  // void onReady() {
+  //   _initBluetooth();
+  //   super.onReady();
+  // }
+  //
+  // Future refreshBluetoothScan() async {
+  //   await Future.delayed(Constants.fourSec);
+  // }
+  //
+  // Future<void> testPrintA() async {
+  //   Map<String, dynamic> config = Map();
+  //   List<LineText> list = [];
+  //
+  //   list.add(LineText(type: LineText.TYPE_TEXT, content: 'DEMO BILLER', weight: 2, align: LineText.ALIGN_CENTER, linefeed: 1, size: 26));
+  //   list.add(LineText(
+  //       type: LineText.TYPE_TEXT,
+  //       content: 'demo address demo city 001 demo state 01',
+  //       weight: 1,
+  //       align: LineText.ALIGN_CENTER,
+  //       linefeed: 1,
+  //       size: 18));
+  //   list.add(LineText(type: LineText.TYPE_TEXT, content: 'Tel: 00550055', weight: 1, align: LineText.ALIGN_CENTER, linefeed: 1, size: 18));
+  //   list.add(LineText(
+  //       type: LineText.TYPE_TEXT, content: 'VAT NO: 300926682900003', weight: 1, align: LineText.ALIGN_CENTER, linefeed: 1, size: 18));
+  //
+  //   //list.add(LineText(type: LineText.TYPE_TEXT, content: 'this is conent left', weight: 0, align: LineText.ALIGN_LEFT,linefeed: 1));
+  //   //list.add(LineText(type: LineText.TYPE_TEXT, content: 'this is conent right', align: LineText.ALIGN_RIGHT,linefeed: 1));
+  //   //list.add(LineText(linefeed: 1));
+  //
+  //   //ByteData data = await rootBundle.load("assets/images/bluetooth_print.png");
+  //   //List<int> imageBytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+  //   //String base64Image = base64Encode(imageBytes);
+  //   //list.add(LineText(type: LineText.TYPE_IMAGE, content: base64Image, align: LineText.ALIGN_CENTER, linefeed: 1));
+  //
+  //   await bluetoothPrint.printReceipt(config, list);
+  // }
+  //
+  // void setDevice(BluetoothDevice reqDevice) async {
+  //   device = reqDevice;
+  //   if (device != null && device.address != null) {
+  //     try {
+  //       bluetoothPrint.connect(device);
+  //     } on Exception catch (e) {
+  //       print("exception on connecting");
+  //     }
+  //     await Future.delayed(Constants.oneSecDuration);
+  //   } else {
+  //     conMsg.value = 'please_select_a_device_that_support_printing'.tr;
+  //   }
+  // }
+  //
+  // String currentConnectedDevice() {
+  //   if (printerConn) {
+  //     return 'connected to printer';
+  //   } else {
+  //     return 'not connected';
+  //   }
+  // }
+  //
+  // void _initBluetooth() async {
+  //   bluetoothPrint.startScan(timeout: Constants.fourSec);
+  //   printerConn = await bluetoothPrint.isConnected;
+  //   bluetoothPrint.state.listen((state) {
+  //     switch (state) {
+  //       case BluetoothPrint.CONNECTED:
+  //         printerConn = true;
+  //         conMsg.value = 'connection_success'.tr;
+  //         break;
+  //       case BluetoothPrint.DISCONNECTED:
+  //         printerConn = false;
+  //         conMsg.value = 'disconnected_from_printer'.tr;
+  //         break;
+  //       default:
+  //         printerConn = false;
+  //         conMsg.value = 'not_a_valid_connection'.tr;
+  //         break;
+  //     }
+  //   });
+  // }
+}
