@@ -101,7 +101,7 @@ class PrintProvider extends BasePrintProvider {
   }
 
   Future<void> initPlatformState() async {
-    bool? isConnected = await bluetooth.isConnected;
+    // bool? isConnected = await bluetooth.isConnected;
     List<BluetoothDevice> tempList = [];
     try {
       devices = await bluetooth.getBondedDevices();
@@ -125,9 +125,9 @@ class PrintProvider extends BasePrintProvider {
           break;
       }
     });
-    if (isConnected!) {
-      connected.value = true;
-    }
+    // if (isConnected!) {
+    //   connected.value = true;
+    // }
   }
 
   Future<dynamic> downloadImage(filename, url) async {

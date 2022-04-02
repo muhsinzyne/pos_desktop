@@ -1,14 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:posdelivery/app/helpers/string.dart';
+import 'package:posdelivery/app/modules/sales_point/contracts.dart';
+import 'package:posdelivery/app/ui/components/ui_notification.dart';
+import 'package:posdelivery/controllers/base_controller.dart';
+import 'package:posdelivery/models/response/desktop/customer_group.dart';
+import 'package:posdelivery/models/response/desktop/customer_list.dart';
+import 'package:posdelivery/models/response/desktop/warehouse_products.dart';
+import 'package:posdelivery/models/response/desktop/warehouse_list.dart';
+import 'package:posdelivery/models/response/error_message.dart';
+import 'package:posdelivery/providers/data/desktop_data_provider.dart';
+import 'package:posdelivery/providers/data/pos_data_provider.dart';
 import 'package:posdelivery/services/app_service.dart';
 
-import '../../../../models/response/pos/customer.dart';
-
-class SalesPointController extends GetxController {
-  //TODO: Implement SalesPointController
-
-  final count = 0.obs;
+class SalesPointController extends BaseGetXController
+    implements ISalesPointController {
+  PosDataProvider posDataProvider = Get.find<PosDataProvider>();
+  DesktopDataProvider desktopDataProvider = Get.find<DesktopDataProvider>();
   final TextEditingController company = TextEditingController();
   final TextEditingController pCode = TextEditingController();
   final TextEditingController cName = TextEditingController();
@@ -29,24 +37,29 @@ class SalesPointController extends GetxController {
   final RxString cCustomer = RxString('');
   final RxString selectedCustomerName = RxString('');
   final RxBool scanner = RxBool(false);
-  RxList<CustomerInfo> customerList = RxList([]);
+
+  String get cWareHouseName => _cWareHouseName.value;
+
+  RxList<CustomerGroupResponse> custGrps = RxList([]);
+  RxList<CustomerListOffResponse> cusList = RxList([]);
   List<String> get customerListString {
     List<String> dummyList = [];
-    for (var element in customerList) {
-      dummyList.add("[${element.id.toString()}]  ${element.value.toString()}");
+    for (var element in cusList) {
+      // dummyList.add("[${element.id.toString()}]  ${element.name.toString()}");
+      dummyList.add(element.name.toString());
     }
     return dummyList;
   }
 
-  final List<String> custGrps = [
-    "A",
-    "b",
-    "c",
-    "d",
-    "e",
-    "f",
-    "g",
-  ];
+  RxList<WarehouseListResponse> wLsit = RxList([]);
+  List<String> get warehouses {
+    List<String> wh = [];
+    for (var x in wLsit) {
+      wh.add(x.name.toString());
+    }
+    return wh;
+  }
+
   final List<String> pGrps = [
     "A",
     "b",
@@ -62,17 +75,94 @@ class SalesPointController extends GetxController {
     appService.cCustomer = cCustomer.value;
   }
 
+  void changeWarehouse(String value) {
+    _cWareHouseName.value = value;
+  }
+
+  void changeCustGroup(String value) {
+    custGrp.value = value;
+  }
+
   @override
   void onInit() {
+    // posDataProvider.salePointCallBack = this;
+    desktopDataProvider.salePointCallBack = this;
+    _cWareHouseName.value = appService.myInfoResponse.cWareHouse.name ?? '';
+    _cBillerName.value = appService.myInfoResponse.cBiller.name ?? '';
+    appService.cWareHouse = appService.myInfoResponse.cWareHouse.id!;
+    appService.cBiller = appService.myInfoResponse.cBiller.id!;
     super.onInit();
   }
 
   @override
   void onReady() {
+    // _fetchCustomerList();
+    _fetchCustomerListOff();
     super.onReady();
+  }
+
+  _fetchCustomerListOff() {
+    UINotification.showLoading();
+    desktopDataProvider.getCusListOff();
+    desktopDataProvider.getWarehouse();
+    desktopDataProvider.getCusGrpOff();
+    desktopDataProvider.getWarehouseProducts();
+  }
+
+  onSubmitButton() {
+    CustomerListOffResponse(
+        name: cName.text,
+        company: company.text,
+        vatNo: vatNo.text,
+        email: email.text,
+        phone: phone.text);
   }
 
   @override
   void onClose() {}
-  void increment() => count.value++;
+
+  @override
+  onCustomerOffListDone(List<CustomerListOffResponse> cListRes) {
+    cusList.value = cListRes;
+    selectedCustomerName.value = cListRes.first.name.toString();
+    UINotification.hideLoading();
+  }
+
+  @override
+  onCustomerOffListError(ErrorMessage err) {
+    UINotification.hideLoading();
+  }
+
+  @override
+  onCustomerGrpOffListDone(List<CustomerGroupResponse> cGrpRes) {
+    custGrps.value = cGrpRes;
+    custGrp.value = cGrpRes.first.name.toString();
+    UINotification.hideLoading();
+  }
+
+  @override
+  onCustomerGrpOffListError(ErrorMessage err) {
+    UINotification.hideLoading();
+  }
+
+  @override
+  onWProductOffListDone(List<WarehouseProductsResponse> wPListRes) {
+    UINotification.hideLoading();
+  }
+
+  @override
+  onWProductOffListError(ErrorMessage err) {
+    UINotification.hideLoading();
+  }
+
+  @override
+  onWarehouseOffListDone(List<WarehouseListResponse> wListRes) {
+    wLsit.value = wListRes;
+    UINotification.hideLoading();
+  }
+
+  @override
+  onWarehouseOffListError(ErrorMessage err) {
+    UINotification.hideLoading();
+  }
 }

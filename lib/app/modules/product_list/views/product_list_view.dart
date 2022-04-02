@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import '../controllers/product_list_controller.dart';
 
 class ProductListView extends GetView<ProductListController> {
+  const ProductListView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -21,32 +23,45 @@ class ProductListView extends GetView<ProductListController> {
                 children: [
                   Container(
                     color: Colors.amber,
-                    child: const TabBar(
-                      indicator: BoxDecoration(
+                    child: TabBar(
+                      labelPadding: EdgeInsets.zero,
+                      indicator: const BoxDecoration(
                         color: Colors.green,
                       ),
                       labelColor: Colors.white,
                       unselectedLabelColor: Colors.black,
                       tabs: [
                         Tab(
-                          child: Text(
-                            "Top Sellers",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
+                          child: Container(
+                            decoration: const BoxDecoration(
+                                border: Border(
+                                    right: BorderSide(color: Colors.white))),
+                            alignment: Alignment.center,
+                            child: const Text(
+                              "Top Sellers",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
                         Tab(
-                          child: Text(
-                            "Category",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: const BoxDecoration(
+                                border: Border(
+                                    right: BorderSide(color: Colors.white))),
+                            child: const Text(
+                              "Category",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
-                        Tab(
+                        const Tab(
                           child: Text(
                             "Brands",
                             textAlign: TextAlign.center,
@@ -58,11 +73,50 @@ class ProductListView extends GetView<ProductListController> {
                       ],
                     ),
                   ),
-                  const Expanded(
+                  Expanded(
                     flex: 20,
                     child: TabBarView(
                       children: [
-                        GridTest(),
+                        Container(
+                          padding: const EdgeInsets.all(8.0),
+                          color: Colors.white,
+                          child: Obx(() => GridView.builder(
+                                shrinkWrap: true,
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 5,
+                                        mainAxisSpacing: 5,
+                                        crossAxisSpacing: 5),
+                                itemCount: controller.products.length,
+                                itemBuilder: (context, index) => InkWell(
+                                  onTap: () {},
+                                  child: Container(
+                                    padding: EdgeInsets.all(5),
+                                    decoration:
+                                        BoxDecoration(border: Border.all()),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 25,
+                                          backgroundColor: Colors.red,
+                                          child: Text(index.toString()),
+                                        ),
+                                        Text(
+                                          controller.products[index].productId
+                                              .toString(),
+                                          textAlign: TextAlign.center,
+                                          maxLines: 2,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )),
+                        ),
                         SizedBox(),
                         GridTest(),
                       ],

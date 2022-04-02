@@ -11,7 +11,8 @@ class NetworkURL {
   static var productSuj = base + 'pos/product_sujession';
   static var addSale = base + 'pos/add_sale';
   static var saleView = base + 'pos/sales_view';
-  static var customerAndPriceGroup = base + 'customers/customer_and_price_group';
+  static var customerAndPriceGroup =
+      base + 'customers/customer_and_price_group';
   static var customerAdd = base + 'customers/add';
   static var customerList = base + 'customers/customer_list';
   static var addSalePayment = base + 'pos/add_sale_payment';
@@ -19,4 +20,8 @@ class NetworkURL {
   static var openRegister = base + 'pos/open_register';
   static var registerCloseSummary = base + 'pos/register_close_summary';
   static var customerSearch = base + 'customers/customer_sujession';
+  static var warehouseListOffline = base + 'offline/warehouse_list';
+  static var customerListOffline = base + 'offline/customer_list';
+  static var customerGroupOffline = base + 'offline/customer_groups';
+  static var warehouseProductOffline = base + 'offline/warehouse_products';
 }

@@ -2,11 +2,11 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:posdelivery/app/modules/payment/sale-payment/controllers/sale_payment_controller.dart';
-
 import '../controllers/sales_point_controller.dart';
 
 class SalesPointView extends GetView<SalesPointController> {
+  const SalesPointView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -27,19 +27,15 @@ class SalesPointView extends GetView<SalesPointController> {
                     color: Colors.white,
                     child: Obx(
                       () {
-                        return Container(
-                          child: DropdownSearch<String>(
-                            mode: Mode.DIALOG,
-                            showSelectedItems: false,
-                            items: controller.customerListString,
-                            label: "select_customer".tr,
-                            hint: "select_customer".tr,
-                            onChanged: (value) {
-                              controller.changeCustomer(value!);
-                            },
-                            selectedItem: controller.selectedCustomerName.value,
-                            showSearchBox: true,
-                          ),
+                        return DropdownSearch<String>(
+                          mode: Mode.MENU,
+                          showSelectedItems: false,
+                          items: controller.customerListString,
+                          onChanged: (value) {
+                            controller.changeCustomer(value!);
+                          },
+                          selectedItem: controller.selectedCustomerName.value,
+                          showSearchBox: true,
                         );
                       },
                     ),
@@ -100,10 +96,21 @@ class SalesPointView extends GetView<SalesPointController> {
                 Expanded(
                   child: Container(
                     color: Colors.white,
-                    child: const TextField(
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.zero))),
+                    child: Obx(
+                      () {
+                        return Container(
+                          child: DropdownSearch<String>(
+                            mode: Mode.MENU,
+                            showSelectedItems: false,
+                            items: controller.warehouses,
+                            onChanged: (value) {
+                              controller.changeWarehouse(value!);
+                            },
+                            selectedItem: controller.cWareHouseName,
+                            showSearchBox: false,
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -125,12 +132,17 @@ class SalesPointView extends GetView<SalesPointController> {
                     color: Colors.white,
                     child: const TextField(
                       decoration: InputDecoration(
+                          hintText: "Scan/Search product by name/code",
+                          hintStyle: TextStyle(fontSize: 14),
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.zero))),
+                            borderRadius: BorderRadius.all(Radius.zero),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 5.0)),
                     ),
                   ),
                 ),
-                Expanded(
+                const Expanded(
                   flex: 8,
                   child: AddProductButton(),
                 ),
@@ -367,259 +379,380 @@ class PaymentPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      content: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.6,
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                "FINALIZE SALE",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.close,
-                    size: 30,
-                  ))
-            ],
-          ),
-          const Divider(),
-          const SizedBox(
-            height: 5,
-          ),
-          Row(
-            children: [
-              Expanded(
-                  flex: 5,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Biller",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const TextField(
-                          decoration: InputDecoration(
-                              hintText: "DEMO BILLER",
-                              border: OutlineInputBorder()),
-                        ),
-                        Row(
-                          children: const [
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 8.0),
-                                child: TextField(
-                                  minLines: 5,
-                                  maxLines: 10,
-                                  decoration: InputDecoration(
-                                      hintText: "Sale Note",
-                                      border: OutlineInputBorder()),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 30,
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 8.0),
-                                child: TextField(
-                                  minLines: 5,
-                                  maxLines: 10,
-                                  decoration: InputDecoration(
-                                      hintText: "Staff Note",
-                                      border: OutlineInputBorder()),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(), color: Color(0xFFDADADA)),
-                          child: Column(children: [
-                            Row(
-                              children: const [
-                                Expanded(
-                                  child: ListTile(
-                                    title: Text("Amount",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        )),
-                                    subtitle: TextField(
-                                        decoration: InputDecoration(
-                                            border: OutlineInputBorder())),
+      content: SingleChildScrollView(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.6,
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "FINALIZE SALE",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.close,
+                      size: 30,
+                    ))
+              ],
+            ),
+            const Divider(),
+            const SizedBox(
+              height: 5,
+            ),
+            Row(
+              children: [
+                Expanded(
+                    flex: 5,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Biller",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          const TextField(
+                            decoration: InputDecoration(
+                                hintText: "DEMO BILLER",
+                                border: OutlineInputBorder()),
+                          ),
+                          Row(
+                            children: const [
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 8.0),
+                                  child: TextField(
+                                    minLines: 5,
+                                    maxLines: 10,
+                                    decoration: InputDecoration(
+                                        hintText: "Sale Note",
+                                        border: OutlineInputBorder()),
                                   ),
                                 ),
-                                Expanded(
-                                  child: ListTile(
-                                    title: Text("Paying By",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        )),
-                                    subtitle: TextField(
-                                        decoration: InputDecoration(
-                                            border: OutlineInputBorder())),
+                              ),
+                              SizedBox(
+                                width: 30,
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 8.0),
+                                  child: TextField(
+                                    minLines: 5,
+                                    maxLines: 10,
+                                    decoration: InputDecoration(
+                                        hintText: "Staff Note",
+                                        border: OutlineInputBorder()),
                                   ),
                                 ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ListTile(
-                                title: const Text("Payment Note",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    )),
-                                subtitle: TextField(
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(0))),
-                                ),
                               ),
-                            )
-                          ]),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        ElevatedButton(
-                            onPressed: () {},
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.max,
-                              children: const [
-                                Icon(
-                                  Icons.add,
+                            ],
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Color(0xFFB4B4B4), width: 0.5),
+                                color: Color.fromARGB(255, 231, 231, 231)),
+                            child: Column(children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: ListTile(
+                                      title: const Text("Amount",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                      subtitle: Container(
+                                        height: 40,
+                                        decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10))),
+                                        child: const TextField(
+                                            decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 3),
+                                          border: OutlineInputBorder(),
+                                        )),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: ListTile(
+                                      title: const Text("Paying By",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                      subtitle: Container(
+                                        height: 40,
+                                        decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10))),
+                                        child: const TextField(
+                                            decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 3),
+                                          border: OutlineInputBorder(),
+                                        )),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ListTile(
+                                  title: const Text("Payment Note",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                  subtitle: Container(
+                                    color: Colors.white,
+                                    child: TextField(
+                                      minLines: 2,
+                                      maxLines: null,
+                                      decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(0))),
+                                    ),
+                                  ),
                                 ),
-                                Text("Add More Payments")
-                              ],
-                            )),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                                child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
-                                Text(
-                                  "Total Items",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  "2",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                )
-                              ],
-                            )),
-                            const VerticalDivider(),
-                            Expanded(
-                                child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
-                                Text(
-                                  "Total Payable",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  "100.00",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                )
-                              ],
-                            )),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                                child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
-                                Text(
-                                  "Total Paying",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  "100.00",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                )
-                              ],
-                            )),
-                            const VerticalDivider(),
-                            Expanded(
-                                child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
-                                Text(
-                                  "Balance",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  "0.00",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                )
-                              ],
-                            )),
-                          ],
-                        )
-                      ],
-                    ),
-                  )),
-              Expanded(
-                  child: Column(
-                children: [
-                  const Text(
-                    "Quick Cash",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  InkWell(
-                    onTap: () {},
+                              )
+                            ]),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          ElevatedButton(
+                              onPressed: () {},
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.max,
+                                children: const [
+                                  Icon(
+                                    Icons.add,
+                                  ),
+                                  Text("Add More Payments")
+                                ],
+                              )),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                  child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: const [
+                                  Text(
+                                    "Total Items",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    "2",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              )),
+                              const VerticalDivider(),
+                              Expanded(
+                                  child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: const [
+                                  Text(
+                                    "Total Payable",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    "100.00",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              )),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                  child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: const [
+                                  Text(
+                                    "Total Paying",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    "100.00",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              )),
+                              const VerticalDivider(),
+                              Expanded(
+                                  child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: const [
+                                  Text(
+                                    "Balance",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    "0.00",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              )),
+                            ],
+                          )
+                        ],
+                      ),
+                    )),
+                Expanded(
                     child: Container(
-                      color: Colors.blue,
-                    ),
-                  )
-                ],
-              ))
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Container(
-            color: Colors.grey,
-            height: 1,
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              vertical: 10,
+                  padding: const EdgeInsets.all(20),
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      const Text(
+                        "Quick Cash",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      ListTile(
+                        onTap: (() {}),
+                        tileColor: Colors.blue,
+                        title: const Text(
+                          "199",
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      ListTile(
+                        onTap: (() {}),
+                        tileColor: Colors.amber,
+                        title: const Text(
+                          "10",
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      ListTile(
+                        onTap: (() {}),
+                        tileColor: Colors.amber,
+                        title: const Text(
+                          "20",
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      ListTile(
+                        onTap: (() {}),
+                        tileColor: Colors.amber,
+                        title: const Text(
+                          "50",
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      ListTile(
+                        onTap: (() {}),
+                        tileColor: Colors.amber,
+                        title: const Text(
+                          "100",
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      ListTile(
+                        onTap: (() {}),
+                        tileColor: Colors.amber,
+                        title: const Text(
+                          "500",
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      ListTile(
+                        onTap: (() {}),
+                        tileColor: Colors.amber,
+                        title: const Text(
+                          "1000",
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      ListTile(
+                        onTap: (() {}),
+                        tileColor: Colors.amber,
+                        title: const Text(
+                          "5000",
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      ListTile(
+                        onTap: (() {}),
+                        tileColor: Colors.red,
+                        title: const Text(
+                          "Clear",
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  ),
+                ))
+              ],
             ),
-            child: ElevatedButton(
-              onPressed: () {},
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "SUBMIT",
-                      style: TextStyle(fontSize: 20, color: Colors.white),
-                    ),
-                  )
-                ],
+            const SizedBox(
+              height: 10,
+            ),
+            Container(
+              color: Colors.grey,
+              height: 1,
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 10,
               ),
-            ),
-          )
-        ]),
+              child: ElevatedButton(
+                onPressed: () {},
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        "SUBMIT",
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            )
+          ]),
+        ),
       ),
     );
   }
@@ -667,27 +800,32 @@ class AddCustomerButton extends GetView<SalesPointController> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    subtitle: DropdownButtonFormField(
-                                      onChanged: (value) {
-                                        print(value);
-                                        // controller.category = value;
-                                      },
-                                      items: controller.custGrps
-                                          .map((selectedType) {
-                                        return DropdownMenuItem(
-                                          child: Text(
-                                            selectedType,
-                                          ),
-                                          value: selectedType,
-                                        );
-                                      }).toList(),
-                                      decoration: const InputDecoration(
-                                          contentPadding: EdgeInsets.symmetric(
-                                              horizontal: 10, vertical: 2),
-                                          border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.zero))),
-                                    ),
+                                    subtitle: Obx(() =>
+                                        DropdownButtonFormField<String>(
+                                          value: controller.custGrp.value,
+                                          onChanged: (value) {
+                                            controller.changeCustGroup(value!);
+                                          },
+                                          items: controller.custGrps
+                                              .map((selectedType) {
+                                            return DropdownMenuItem(
+                                              child: Text(
+                                                selectedType.name.toString(),
+                                              ),
+                                              value:
+                                                  selectedType.name.toString(),
+                                            );
+                                          }).toList(),
+                                          decoration: const InputDecoration(
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 2),
+                                              border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.zero))),
+                                        )),
                                   ),
                                 ),
                                 Expanded(

@@ -9,6 +9,7 @@ import 'package:posdelivery/app/modules/dashboard/contracts.dart';
 import 'package:posdelivery/app/modules/payment/contracts.dart';
 import 'package:posdelivery/app/modules/pos/contract.dart';
 import 'package:posdelivery/app/modules/pos/print-view/contracts.dart';
+import 'package:posdelivery/app/modules/sales_point/contracts.dart';
 import 'package:posdelivery/models/requests/auth/open_register_request.dart';
 import 'package:posdelivery/models/requests/auth/register_close_summary_request.dart';
 import 'package:posdelivery/models/requests/customer/customer_add_request.dart';
@@ -139,9 +140,9 @@ class PosDataProvider extends BaseDataProvider {
     }, onError: (err) {
       final ErrorMessage errMsg =
           ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
-      if (err.response?.statusCode == StatusCodes.status404NotFound) {
+      if (err.response.statusCode == StatusCodes.status404NotFound) {
         dashboardCtrl.onCurrentRegisterNotOpen(errMsg);
-      } else if (err.response?.statusCode == StatusCodes.status400BadRequest) {
+      } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
         //saleListCtrl.onSalesListResponseBadRequest(errMsg);
       }
     });
@@ -356,10 +357,12 @@ class PosDataProvider extends BaseDataProvider {
       try {
         CustomerListResponse cListResponse =
             CustomerListResponse.fromJSON(data.data);
+
         iFindCCtrl.onCustomerListDone(cListResponse);
       } on Exception {
         final ErrorMessage errMsg = ErrorMessage();
         errMsg.message = 'invalid_response'.tr;
+
         iFindCCtrl.onCustomerListError(errMsg);
       }
     }, onError: (err) {
