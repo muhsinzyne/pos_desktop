@@ -146,7 +146,42 @@ class DashboardScreen extends GetView<DashboardScreenController> {
                                       color: AppColors.greenIconColor,
                                       textColor: Colors.white,
                                       onPress: () {
-                                        controller.actionPOSSalesWindow();
+                                        showDialog(
+                                            context: context,
+                                            builder: (_) {
+                                              return AlertDialog(
+                                                title: const Center(
+                                                  child:
+                                                      Text("Sync Data Now ?"),
+                                                ),
+                                                content: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      CTextButton(
+                                                        text: 'Yes'.tr,
+                                                        textColor: Colors.white,
+                                                        onPress: () {
+                                                          controller
+                                                              .actionPOSSalesWindow();
+                                                        },
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      CTextButton(
+                                                        color: Colors.red,
+                                                        text: 'No'.tr,
+                                                        textColor: Colors.white,
+                                                        onPress: () {
+                                                          controller
+                                                              .actionPOSSalesWindowWithoutSync();
+                                                        },
+                                                      ),
+                                                    ]),
+                                              );
+                                            });
                                       },
                                       width: Get.size.width / 2.5,
                                       borderRadius: BorderRadius.circular(10),

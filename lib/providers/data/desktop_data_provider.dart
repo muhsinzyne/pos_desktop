@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:posdelivery/app/modules/dashboard/contracts.dart';
 import 'package:posdelivery/app/modules/product_list/contracts.dart';
 import 'package:posdelivery/app/modules/sales_point/contracts.dart';
 import 'package:posdelivery/models/response/desktop/warehouse_list.dart';
@@ -16,6 +17,7 @@ import '../../models/response/desktop/customer_list.dart';
 class DesktopDataProvider extends BaseDataProvider {
   late ISalesPointController sPCtrl;
   late IProductListController pLCtrl;
+  late IDashboardScreenController dashboardCtrl;
 
   set salePointCallBack(ISalesPointController controller) {
     sPCtrl = controller;
@@ -25,6 +27,10 @@ class DesktopDataProvider extends BaseDataProvider {
     pLCtrl = controller;
   }
 
+  set dashboardCallBack(IDashboardScreenController controller) {
+    dashboardCtrl = controller;
+  }
+
   getWarehouse() {
     final obs = network.get(NetworkURL.warehouseListOffline).asStream();
     obs.listen((data) {
@@ -32,7 +38,7 @@ class DesktopDataProvider extends BaseDataProvider {
         List<WarehouseListResponse> wRes =
             warehouseListResponseFromJson(jsonEncode(data.data));
 
-        sPCtrl.onWarehouseOffListDone(wRes);
+        dashboardCtrl.onWarehouseOffListDone(wRes);
       } on Exception {
         final ErrorMessage errMsg = ErrorMessage();
         errMsg.message = 'warehouse_not_loaded'.tr;
@@ -41,9 +47,9 @@ class DesktopDataProvider extends BaseDataProvider {
       final ErrorMessage errMsg =
           ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
       if (err.response.statusCode == StatusCodes.status404NotFound) {
-        sPCtrl.onWarehouseOffListError(errMsg);
+        dashboardCtrl.onWarehouseOffListError(errMsg);
       } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
-        sPCtrl.onWarehouseOffListError(errMsg);
+        dashboardCtrl.onWarehouseOffListError(errMsg);
       }
     });
   }
@@ -54,8 +60,8 @@ class DesktopDataProvider extends BaseDataProvider {
       try {
         List<WarehouseProductsResponse> wPRes =
             warehouseProductsResponseFromJson(jsonEncode(data.data));
-        sPCtrl.onWProductOffListDone(wPRes);
-        pLCtrl.onWProductOffListDone(wPRes);
+        dashboardCtrl.onWProductOffListDone(wPRes);
+        // pLCtrl.onWProductOffListDone(wPRes);
       } on Exception {
         final ErrorMessage errMsg = ErrorMessage();
         errMsg.message = 'warehouse_not_loaded'.tr;
@@ -64,11 +70,11 @@ class DesktopDataProvider extends BaseDataProvider {
       final ErrorMessage errMsg =
           ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
       if (err.response.statusCode == StatusCodes.status404NotFound) {
-        sPCtrl.onWProductOffListError(errMsg);
-        pLCtrl.onWProductOffListError(errMsg);
+        dashboardCtrl.onWProductOffListError(errMsg);
+        // pLCtrl.onWProductOffListError(errMsg);
       } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
-        sPCtrl.onWProductOffListError(errMsg);
-        pLCtrl.onWProductOffListError(errMsg);
+        dashboardCtrl.onWProductOffListError(errMsg);
+        // pLCtrl.onWProductOffListError(errMsg);
       }
     });
   }
@@ -79,7 +85,7 @@ class DesktopDataProvider extends BaseDataProvider {
       try {
         List<CustomerListOffResponse> cListRes =
             customerListOffResponseFromJson(jsonEncode(data.data));
-        sPCtrl.onCustomerOffListDone(cListRes);
+        dashboardCtrl.onCustomerOffListDone(cListRes);
       } on Exception {
         final ErrorMessage errMsg = ErrorMessage();
         errMsg.message = 'warehouse_not_loaded'.tr;
@@ -88,10 +94,10 @@ class DesktopDataProvider extends BaseDataProvider {
       final ErrorMessage errMsg =
           ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
       if (err.response.statusCode == StatusCodes.status404NotFound) {
-        sPCtrl.onCustomerOffListError(errMsg);
+        dashboardCtrl.onCustomerOffListError(errMsg);
         // print("404");
       } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
-        sPCtrl.onCustomerOffListError(errMsg);
+        dashboardCtrl.onCustomerOffListError(errMsg);
         // print("400");
       }
     });
@@ -103,7 +109,7 @@ class DesktopDataProvider extends BaseDataProvider {
       try {
         List<CustomerGroupResponse> cGrpRes =
             customerGroupResponseFromJson(jsonEncode(data.data));
-        sPCtrl.onCustomerGrpOffListDone(cGrpRes);
+        dashboardCtrl.onCustomerGrpOffListDone(cGrpRes);
       } on Exception {
         final ErrorMessage errMsg = ErrorMessage();
         errMsg.message = 'warehouse_not_loaded'.tr;
@@ -112,9 +118,9 @@ class DesktopDataProvider extends BaseDataProvider {
       final ErrorMessage errMsg =
           ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
       if (err.response.statusCode == StatusCodes.status404NotFound) {
-        sPCtrl.onCustomerGrpOffListError(errMsg);
+        dashboardCtrl.onCustomerGrpOffListError(errMsg);
       } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
-        sPCtrl.onCustomerGrpOffListError(errMsg);
+        dashboardCtrl.onCustomerGrpOffListError(errMsg);
       }
     });
   }

@@ -84,7 +84,7 @@ class ProductListView extends GetView<ProductListController> {
                                 shrinkWrap: true,
                                 gridDelegate:
                                     const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 5,
+                                        crossAxisCount: 7,
                                         mainAxisSpacing: 5,
                                         crossAxisSpacing: 5),
                                 itemCount: controller.products.length,
