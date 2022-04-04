@@ -1,6 +1,7 @@
 import 'package:posdelivery/models/response/auth/current_register_response.dart';
 import 'package:posdelivery/models/response/auth/employee_info.dart';
 import 'package:posdelivery/models/response/auth/register_close_summary.dart';
+import 'package:posdelivery/models/response/customer/customer_price_group_response.dart';
 import 'package:posdelivery/models/response/desktop/customer_group.dart';
 import 'package:posdelivery/models/response/desktop/customer_list.dart';
 import 'package:posdelivery/models/response/desktop/warehouse_list.dart';
@@ -26,4 +27,8 @@ abstract class IDashboardScreenController {
   onWProductOffListError(ErrorMessage err);
   onCustomerGrpOffListDone(List<CustomerGroupResponse> cGrpRes);
   onCustomerGrpOffListError(ErrorMessage err);
+
+  customerGroupFetchDone(
+      CustomerPriceGroupsResponse customerPriceGroupsResponse);
+  onCustomerGroupFetchError(ErrorMessage err);
 }

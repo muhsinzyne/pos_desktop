@@ -1,3 +1,4 @@
+import 'package:posdelivery/models/response/customer/customer_add_response.dart';
 import 'package:posdelivery/models/response/desktop/customer_group.dart';
 import 'package:posdelivery/models/response/desktop/customer_list.dart';
 import 'package:posdelivery/models/response/desktop/warehouse_products.dart';
@@ -14,4 +15,7 @@ abstract class ISalesPointController {
   onWProductOffListError(ErrorMessage err);
   onCustomerGrpOffListDone(List<CustomerGroupResponse> cGrpRes);
   onCustomerGrpOffListError(ErrorMessage err);
+  actionOnSaveRequest();
+  onCustomerAddDone(CustomerAddResponse customerAddResponse);
+  onCustomerAddError(ErrorMessage err);
 }

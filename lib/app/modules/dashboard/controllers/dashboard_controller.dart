@@ -11,6 +11,7 @@ import 'package:posdelivery/models/cache_db_path.dart';
 import 'package:posdelivery/models/requests/auth/register_close_summary_request.dart';
 import 'package:posdelivery/models/response/auth/current_register_response.dart';
 import 'package:posdelivery/models/response/auth/register_close_summary.dart';
+import 'package:posdelivery/models/response/customer/customer_price_group_response.dart';
 import 'package:posdelivery/models/response/desktop/customer_group.dart';
 import 'package:posdelivery/models/response/desktop/customer_list.dart';
 import 'package:posdelivery/models/response/desktop/warehouse_list.dart';
@@ -27,6 +28,7 @@ class DashboardScreenController extends BaseGetXController
   DesktopDataProvider desktopDataProvider = Get.find<DesktopDataProvider>();
   var cRegister = CurrentRegisterResponse().obs;
   var registerCloseSummary = RegisterCloseSummary().obs;
+
   actionGoSales() {
     Get.toNamed(Routes.findCustomer)?.then((value) {
       _fetchMyData();
@@ -51,7 +53,8 @@ class DashboardScreenController extends BaseGetXController
   }
 
   actionPOSSalesWindow() {
-    Get.toNamed(Routes.homePos)?.then((value) => _fetchCustomerListOff());
+    _fetchCustomerListOff();
+    Get.toNamed(Routes.homePos);
     UINotification.showLoading();
     Future.delayed(const Duration(seconds: 2))
         .then((value) => UINotification.hideLoading());
@@ -87,10 +90,13 @@ class DashboardScreenController extends BaseGetXController
 
   _fetchCustomerListOff() {
     UINotification.showLoading();
+    desktopDataProvider.getCustomerGroupAndPriceGroup();
     desktopDataProvider.getCusListOff();
     desktopDataProvider.getWarehouse();
     desktopDataProvider.getCusGrpOff();
     desktopDataProvider.getWarehouseProducts();
+
+    Future.delayed(const Duration(seconds: 1));
   }
 
   @override
@@ -179,4 +185,14 @@ class DashboardScreenController extends BaseGetXController
   onWarehouseOffListError(ErrorMessage err) {
     UINotification.hideLoading();
   }
+
+  @override
+  customerGroupFetchDone(CustomerPriceGroupsResponse response) {
+    UINotification.hideLoading();
+
+    cache.setData(CacheDBPath.customerPriceGroups, response);
+  }
+
+  @override
+  onCustomerGroupFetchError(ErrorMessage err) {}
 }

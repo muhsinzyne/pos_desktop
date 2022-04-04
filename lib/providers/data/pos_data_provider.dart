@@ -234,11 +234,13 @@ class PosDataProvider extends BaseDataProvider {
       try {
         CustomerPriceGroupsResponse customerPriceGroupsResponse =
             CustomerPriceGroupsResponse.fromJson(data.data);
+        dashboardCtrl.customerGroupFetchDone(customerPriceGroupsResponse);
         cAddCtrl.customerGroupFetchDone(customerPriceGroupsResponse);
       } on Exception {
         final ErrorMessage errMsg = ErrorMessage();
         errMsg.message = 'invalid_response'.tr;
         cAddCtrl.onCustomerGroupFetchError(errMsg);
+        dashboardCtrl.onCustomerGroupFetchError(errMsg);
       }
     }, onError: (err) {
       final ErrorMessage errMsg =

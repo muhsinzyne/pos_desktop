@@ -2,6 +2,8 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:posdelivery/models/response/customer/customer_group.dart';
+import 'package:posdelivery/models/response/customer/price_group.dart';
 import '../controllers/sales_point_controller.dart';
 
 class SalesPointView extends GetView<SalesPointController> {
@@ -774,385 +776,462 @@ class AddCustomerButton extends GetView<SalesPointController> {
                   content: SizedBox(
                     width: MediaQuery.of(context).size.width * .6,
                     child: SingleChildScrollView(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text("ADD CUSTOMER"),
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(
-                                      Icons.close,
-                                      size: 30,
-                                    ))
-                              ],
-                            ),
-                            const Divider(),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: ListTile(
-                                    title: const Text(
-                                      "Customer Group *",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    subtitle: Obx(() =>
-                                        DropdownButtonFormField<String>(
-                                          value: controller.custGrp.value,
-                                          onChanged: (value) {
-                                            controller.changeCustGroup(value!);
+                      child: Form(
+                        key: controller.addFromKey,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text("ADD CUSTOMER"),
+                                  IconButton(
+                                      onPressed: () {
+                                        Get.back();
+                                      },
+                                      icon: const Icon(
+                                        Icons.close,
+                                        size: 30,
+                                      ))
+                                ],
+                              ),
+                              const Divider(),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: ListTile(
+                                      title: const Text(
+                                        "Customer Group *",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      subtitle: SizedBox(
+                                        height: 30,
+                                        child: DropdownButtonFormField<
+                                            CustomerGroups>(
+                                          decoration: const InputDecoration(
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                              horizontal: 8,
+                                              vertical: 3,
+                                            ),
+                                            //filled: true,
+                                            //fillColor: Colors.red,
+                                            border: OutlineInputBorder(),
+                                            // labelText: 'customer_group'.tr,
+                                          ),
+                                          isExpanded: true,
+                                          value:
+                                              controller.cCustomerGroup.value,
+                                          items: (controller.customerPriceGroup
+                                                  .value.customerGroups!
+                                                  .map(buildCustomerGroup))
+                                              .toList(),
+                                          onChanged: (CustomerGroups? value) {
+                                            controller
+                                                .onChangeCustomerGroup(value!);
                                           },
-                                          items: controller.custGrps
-                                              .map((selectedType) {
-                                            return DropdownMenuItem(
-                                              child: Text(
-                                                selectedType.name.toString(),
-                                              ),
-                                              value:
-                                                  selectedType.name.toString(),
-                                            );
-                                          }).toList(),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: ListTile(
+                                      title: const Text(
+                                        "Price Group",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      subtitle: SizedBox(
+                                        height: 30,
+                                        child: DropdownButtonFormField<
+                                            PriceGroups>(
+                                          decoration: const InputDecoration(
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                              horizontal: 8,
+                                              vertical: 3,
+                                            ),
+                                            //filled: true,
+                                            //fillColor: Colors.red,
+                                            // labelText: 'price_group'.tr,
+                                            border: OutlineInputBorder(),
+                                          ),
+                                          isExpanded: true,
+                                          value: controller.cPriceGroup.value,
+                                          items: (controller.customerPriceGroup
+                                                      .value.priceGroups
+                                                      ?.map(
+                                                          buildPriceGroupItem) ??
+                                                  [])
+                                              .toList(),
+                                          onChanged: (PriceGroups? value) {
+                                            controller
+                                                .onChangePriceGroup(value!);
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: ListTile(
+                                      title: const Text(
+                                        "Company *",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      subtitle: SizedBox(
+                                        height: 30,
+                                        child: TextFormField(
+                                          controller: controller.company,
                                           decoration: const InputDecoration(
                                               contentPadding:
                                                   EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 2),
-                                              border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.zero))),
-                                        )),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: ListTile(
-                                    title: const Text(
-                                      "Price Group",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    subtitle: DropdownButtonFormField(
-                                      onChanged: (value) {
-                                        print(value);
-                                        // controller.category = value;
-                                      },
-                                      items:
-                                          controller.pGrps.map((selectedType) {
-                                        return DropdownMenuItem(
-                                          child: Text(
-                                            selectedType,
-                                          ),
-                                          value: selectedType,
-                                        );
-                                      }).toList(),
-                                      decoration: const InputDecoration(
-                                          contentPadding: EdgeInsets.symmetric(
-                                              horizontal: 10, vertical: 2),
-                                          border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.zero))),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: ListTile(
-                                    title: const Text(
-                                      "Company *",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    subtitle: SizedBox(
-                                      height: 30,
-                                      child: TextFormField(
-                                        controller: controller.company,
-                                        decoration: const InputDecoration(
-                                            border: OutlineInputBorder()),
+                                                horizontal: 8,
+                                                vertical: 3,
+                                              ),
+                                              border: OutlineInputBorder()),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  child: ListTile(
-                                    title: const Text(
-                                      "Postal Code",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    subtitle: SizedBox(
-                                      height: 30,
-                                      child: TextFormField(
-                                        controller: controller.pCode,
-                                        decoration: const InputDecoration(
-                                            border: OutlineInputBorder()),
+                                  Expanded(
+                                    child: ListTile(
+                                      title: const Text(
+                                        "Postal Code",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      subtitle: SizedBox(
+                                        height: 30,
+                                        child: TextFormField(
+                                          controller: controller.pCode,
+                                          decoration: const InputDecoration(
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                horizontal: 8,
+                                                vertical: 3,
+                                              ),
+                                              border: OutlineInputBorder()),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: ListTile(
-                                    title: const Text(
-                                      "Name *",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    subtitle: SizedBox(
-                                      height: 30,
-                                      child: TextFormField(
-                                        controller: controller.cName,
-                                        decoration: const InputDecoration(
-                                            border: OutlineInputBorder()),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: ListTile(
+                                      title: const Text(
+                                        "Name *",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      subtitle: SizedBox(
+                                        height: 30,
+                                        child: TextFormField(
+                                          controller: controller.cName,
+                                          decoration: const InputDecoration(
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                horizontal: 8,
+                                                vertical: 3,
+                                              ),
+                                              border: OutlineInputBorder()),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  child: ListTile(
-                                    title: const Text(
-                                      "Country",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    subtitle: SizedBox(
-                                      height: 30,
-                                      child: TextFormField(
-                                        controller: controller.country,
-                                        decoration: const InputDecoration(
-                                            border: OutlineInputBorder()),
+                                  Expanded(
+                                    child: ListTile(
+                                      title: const Text(
+                                        "Country",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      subtitle: SizedBox(
+                                        height: 30,
+                                        child: TextFormField(
+                                          controller: controller.country,
+                                          decoration: const InputDecoration(
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                horizontal: 8,
+                                                vertical: 3,
+                                              ),
+                                              border: OutlineInputBorder()),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: ListTile(
-                                    title: const Text(
-                                      "VAT Number",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    subtitle: SizedBox(
-                                      height: 30,
-                                      child: TextFormField(
-                                        controller: controller.vatNo,
-                                        decoration: const InputDecoration(
-                                            border: OutlineInputBorder()),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: ListTile(
+                                      title: const Text(
+                                        "VAT Number",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      subtitle: SizedBox(
+                                        height: 30,
+                                        child: TextFormField(
+                                          controller: controller.vatNo,
+                                          decoration: const InputDecoration(
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                horizontal: 8,
+                                                vertical: 3,
+                                              ),
+                                              border: OutlineInputBorder()),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  child: ListTile(
-                                    title: const Text(
-                                      "Customer Custom Field 1",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    subtitle: SizedBox(
-                                      height: 30,
-                                      child: TextFormField(
-                                        controller: controller.custom1,
-                                        decoration: const InputDecoration(
-                                            border: OutlineInputBorder()),
+                                  Expanded(
+                                    child: ListTile(
+                                      title: const Text(
+                                        "Customer Custom Field 1",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      subtitle: SizedBox(
+                                        height: 30,
+                                        child: TextFormField(
+                                          controller: controller.custom1,
+                                          decoration: const InputDecoration(
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                horizontal: 8,
+                                                vertical: 3,
+                                              ),
+                                              border: OutlineInputBorder()),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: ListTile(
-                                    title: const Text(
-                                      "GST Number",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    subtitle: SizedBox(
-                                      height: 30,
-                                      child: TextFormField(
-                                        controller: controller.gstNo,
-                                        decoration: const InputDecoration(
-                                            border: OutlineInputBorder()),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  // Expanded(
+                                  //   child: ListTile(
+                                  //     title: const Text(
+                                  //       "GST Number",
+                                  //       style: TextStyle(
+                                  //           fontWeight: FontWeight.bold),
+                                  //     ),
+                                  //     subtitle: SizedBox(
+                                  //       height: 30,
+                                  //       child: TextFormField(
+                                  //         controller: controller.gstNo,
+                                  //         decoration: const InputDecoration(
+                                  //             contentPadding:
+                                  //                 EdgeInsets.symmetric(
+                                  //               horizontal: 8,
+                                  //               vertical: 3,
+                                  //             ),
+                                  //             border: OutlineInputBorder()),
+                                  //       ),
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  Expanded(
+                                    child: ListTile(
+                                      title: const Text(
+                                        "Email Address *",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      subtitle: SizedBox(
+                                        height: 30,
+                                        child: TextFormField(
+                                          controller: controller.email,
+                                          decoration: const InputDecoration(
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                horizontal: 8,
+                                                vertical: 3,
+                                              ),
+                                              border: OutlineInputBorder()),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  child: ListTile(
-                                    title: const Text(
-                                      "Email Address *",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    subtitle: SizedBox(
-                                      height: 30,
-                                      child: TextFormField(
-                                        controller: controller.email,
-                                        decoration: const InputDecoration(
-                                            border: OutlineInputBorder()),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                                  Expanded(child: SizedBox()),
+                                ],
+                              ),
 
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: ListTile(
-                                    title: const Text(
-                                      "Phone *",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    subtitle: SizedBox(
-                                      height: 30,
-                                      child: TextFormField(
-                                        keyboardType: TextInputType.phone,
-                                        controller: controller.phone,
-                                        decoration: const InputDecoration(
-                                            border: OutlineInputBorder()),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: ListTile(
+                                      title: const Text(
+                                        "Phone *",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      subtitle: SizedBox(
+                                        height: 30,
+                                        child: TextFormField(
+                                          keyboardType: TextInputType.phone,
+                                          controller: controller.phone,
+                                          decoration: const InputDecoration(
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                horizontal: 8,
+                                                vertical: 3,
+                                              ),
+                                              border: OutlineInputBorder()),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  child: ListTile(
-                                    title: const Text(
-                                      "Address *",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    subtitle: SizedBox(
-                                      height: 30,
-                                      child: TextFormField(
-                                        controller: controller.address,
-                                        decoration: const InputDecoration(
-                                            border: OutlineInputBorder()),
+                                  Expanded(
+                                    child: ListTile(
+                                      title: const Text(
+                                        "Address *",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      subtitle: SizedBox(
+                                        height: 30,
+                                        child: TextFormField(
+                                          controller: controller.address,
+                                          decoration: const InputDecoration(
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                horizontal: 8,
+                                                vertical: 3,
+                                              ),
+                                              border: OutlineInputBorder()),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: ListTile(
-                                    title: const Text(
-                                      "City *",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    subtitle: SizedBox(
-                                      height: 30,
-                                      child: TextFormField(
-                                        controller: controller.city,
-                                        decoration: const InputDecoration(
-                                            border: OutlineInputBorder()),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: ListTile(
+                                      title: const Text(
+                                        "City *",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      subtitle: SizedBox(
+                                        height: 30,
+                                        child: TextFormField(
+                                          controller: controller.city,
+                                          decoration: const InputDecoration(
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                horizontal: 8,
+                                                vertical: 3,
+                                              ),
+                                              border: OutlineInputBorder()),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  child: ListTile(
-                                    title: const Text(
-                                      "State",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    subtitle: SizedBox(
-                                      height: 30,
-                                      child: TextFormField(
-                                        controller: controller.state,
-                                        decoration: const InputDecoration(
-                                            border: OutlineInputBorder()),
+                                  Expanded(
+                                    child: ListTile(
+                                      title: const Text(
+                                        "State",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      subtitle: SizedBox(
+                                        height: 30,
+                                        child: TextFormField(
+                                          controller: controller.state,
+                                          decoration: const InputDecoration(
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                horizontal: 8,
+                                                vertical: 3,
+                                              ),
+                                              border: OutlineInputBorder()),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            const Divider(),
-                            ElevatedButton(
-                                onPressed: () {},
-                                child: const Text("Add Customer"))
-                            // GridView(
-                            //     shrinkWrap: true,
-                            //     physics: const ScrollPhysics(),
-                            //     gridDelegate:
-                            //         const SliverGridDelegateWithFixedCrossAxisCount(
-                            //             crossAxisCount: 2),
-                            //     children: const [
-                            //       ListTile(
-                            //         title: Text(
-                            //           "Customer Group *",
-                            //           style: TextStyle(fontWeight: FontWeight.bold),
-                            //         ),
-                            //         subtitle: TextField(
-                            //           decoration: InputDecoration(
-                            //               border: OutlineInputBorder()),
-                            //         ),
-                            //       ),
-                            //       ListTile(
-                            //         title: Text(
-                            //           "Customer Group *",
-                            //           style: TextStyle(fontWeight: FontWeight.bold),
-                            //         ),
-                            //         subtitle: TextField(
-                            //           decoration: InputDecoration(
-                            //               border: OutlineInputBorder()),
-                            //         ),
-                            //       ),
-                            //       ListTile(
-                            //         title: Text(
-                            //           "Customer Group *",
-                            //           style: TextStyle(fontWeight: FontWeight.bold),
-                            //         ),
-                            //         subtitle: TextField(
-                            //           decoration: InputDecoration(
-                            //               border: OutlineInputBorder()),
-                            //         ),
-                            //       ),
-                            //       ListTile(
-                            //         title: Text(
-                            //           "Customer Group *",
-                            //           style: TextStyle(fontWeight: FontWeight.bold),
-                            //         ),
-                            //         subtitle: TextField(
-                            //           decoration: InputDecoration(
-                            //               border: OutlineInputBorder()),
-                            //         ),
-                            //       ),
-                            //       ListTile(
-                            //         title: Text(
-                            //           "Customer Group *",
-                            //           style: TextStyle(fontWeight: FontWeight.bold),
-                            //         ),
-                            //         subtitle: TextField(
-                            //           decoration: InputDecoration(
-                            //               border: OutlineInputBorder()),
-                            //         ),
-                            //       ),
-                            //     ]),
-                          ]),
+                                ],
+                              ),
+                              const Divider(),
+                              ElevatedButton(
+                                  onPressed: controller.actionOnSaveRequest,
+                                  child: const Text("Add Customer"))
+                              // GridView(
+                              //     shrinkWrap: true,
+                              //     physics: const ScrollPhysics(),
+                              //     gridDelegate:
+                              //         const SliverGridDelegateWithFixedCrossAxisCount(
+                              //             crossAxisCount: 2),
+                              //     children: const [
+                              //       ListTile(
+                              //         title: Text(
+                              //           "Customer Group *",
+                              //           style: TextStyle(fontWeight: FontWeight.bold),
+                              //         ),
+                              //         subtitle: TextField(
+                              //           decoration: InputDecoration(
+                              //               border: OutlineInputBorder()),
+                              //         ),
+                              //       ),
+                              //       ListTile(
+                              //         title: Text(
+                              //           "Customer Group *",
+                              //           style: TextStyle(fontWeight: FontWeight.bold),
+                              //         ),
+                              //         subtitle: TextField(
+                              //           decoration: InputDecoration(
+                              //               border: OutlineInputBorder()),
+                              //         ),
+                              //       ),
+                              //       ListTile(
+                              //         title: Text(
+                              //           "Customer Group *",
+                              //           style: TextStyle(fontWeight: FontWeight.bold),
+                              //         ),
+                              //         subtitle: TextField(
+                              //           decoration: InputDecoration(
+                              //               border: OutlineInputBorder()),
+                              //         ),
+                              //       ),
+                              //       ListTile(
+                              //         title: Text(
+                              //           "Customer Group *",
+                              //           style: TextStyle(fontWeight: FontWeight.bold),
+                              //         ),
+                              //         subtitle: TextField(
+                              //           decoration: InputDecoration(
+                              //               border: OutlineInputBorder()),
+                              //         ),
+                              //       ),
+                              //       ListTile(
+                              //         title: Text(
+                              //           "Customer Group *",
+                              //           style: TextStyle(fontWeight: FontWeight.bold),
+                              //         ),
+                              //         subtitle: TextField(
+                              //           decoration: InputDecoration(
+                              //               border: OutlineInputBorder()),
+                              //         ),
+                              //       ),
+                              //     ]),
+                            ]),
+                      ),
                     ),
                   ),
                 ));
@@ -1167,6 +1246,22 @@ class AddCustomerButton extends GetView<SalesPointController> {
       ),
     );
   }
+
+  DropdownMenuItem<CustomerGroups> buildCustomerGroup(CustomerGroups item) =>
+      DropdownMenuItem(
+        value: item,
+        child: Text(
+          item.name.toString().toUpperCase(),
+        ),
+      );
+
+  DropdownMenuItem<PriceGroups> buildPriceGroupItem(PriceGroups item) =>
+      DropdownMenuItem(
+        value: item,
+        child: Text(
+          item.name.toString().toUpperCase(),
+        ),
+      );
 }
 
 class AddProductButton extends StatelessWidget {

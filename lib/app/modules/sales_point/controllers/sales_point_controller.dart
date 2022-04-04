@@ -1,12 +1,19 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:posdelivery/app/helpers/string.dart';
 import 'package:posdelivery/app/modules/sales_point/contracts.dart';
 import 'package:posdelivery/app/ui/components/ui_notification.dart';
+import 'package:posdelivery/app/ui/theme/app_colors.dart';
 import 'package:posdelivery/controllers/base_controller.dart';
 import 'package:posdelivery/models/cache_db_path.dart';
+import 'package:posdelivery/models/requests/customer/customer_add_request.dart';
+import 'package:posdelivery/models/response/customer/customer_add_response.dart';
+import 'package:posdelivery/models/response/customer/customer_group.dart';
+import 'package:posdelivery/models/response/customer/customer_price_group_response.dart';
+import 'package:posdelivery/models/response/customer/price_group.dart';
 import 'package:posdelivery/models/response/desktop/customer_group.dart';
 import 'package:posdelivery/models/response/desktop/customer_list.dart';
 import 'package:posdelivery/models/response/desktop/warehouse_products.dart';
@@ -21,12 +28,13 @@ class SalesPointController extends BaseGetXController
     implements ISalesPointController {
   PosDataProvider posDataProvider = Get.find<PosDataProvider>();
   DesktopDataProvider desktopDataProvider = Get.find<DesktopDataProvider>();
+
+  final addFromKey = GlobalKey<FormState>();
   final TextEditingController company = TextEditingController();
   final TextEditingController pCode = TextEditingController();
   final TextEditingController cName = TextEditingController();
   final TextEditingController country = TextEditingController();
   final TextEditingController vatNo = TextEditingController();
-  final TextEditingController gstNo = TextEditingController();
   final TextEditingController email = TextEditingController();
   final TextEditingController custom1 = TextEditingController();
   final TextEditingController phone = TextEditingController();
@@ -42,11 +50,21 @@ class SalesPointController extends BaseGetXController
   final RxString cCustomer = RxString('');
   final RxString selectedCustomerName = RxString('');
   final RxBool scanner = RxBool(false);
-
+  var customerPriceGroup = CustomerPriceGroupsResponse().obs;
+  var cCustomerGroup = CustomerGroups().obs;
+  var cPriceGroup = PriceGroups().obs;
   String get cWareHouseName => _cWareHouseName.value;
 
-  RxList<CustomerGroupResponse> custGrps = RxList([]);
+  // RxList<CustomerGroupResponse> custGrps = RxList([]);
   RxList<CustomerListOffResponse> cusList = RxList([]);
+  // List<String> get customerGroups {
+  //   List<String> dummy = [];
+  //   for (var element in custGrps) {
+  //     dummy.add(element.name.toString());
+  //   }
+  //   return dummy;
+  // }
+
   List<String> get customerListString {
     List<String> dummyList = [];
     for (var element in cusList) {
@@ -65,15 +83,13 @@ class SalesPointController extends BaseGetXController
     return wh;
   }
 
-  final List<String> pGrps = [
-    "A",
-    "b",
-    "c",
-    "d",
-    "e",
-    "f",
-    "g",
-  ];
+  List<String> get pGrps {
+    List<String> dummy = [];
+    for (var element in customerPriceGroup.value.priceGroups!) {
+      dummy.add(element.name.toString());
+    }
+    return dummy;
+  }
 
   void changeCustomer(String value) {
     cCustomer.value = StringHelper.splitFromBracket(value);
@@ -86,6 +102,14 @@ class SalesPointController extends BaseGetXController
 
   void changeCustGroup(String value) {
     custGrp.value = value;
+  }
+
+  onChangeCustomerGroup(CustomerGroups value) {
+    cCustomerGroup.value = value;
+  }
+
+  onChangePriceGroup(PriceGroups value) {
+    cPriceGroup.value = value;
   }
 
   @override
@@ -102,7 +126,7 @@ class SalesPointController extends BaseGetXController
   @override
   void onReady() {
     // _fetchCustomerList();
-    _getData();
+    Future.delayed(const Duration(seconds: 1)).then((value) => _getData());
     // _fetchCustomerListOff();
 
     super.onReady();
@@ -110,21 +134,41 @@ class SalesPointController extends BaseGetXController
 
   _getData() {
     List cList = cache.getData(CacheDBPath.customers);
-    List cGList = cache.getData(CacheDBPath.customersGroup);
+    // List cGList = cache.getData(CacheDBPath.customersGroup);
     List _wList = cache.getData(CacheDBPath.warehouse);
+    var _cPRes = cache.getData(CacheDBPath.customerPriceGroups);
     cusList.value = customerListOffResponseFromJson(jsonEncode(cList));
-    custGrps.value = customerGroupResponseFromJson(jsonEncode(cGList));
+    // custGrps.value = customerGroupResponseFromJson(jsonEncode(cGList));
     wLsit.value = warehouseListResponseFromJson(jsonEncode(_wList));
     selectedCustomerName.value = cusList.first.name.toString();
+    customerPriceGroup.value = CustomerPriceGroupsResponse.fromJson(_cPRes);
+    cCustomerGroup.value = customerPriceGroup.value.customerGroups!.first;
+    cPriceGroup.value = customerPriceGroup.value.priceGroups!.first;
   }
 
-  onSubmitButton() {
-    CustomerListOffResponse(
-        name: cName.text,
-        company: company.text,
-        vatNo: vatNo.text,
-        email: email.text,
-        phone: phone.text);
+  @override
+  actionOnSaveRequest() {
+    print("object");
+    if (addFromKey.currentState!.validate()) {
+      UINotification.showLoading();
+      CustomerAddRequest addRequest = CustomerAddRequest();
+      addRequest.name = cName.text;
+      addRequest.email = email.text;
+      addRequest.customerGroup = cCustomerGroup.value.id;
+      addRequest.priceGroup = cPriceGroup.value.id;
+      addRequest.company = company.text;
+      addRequest.address = address.text;
+      addRequest.vatNo = vatNo.text;
+      addRequest.city = city.text;
+      addRequest.state = state.text;
+      addRequest.postalCode = pCode.text;
+      addRequest.country = country.text;
+      addRequest.phone = phone.text;
+      desktopDataProvider.customerAddRequest(addRequest);
+    } else {
+      UINotification.showNotification(
+          color: Colors.red, title: 'please_complete_form'.tr);
+    }
   }
 
   @override
@@ -146,8 +190,8 @@ class SalesPointController extends BaseGetXController
 
   @override
   onCustomerGrpOffListDone(List<CustomerGroupResponse> cGrpRes) {
-    custGrps.value = cGrpRes;
-    custGrp.value = cGrpRes.first.name.toString();
+    // custGrps.value = cGrpRes;
+    // custGrp.value = cGrpRes.first.name.toString();
     UINotification.hideLoading();
   }
 
@@ -175,5 +219,20 @@ class SalesPointController extends BaseGetXController
   @override
   onWarehouseOffListError(ErrorMessage err) {
     UINotification.hideLoading();
+  }
+
+  @override
+  onCustomerAddDone(CustomerAddResponse customerAddResponse) {
+    UINotification.hideLoading();
+    UINotification.showNotification(
+      color: AppColors.greenIconColor,
+      title: customerAddResponse.message,
+    );
+    Get.back(canPop: true);
+  }
+
+  @override
+  onCustomerAddError(ErrorMessage err) {
+    UINotification.showNotification(color: Colors.red, title: err.message);
   }
 }

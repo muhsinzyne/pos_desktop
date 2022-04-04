@@ -4,6 +4,9 @@ import 'package:get/get.dart';
 import 'package:posdelivery/app/modules/dashboard/contracts.dart';
 import 'package:posdelivery/app/modules/product_list/contracts.dart';
 import 'package:posdelivery/app/modules/sales_point/contracts.dart';
+import 'package:posdelivery/models/requests/customer/customer_add_request.dart';
+import 'package:posdelivery/models/response/customer/customer_add_response.dart';
+import 'package:posdelivery/models/response/customer/customer_price_group_response.dart';
 import 'package:posdelivery/models/response/desktop/warehouse_list.dart';
 import 'package:posdelivery/models/response/desktop/warehouse_products.dart';
 import 'package:posdelivery/models/response/error_message.dart';
@@ -29,6 +32,32 @@ class DesktopDataProvider extends BaseDataProvider {
 
   set dashboardCallBack(IDashboardScreenController controller) {
     dashboardCtrl = controller;
+  }
+
+  getCustomerGroupAndPriceGroup() {
+    final obs = network
+        .get(
+          NetworkURL.customerAndPriceGroup,
+        )
+        .asStream();
+    obs.listen((data) {
+      try {
+        CustomerPriceGroupsResponse customerPriceGroupsResponse =
+            CustomerPriceGroupsResponse.fromJson(data.data);
+        dashboardCtrl.customerGroupFetchDone(customerPriceGroupsResponse);
+      } on Exception {
+        final ErrorMessage errMsg = ErrorMessage();
+        errMsg.message = 'invalid_response'.tr;
+
+        dashboardCtrl.onCustomerGroupFetchError(errMsg);
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+          ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      if (err.response?.statusCode == StatusCodes.status400BadRequest) {
+        //saleListCtrl.onSalesListResponseBadRequest(errMsg);
+      }
+    });
   }
 
   getWarehouse() {
@@ -121,6 +150,29 @@ class DesktopDataProvider extends BaseDataProvider {
         dashboardCtrl.onCustomerGrpOffListError(errMsg);
       } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
         dashboardCtrl.onCustomerGrpOffListError(errMsg);
+      }
+    });
+  }
+
+  customerAddRequest(CustomerAddRequest customerAddRequest) {
+    final obs = network
+        .post(NetworkURL.customerAdd, data: customerAddRequest.toJson())
+        .asStream();
+    obs.listen((data) {
+      try {
+        CustomerAddResponse addResponse =
+            CustomerAddResponse.fromJson(data.data);
+        sPCtrl.onCustomerAddDone(addResponse);
+      } on Exception {
+        final ErrorMessage errMsg = ErrorMessage();
+        errMsg.message = 'invalid_response'.tr;
+        sPCtrl.onCustomerAddError(errMsg);
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+          ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      if (err.response?.statusCode == StatusCodes.status400BadRequest) {
+        sPCtrl.onCustomerAddError(errMsg);
       }
     });
   }
