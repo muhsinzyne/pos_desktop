@@ -1,5 +1,6 @@
 import 'package:posdelivery/models/response/auth/current_register_response.dart';
 import 'package:posdelivery/models/response/auth/employee_info.dart';
+import 'package:posdelivery/models/response/auth/my_info_response.dart';
 import 'package:posdelivery/models/response/auth/register_close_summary.dart';
 import 'package:posdelivery/models/response/customer/customer_price_group_response.dart';
 import 'package:posdelivery/models/response/desktop/customer_group.dart';
@@ -7,6 +8,7 @@ import 'package:posdelivery/models/response/desktop/customer_list.dart';
 import 'package:posdelivery/models/response/desktop/warehouse_list.dart';
 import 'package:posdelivery/models/response/desktop/warehouse_products.dart';
 import 'package:posdelivery/models/response/error_message.dart';
+import 'package:posdelivery/models/response/pos/product.dart';
 
 abstract class IDashboardScreenController {
   void onLoadTokenValid(EmployeeInfo employeeInfo);
@@ -31,4 +33,6 @@ abstract class IDashboardScreenController {
   customerGroupFetchDone(
       CustomerPriceGroupsResponse customerPriceGroupsResponse);
   onCustomerGroupFetchError(ErrorMessage err);
+  myInfoFetchDone(MyInfoResponse myInfoResponse);
+  myInfoFetchError(ErrorMessage err);
 }

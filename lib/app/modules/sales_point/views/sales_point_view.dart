@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:posdelivery/models/response/customer/customer_group.dart';
 import 'package:posdelivery/models/response/customer/price_group.dart';
+import 'package:textfield_search/textfield_search.dart';
 import '../controllers/sales_point_controller.dart';
 
 class SalesPointView extends GetView<SalesPointController> {
@@ -132,10 +133,23 @@ class SalesPointView extends GetView<SalesPointController> {
                   flex: 92,
                   child: Container(
                     color: Colors.white,
-                    child: const TextField(
-                      decoration: InputDecoration(
+                    child: TextFieldSearch(
+                      initialList: [
+                        "a",
+                        "acd",
+                        "ab",
+                        "abcd",
+                        "aaa",
+                        "aads",
+                        "acas",
+                        "aaca",
+                        "ca",
+                        "acc",
+                      ],
+                      label: "Scan/Search product by name/code",
+                      controller: controller.search,
+                      decoration: const InputDecoration(
                           hintText: "Scan/Search product by name/code",
-                          hintStyle: TextStyle(fontSize: 14),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.zero),
                           ),

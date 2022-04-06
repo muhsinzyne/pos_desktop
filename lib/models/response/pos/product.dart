@@ -1,6 +1,13 @@
+import 'dart:convert';
 import 'package:posdelivery/models/response/pos/row.dart';
 import 'package:posdelivery/models/response/pos/tax_rate.dart';
 import 'package:posdelivery/models/response/pos/units.dart';
+
+List<Product> productFromJson(String str) =>
+    List<Product>.from(json.decode(str).map((x) => Product.fromJson(x)));
+
+String productToJson(List<Product> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Product {
   String? id;

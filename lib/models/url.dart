@@ -24,4 +24,5 @@ class NetworkURL {
   static var customerListOffline = base + 'offline/customer_list';
   static var customerGroupOffline = base + 'offline/customer_groups';
   static var warehouseProductOffline = base + 'offline/warehouse_products';
+  static var products = base + 'offline/product_list';
 }

@@ -5,11 +5,13 @@ import 'package:posdelivery/app/modules/dashboard/contracts.dart';
 import 'package:posdelivery/app/modules/product_list/contracts.dart';
 import 'package:posdelivery/app/modules/sales_point/contracts.dart';
 import 'package:posdelivery/models/requests/customer/customer_add_request.dart';
+import 'package:posdelivery/models/response/auth/my_info_response.dart';
 import 'package:posdelivery/models/response/customer/customer_add_response.dart';
 import 'package:posdelivery/models/response/customer/customer_price_group_response.dart';
 import 'package:posdelivery/models/response/desktop/warehouse_list.dart';
 import 'package:posdelivery/models/response/desktop/warehouse_products.dart';
 import 'package:posdelivery/models/response/error_message.dart';
+import 'package:posdelivery/models/response/pos/product.dart';
 import 'package:posdelivery/models/status_codes.dart';
 import 'package:posdelivery/models/url.dart';
 import 'package:posdelivery/providers/data/base_data_provider.dart';
@@ -153,6 +155,53 @@ class DesktopDataProvider extends BaseDataProvider {
       }
     });
   }
+
+  getMyInfo() {
+    final obs = network.get(NetworkURL.myInfo).asStream();
+    obs.listen((data) {
+      try {
+        MyInfoResponse myInfoResponse = MyInfoResponse.fromJSON(data.data);
+        dashboardCtrl.myInfoFetchDone(myInfoResponse);
+      } on Exception {
+        final ErrorMessage errMsg = ErrorMessage();
+        errMsg.message = 'warehouse_not_loaded'.tr;
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+          ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      if (err.response.statusCode == StatusCodes.status404NotFound) {
+        dashboardCtrl.myInfoFetchError(errMsg);
+      } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
+        dashboardCtrl.myInfoFetchError(errMsg);
+      }
+    });
+  }
+
+  // getProducts() {
+  //   Map<String, String> warehouseId = {"warehouse_id": "1"};
+  //   final obs = network
+  //       .get(NetworkURL.products, queryParameters: warehouseId)
+  //       .asStream();
+  //   obs.listen((data) {
+  //     try {
+  //       Product product = Product.fromJson(data.data);
+  //       print("=====================================================");
+  //       print(product);
+  //       dashboardCtrl.productListFetchDone(product);
+  //     } on Exception {
+  //       final ErrorMessage errMsg = ErrorMessage();
+  //       errMsg.message = 'warehouse_not_loaded'.tr;
+  //     }
+  //   }, onError: (err) {
+  //     final ErrorMessage errMsg =
+  //         ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+  //     if (err.response.statusCode == StatusCodes.status404NotFound) {
+  //       dashboardCtrl.myInfoFetchError(errMsg);
+  //     } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
+  //       dashboardCtrl.myInfoFetchError(errMsg);
+  //     }
+  //   });
+  // }
 
   customerAddRequest(CustomerAddRequest customerAddRequest) {
     final obs = network

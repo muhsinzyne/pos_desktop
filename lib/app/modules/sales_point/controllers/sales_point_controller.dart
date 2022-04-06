@@ -10,6 +10,7 @@ import 'package:posdelivery/app/ui/theme/app_colors.dart';
 import 'package:posdelivery/controllers/base_controller.dart';
 import 'package:posdelivery/models/cache_db_path.dart';
 import 'package:posdelivery/models/requests/customer/customer_add_request.dart';
+import 'package:posdelivery/models/response/auth/my_info_response.dart';
 import 'package:posdelivery/models/response/customer/customer_add_response.dart';
 import 'package:posdelivery/models/response/customer/customer_group.dart';
 import 'package:posdelivery/models/response/customer/customer_price_group_response.dart';
@@ -19,6 +20,7 @@ import 'package:posdelivery/models/response/desktop/customer_list.dart';
 import 'package:posdelivery/models/response/desktop/warehouse_products.dart';
 import 'package:posdelivery/models/response/desktop/warehouse_list.dart';
 import 'package:posdelivery/models/response/error_message.dart';
+import 'package:posdelivery/models/response/pos/product.dart';
 import 'package:posdelivery/providers/data/desktop_data_provider.dart';
 import 'package:posdelivery/providers/data/pos_data_provider.dart';
 import 'package:posdelivery/services/app_service.dart';
@@ -30,6 +32,7 @@ class SalesPointController extends BaseGetXController
   DesktopDataProvider desktopDataProvider = Get.find<DesktopDataProvider>();
 
   final addFromKey = GlobalKey<FormState>();
+  final TextEditingController search = TextEditingController();
   final TextEditingController company = TextEditingController();
   final TextEditingController pCode = TextEditingController();
   final TextEditingController cName = TextEditingController();
@@ -53,6 +56,7 @@ class SalesPointController extends BaseGetXController
   var customerPriceGroup = CustomerPriceGroupsResponse().obs;
   var cCustomerGroup = CustomerGroups().obs;
   var cPriceGroup = PriceGroups().obs;
+  MyInfoResponse info = MyInfoResponse();
   String get cWareHouseName => _cWareHouseName.value;
 
   // RxList<CustomerGroupResponse> custGrps = RxList([]);
@@ -74,6 +78,8 @@ class SalesPointController extends BaseGetXController
     return dummyList;
   }
 
+  List<Product> product = [];
+  // RxList<Product> product = RxList([]);
   RxList<WarehouseListResponse> wLsit = RxList([]);
   List<String> get warehouses {
     List<String> wh = [];
@@ -133,6 +139,8 @@ class SalesPointController extends BaseGetXController
   }
 
   _getData() {
+    var myInfo = cache.getData(CacheDBPath.myInfo);
+    info = MyInfoResponse.fromJSON(myInfo);
     List cList = cache.getData(CacheDBPath.customers);
     // List cGList = cache.getData(CacheDBPath.customersGroup);
     List _wList = cache.getData(CacheDBPath.warehouse);
@@ -144,6 +152,12 @@ class SalesPointController extends BaseGetXController
     customerPriceGroup.value = CustomerPriceGroupsResponse.fromJson(_cPRes);
     cCustomerGroup.value = customerPriceGroup.value.customerGroups!.first;
     cPriceGroup.value = customerPriceGroup.value.priceGroups!.first;
+    var _prdts = cache
+        .getData(CacheDBPath.warehouseProducts + info.warehouses!.first.id!);
+    print(_prdts);
+    product = productFromJson(jsonEncode(_prdts));
+    print("product");
+    print(product);
   }
 
   @override
