@@ -57,11 +57,11 @@ class Product {
     data['label'] = label;
     data['category'] = category;
     if (row != null) {
-      data['row'] = row;
+      data['row'] = row!.toJson();
     }
     data['combo_items'] = comboItems;
     if (taxRate != null) {
-      data['tax_rate'] = taxRate;
+      data['tax_rate'] = taxRate!.toJson();
     }
     if (units != null) {
       data['units'] = units!.map((v) => v.toJson()).toList();

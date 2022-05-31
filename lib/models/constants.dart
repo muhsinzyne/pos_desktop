@@ -60,11 +60,14 @@ class Constants {
   static const Duration smallDuration = Duration(milliseconds: 300);
   static const Duration oneSecDuration = Duration(seconds: 1);
   static const Duration fourSec = Duration(seconds: 4);
+  static const databaseFileName = 'pos_desktop.db';
 }
 
 class CurrencyConst {
-  static CurrencyFormat srFormat1 = CurrencyFormat(format: "##,##,##0", symbol: 'SR', decimal: '0#');
-  static CurrencyFormat srFormat2 = CurrencyFormat(format: "##,##,##0", symbol: 'SR', decimal: '##');
+  static CurrencyFormat srFormat1 =
+      CurrencyFormat(format: "##,##,##0", symbol: 'SR', decimal: '0#');
+  static CurrencyFormat srFormat2 =
+      CurrencyFormat(format: "##,##,##0", symbol: 'SR', decimal: '##');
 }
 
 class SalesStatus {

@@ -86,7 +86,7 @@ class AppController extends GetxController {
   String get appVersion {
     try {
       return " ${Constants.version} ${appService!.packageInfo!.version} - ${appService!.packageInfo!.buildNumber}";
-    } on Exception {
+    } catch (e) {
       return Constants.version;
     }
   }

@@ -29,6 +29,8 @@ import 'package:posdelivery/providers/data/desktop_data_provider.dart';
 import 'package:posdelivery/providers/data/pos_data_provider.dart';
 import 'package:posdelivery/services/base/network.dart';
 import 'package:posdelivery/services/cache/cache_service.dart';
+import 'package:posdelivery/services/storage/app_storage_service.dart';
+import 'package:sembast/sembast.dart';
 
 class DashboardScreenController extends BaseGetXController
     implements IDashboardScreenController {
@@ -36,6 +38,8 @@ class DashboardScreenController extends BaseGetXController
   MyInfoResponse info = MyInfoResponse();
   DioNetwork network = Get.find<DioNetwork>();
   CacheService cache = Get.find<CacheService>();
+  AppDatabase _db = Get.find<AppDatabase>();
+
   DesktopDataProvider desktopDataProvider = Get.find<DesktopDataProvider>();
   d.Dio dio = d.Dio();
   var cRegister = CurrentRegisterResponse().obs;
@@ -124,27 +128,66 @@ class DashboardScreenController extends BaseGetXController
 
   _getProducts() async {
     for (var warehouse in info.warehouses!) {
-      temp = [];
+      List<Product> temp = [];
       int currentPage = 1;
       Map<String, String> qp = {
         "warehouse_id": warehouse.id!,
         "page": "$currentPage",
-        "limit": "100"
+        "limit": "10"
       };
       final pro = await getProduct(qp);
-      while (pro.data != []) {
-        currentPage++;
-        Map<String, String> _qp = {
-          "warehouse_id": warehouse.id!,
-          "page": "$currentPage",
-          "limit": "100"
-        };
-        getProduct(_qp);
-      }
-      print(temp.length);
-      cache.setData(CacheDBPath.warehouseProducts + warehouse.id!,
-          temp.map((e) => e.toJson()).toList());
+      /**
+       * 
+       */
+
+      temp = productFromJson(jsonEncode(pro.data));
+      print("\n \n \n \n -------------------------------------- \n \n \n \n");
+      saveModel(temp);
+      //print(temp[0].id);
+      //print(temp[0]);
+      // while (pro.data != []) {
+      //   currentPage++;
+      //   Map<String, String> _qp = {
+      //     "warehouse_id": warehouse.id!,
+      //     "page": "$currentPage",
+      //     "limit": "100"
+      //   };
+      //   getProduct(_qp);
+      // }
+      //print(temp.length);
+      //cache.setData(CacheDBPath.warehouseProducts + warehouse.id!,
+      //  Iterable test = temp.map((e) => e.toJson().toList());
+      //print(test);
     }
+  }
+
+  Future<List<Product>> saveModel(List<Product> item) async {
+    StoreRef store = _db.getMapStore("products");
+    Database? db = await _db.db;
+    // await db?.transaction((transaction) async {
+    //   item.map(
+    //     (e) async => {await store.record(e.id).put(transaction, e.toJson())});
+    //   if (item.id == null) {
+    //   int key = await store.add(transaction, productToJson(item));
+    //  item.id = key;
+    //} else {
+    // await store.record(item.id).put(transaction, item.toJson());
+    //}
+//    });
+
+    await db?.transaction((transaction) async => {
+          for (var i = 0; i < item.length; i++)
+            {await store.add(transaction, item[i].toJson())}
+          // Future.wait(
+          // item.map((e) async => {
+          //sasa
+          // await store.add(transaction, e.toJson())
+          // }),
+
+          // await store.add(transaction, item[0].toJson())
+        });
+    print("\n \n \n \n \n hello \n \n \n\n ");
+    return item;
   }
 
   Future<d.Response> getProduct(Map<String, String> qp) async {

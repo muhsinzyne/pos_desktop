@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:posdelivery/app/modules/dashboard/views/app_drawer.dart';
+import 'package:posdelivery/app/modules/dashboard/views/test_screen.dart';
 import 'package:posdelivery/app/ui/components/buttons/text_btn.dart';
 import 'package:posdelivery/app/ui/components/profile/profile_info_card_block.dart';
 import 'package:posdelivery/app/ui/components/static/theme_text_underline.dart';
@@ -10,6 +11,7 @@ import 'package:posdelivery/app/ui/theme/styles.dart';
 import 'package:posdelivery/controllers/app_controller.dart';
 import 'package:posdelivery/models/constants.dart';
 import 'package:posdelivery/services/app_service.dart';
+import 'dart:developer';
 
 import '../controllers/dashboard_controller.dart';
 
@@ -20,6 +22,7 @@ class DashboardScreen extends GetView<DashboardScreenController> {
   @override
   Widget build(BuildContext context) {
     //print(dashboardController.localStorage);
+
     return Scaffold(
       key: appController.appDrawerKey,
       appBar: AppBar(
