@@ -5,10 +5,10 @@ import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import '../../models/constants.dart';
 
-class AppDatabase {
+class SembastStorage {
   Database? _db;
 
-  AppDatabase init() {
+  SembastStorage init() {
     return this;
   }
 

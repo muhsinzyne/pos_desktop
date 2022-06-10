@@ -61,6 +61,11 @@ class Constants {
   static const Duration oneSecDuration = Duration(seconds: 1);
   static const Duration fourSec = Duration(seconds: 4);
   static const databaseFileName = 'pos_desktop.db';
+  static const productsStore = 'products_warehouse';
+  static const warehouseListStore = "warehouse_list";
+  static const customerListStore = "customer_list";
+  static const customerGroupeStore = "customer_group";
+  static const warehouseProductsStore = "warehouse_products";
 }
 
 class CurrencyConst {

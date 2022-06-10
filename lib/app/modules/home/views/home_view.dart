@@ -18,7 +18,6 @@ class HomeView extends GetView<HomeController> {
         // leading: const Padding(
         //   padding: EdgeInsets.all(8.0),
         //   child: CircleAvatar(backgroundColor: Colors.grey),
-        // ),
         title: const Text("Demo User"),
         backgroundColor: const Color(0xFF5D25DF),
         actions: [

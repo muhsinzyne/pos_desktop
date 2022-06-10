@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:posdelivery/app/modules/dashboard/contracts.dart';
 import 'package:posdelivery/app/modules/product_list/contracts.dart';
 import 'package:posdelivery/app/modules/sales_point/contracts.dart';
@@ -23,6 +24,15 @@ class DesktopDataProvider extends BaseDataProvider {
   late ISalesPointController sPCtrl;
   late IProductListController pLCtrl;
   late IDashboardScreenController dashboardCtrl;
+  final logger = Logger(
+      printer: PrettyPrinter(
+    methodCount: 0,
+    errorMethodCount: 5,
+    lineLength: 50,
+    colors: true,
+    printEmojis: true,
+    printTime: true,
+  ));
 
   set salePointCallBack(ISalesPointController controller) {
     sPCtrl = controller;
@@ -110,13 +120,34 @@ class DesktopDataProvider extends BaseDataProvider {
     });
   }
 
+  // getCustomerListOff(Map<String, String> customerQuery) async {
+  //   final res = await network.get(NetworkURL.customerListOffline,
+  //       queryParameters: customerQuery);
+
+  //   try {
+  //     dashboardCtrl.onCustomerOfflineListDone(res);
+  //   } on Exception {
+  //     final ErrorMessage errMsg = ErrorMessage();
+  //     errMsg.message = 'warehouse_not_loaded'.tr;
+  //   } catch (err) {
+  //     final ErrorMessage errMsg =
+  //         ErrorMessage.fromJSON(jsonDecode(err.toString()));
+  //     dashboardCtrl.onCustomerOfflineListError(errMsg);
+  //     // print("404");
+  //     // print("400");
+  //   }
+  // }
+
   getCusListOff() {
     final obs = network.get(NetworkURL.customerListOffline).asStream();
     obs.listen((data) {
       try {
-        List<CustomerListOffResponse> cListRes =
+        logger.w(data);
+        final List<CustomerListOffResponse> cListRes =
             customerListOffResponseFromJson(jsonEncode(data.data));
-        dashboardCtrl.onCustomerOffListDone(cListRes);
+        // CustomerListOffResponse cListRes = CustomerListOffResponse.fromJson(data.data);
+        logger.e(cListRes);
+        //dashboardCtrl.onCustomerOffListDone(cListRes);
       } on Exception {
         final ErrorMessage errMsg = ErrorMessage();
         errMsg.message = 'warehouse_not_loaded'.tr;

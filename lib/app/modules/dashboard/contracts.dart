@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:posdelivery/models/response/auth/current_register_response.dart';
 import 'package:posdelivery/models/response/auth/employee_info.dart';
 import 'package:posdelivery/models/response/auth/my_info_response.dart';
@@ -19,6 +20,10 @@ abstract class IDashboardScreenController {
   onCurrentRegisterNotOpen(ErrorMessage errorMessage);
   onRegisterCloseSummaryDone(RegisterCloseSummary rSummary);
   onRegisterCloseSummaryError(ErrorMessage errorMessage);
+
+  //test
+  // onCustomerOfflineListDone(Response response);
+  // onCustomerOfflineListError(ErrorMessage err);
 
   ///Desktop data syncing
   onCustomerOffListDone(List<CustomerListOffResponse> cListRes);

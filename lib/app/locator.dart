@@ -11,7 +11,8 @@ import 'package:posdelivery/providers/data/pos_data_provider.dart';
 import 'package:posdelivery/services/app_service.dart';
 import 'package:posdelivery/services/base/network.dart';
 import 'package:posdelivery/services/cache/cache_service.dart';
-import 'package:posdelivery/services/storage/app_storage_service.dart';
+import 'package:posdelivery/services/cache/cache_sembast_service.dart';
+import 'package:posdelivery/services/storage/sembast_storage_service.dart';
 import 'package:posdelivery/services/storage/local_storage_service.dart';
 
 class AppServiceBinding implements Bindings {
@@ -29,7 +30,8 @@ class AppServiceBinding implements Bindings {
     Get.lazyPut<HomeController>(() => HomeController());
     Get.put<CacheService>(
         CacheService(cacheAdaptor: CacheAdaptor.localStorage));
-    Get.lazyPut(() => AppDatabase().init());
+    Get.lazyPut(() => SembastStorage().init());
+    Get.put(CacheSembastService());
   }
 }
 
