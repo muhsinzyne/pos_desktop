@@ -1,10 +1,14 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:posdelivery/models/response/customer/customer_group.dart';
 import 'package:posdelivery/models/response/customer/price_group.dart';
+import 'package:posdelivery/models/response/pos/product.dart';
 import 'package:textfield_search/textfield_search.dart';
+import 'package:searchfield/searchfield.dart';
 import '../controllers/sales_point_controller.dart';
 
 class SalesPointView extends GetView<SalesPointController> {
@@ -129,32 +133,56 @@ class SalesPointView extends GetView<SalesPointController> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  flex: 92,
-                  child: Container(
-                    color: Colors.white,
-                    child: TextFieldSearch(
-                      initialList: [
-                        "a",
-                        "acd",
-                        "ab",
-                        "abcd",
-                        "aaa",
-                        "aads",
-                        "acas",
-                        "aaca",
-                        "ca",
-                        "acc",
-                      ],
-                      label: "Scan/Search product by name/code",
-                      controller: controller.search,
-                      decoration: const InputDecoration(
+                // Obx(
+                //   () => Expanded(
+                //     flex: 92,
+                //     child: Container(
+                //       color: Colors.white,
+                //       child: TextFieldSearch(
+                //         getSelectedValue: (value, label) {},
+                //         initialList: controller.productListString,
+                //         // initialList: controller.product
+                //         controller: controller.textController,
+                //         decoration: const InputDecoration(
+                //             hintText: "Scan/Search product by name/code",
+                //             border: OutlineInputBorder(
+                //               borderRadius: BorderRadius.all(Radius.zero),
+                //             ),
+                //             contentPadding: EdgeInsets.symmetric(
+                //                 horizontal: 8.0, vertical: 5.0)),
+                //         label: '',
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                Obx(
+                  () => Expanded(
+                    flex: 92,
+                    child: Container(
+                      //height: 300,
+                      color: Colors.white,
+                      child: SearchField<Product>(
+                        onSuggestionTap: (value) {
+                          controller.addProduct(value.item!);
+                        },
+                        itemHeight: 35,
+                        searchInputDecoration: const InputDecoration(
                           hintText: "Scan/Search product by name/code",
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.zero),
                           ),
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 5.0)),
+                          isCollapsed: true,
+                          contentPadding: EdgeInsets.all(11),
+                        ),
+                        suggestions: controller.product
+                            .map(
+                              (e) => SearchFieldListItem<Product>(
+                                e.label.toString(),
+                                item: e,
+                              ),
+                            )
+                            .toList(),
+                      ),
                     ),
                   ),
                 ),
@@ -244,6 +272,113 @@ class SalesPointView extends GetView<SalesPointController> {
                     ]),
                   ),
                 ],
+              ),
+            ),
+          ),
+          Obx(
+            () => Expanded(
+              flex: 7,
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.47,
+                child: ListView.builder(
+                    itemCount: controller.selectedProducts.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            //top: BorderSide(width: 1.0, color: Colors.black12),
+                            left: BorderSide(width: 1.0, color: Colors.black12),
+                            right:
+                                BorderSide(width: 1.0, color: Colors.black12),
+                            bottom:
+                                BorderSide(width: 1.0, color: Colors.black12),
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 30,
+                              //color: const Color(0xFF5D25DF),
+                              child: Row(children: [
+                                Expanded(
+                                    flex: 6,
+                                    child: Center(
+                                      child: Text(
+                                        controller
+                                            .selectedProducts[index].label!,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    )),
+                                VerticalDivider(
+                                  color: Colors.black12,
+                                  thickness: 0.5,
+                                ),
+                                Expanded(
+                                    flex: 3,
+                                    child: Center(
+                                      child: Text(
+                                        controller
+                                            .selectedProducts[index].row!.price
+                                            .toString(),
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    )),
+                                VerticalDivider(
+                                  color: Colors.black12,
+                                  thickness: 0.5,
+                                ),
+                                Expanded(
+                                    flex: 3,
+                                    child: Center(
+                                      child: Text(
+                                        controller
+                                            .selectedProducts[index].row!.qty
+                                            .toString(),
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    )),
+                                VerticalDivider(
+                                  color: Colors.black12,
+                                  thickness: 0.5,
+                                ),
+                                Expanded(
+                                    flex: 3,
+                                    child: Center(
+                                      child: Text(
+                                        controller
+                                            .selectedProducts[index].row!.price
+                                            .toString(),
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    )),
+                                VerticalDivider(
+                                  color: Colors.black12,
+                                  thickness: 0.5,
+                                ),
+                                Expanded(
+                                  child: Center(
+                                    child: IconButton(
+                                        icon: Icon(Icons.delete_outlined),
+                                        color: Colors.white,
+                                        onPressed: () {
+                                          controller.removeProduct(index);
+                                        }),
+                                  ),
+                                )
+                              ]),
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
               ),
             ),
           ),

@@ -38,9 +38,12 @@ class Product {
     category = json['category'];
     row = json['row'] != null ? Row.fromJson(json['row']) : null;
     comboItems = json['combo_items'];
-    taxRate = json['tax_rate'] != false
-        ? TaxRate.fromJson(json['tax_rate'] as Map<String, dynamic>)
-        : null;
+    if (json['tax_rate'] != false && json['tax_rate'] != null) {
+      taxRate = TaxRate.fromJson(json['tax_rate'] as Map<String, dynamic>);
+    } else {
+      taxRate = null;
+    }
+
     if (json['units'] != null) {
       units = <Units>[];
       json['units'].forEach((v) {

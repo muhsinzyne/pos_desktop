@@ -26,6 +26,8 @@ abstract class IDashboardScreenController {
   // onCustomerOfflineListError(ErrorMessage err);
 
   ///Desktop data syncing
+  onProductListDone(List<Product> productRes);
+  onProductListError(ErrorMessage err);
   onCustomerOffListDone(List<CustomerListOffResponse> cListRes);
   onCustomerOffListError(ErrorMessage err);
   onWarehouseOffListDone(List<WarehouseListResponse> wListRes);

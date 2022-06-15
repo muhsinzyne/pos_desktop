@@ -1,11 +1,15 @@
 import 'dart:convert';
 
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:posdelivery/app/modules/dashboard/contracts.dart';
 import 'package:posdelivery/app/modules/product_list/contracts.dart';
 import 'package:posdelivery/app/modules/sales_point/contracts.dart';
 import 'package:posdelivery/models/requests/customer/customer_add_request.dart';
+import 'package:posdelivery/models/requests/pos/customer_list.dart';
+import 'package:posdelivery/models/requests/pos/product_list.dart';
+import 'package:posdelivery/models/requests/pos/warehouse_products.dart';
 import 'package:posdelivery/models/response/auth/my_info_response.dart';
 import 'package:posdelivery/models/response/customer/customer_add_response.dart';
 import 'package:posdelivery/models/response/customer/customer_price_group_response.dart';
@@ -95,6 +99,35 @@ class DesktopDataProvider extends BaseDataProvider {
     });
   }
 
+  getProducts(ProductListRequest productListRequest) {
+    final obs = network
+        .get(NetworkURL.products, queryParameters: productListRequest.toJson())
+        .asStream();
+    obs.listen((data) {
+      try {
+        logger.e(data.data);
+        logger.e("messag");
+        List<Product> product = productFromJson(jsonEncode(data.data));
+        logger.e(product);
+        dashboardCtrl.onProductListDone(product);
+      } on Exception {
+        logger.wtf("amir");
+        final ErrorMessage errMsg = ErrorMessage();
+        errMsg.message = 'warehouse_not_loaded'.tr;
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+          ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      logger.wtf("hel");
+      if (err.response.statusCode == StatusCodes.status404NotFound) {
+        dashboardCtrl.onProductListError(errMsg);
+      } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
+        logger.e("messagworlde");
+        dashboardCtrl.onProductListError(errMsg);
+      }
+    });
+  }
+
   getWarehouseProducts() {
     final obs = network.get(NetworkURL.warehouseProductOffline).asStream();
     obs.listen((data) {
@@ -120,34 +153,16 @@ class DesktopDataProvider extends BaseDataProvider {
     });
   }
 
-  // getCustomerListOff(Map<String, String> customerQuery) async {
-  //   final res = await network.get(NetworkURL.customerListOffline,
-  //       queryParameters: customerQuery);
-
-  //   try {
-  //     dashboardCtrl.onCustomerOfflineListDone(res);
-  //   } on Exception {
-  //     final ErrorMessage errMsg = ErrorMessage();
-  //     errMsg.message = 'warehouse_not_loaded'.tr;
-  //   } catch (err) {
-  //     final ErrorMessage errMsg =
-  //         ErrorMessage.fromJSON(jsonDecode(err.toString()));
-  //     dashboardCtrl.onCustomerOfflineListError(errMsg);
-  //     // print("404");
-  //     // print("400");
-  //   }
-  // }
-
-  getCusListOff() {
-    final obs = network.get(NetworkURL.customerListOffline).asStream();
+  getCusListOff(CustomerListRequest customerListRequest) {
+    final obs = network
+        .get(NetworkURL.customerListOffline,
+            queryParameters: customerListRequest.toJson())
+        .asStream();
     obs.listen((data) {
       try {
-        logger.w(data);
         final List<CustomerListOffResponse> cListRes =
             customerListOffResponseFromJson(jsonEncode(data.data));
-        // CustomerListOffResponse cListRes = CustomerListOffResponse.fromJson(data.data);
-        logger.e(cListRes);
-        //dashboardCtrl.onCustomerOffListDone(cListRes);
+        dashboardCtrl.onCustomerOffListDone(cListRes);
       } on Exception {
         final ErrorMessage errMsg = ErrorMessage();
         errMsg.message = 'warehouse_not_loaded'.tr;
@@ -207,32 +222,6 @@ class DesktopDataProvider extends BaseDataProvider {
       }
     });
   }
-
-  // getProducts() {
-  //   Map<String, String> warehouseId = {"warehouse_id": "1"};
-  //   final obs = network
-  //       .get(NetworkURL.products, queryParameters: warehouseId)
-  //       .asStream();
-  //   obs.listen((data) {
-  //     try {
-  //       Product product = Product.fromJson(data.data);
-  //       print("=====================================================");
-  //       print(product);
-  //       dashboardCtrl.productListFetchDone(product);
-  //     } on Exception {
-  //       final ErrorMessage errMsg = ErrorMessage();
-  //       errMsg.message = 'warehouse_not_loaded'.tr;
-  //     }
-  //   }, onError: (err) {
-  //     final ErrorMessage errMsg =
-  //         ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
-  //     if (err.response.statusCode == StatusCodes.status404NotFound) {
-  //       dashboardCtrl.myInfoFetchError(errMsg);
-  //     } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
-  //       dashboardCtrl.myInfoFetchError(errMsg);
-  //     }
-  //   });
-  // }
 
   customerAddRequest(CustomerAddRequest customerAddRequest) {
     final obs = network

@@ -17,6 +17,8 @@ import 'package:posdelivery/models/cache_db_path.dart';
 import 'package:posdelivery/models/constants.dart';
 import 'package:posdelivery/models/requests/auth/register_close_summary_request.dart';
 import 'package:posdelivery/models/requests/pos/customer_list.dart';
+import 'package:posdelivery/models/requests/pos/product_list.dart';
+import 'package:posdelivery/models/requests/pos/warehouse_products.dart';
 import 'package:posdelivery/models/response/auth/current_register_response.dart';
 import 'package:posdelivery/models/response/auth/my_info_response.dart';
 import 'package:posdelivery/models/response/auth/register_close_summary.dart';
@@ -43,6 +45,7 @@ class DashboardScreenController extends BaseGetXController
   PosDataProvider posDataProvider = Get.find<PosDataProvider>();
   MyInfoResponse info = MyInfoResponse();
   CustomerListRequest customerListRequest = CustomerListRequest();
+  ProductListRequest productListRequest = ProductListRequest();
   DioNetwork network = Get.find<DioNetwork>();
   CacheService cache = Get.find<CacheService>();
   final logger = Logger(
@@ -61,8 +64,10 @@ class DashboardScreenController extends BaseGetXController
   d.Dio dio = d.Dio();
   var cRegister = CurrentRegisterResponse().obs;
   var registerCloseSummary = RegisterCloseSummary().obs;
-  List<Product> temp = [];
   RxList<CustomerListOffResponse> customerListTemp = RxList([]);
+  RxList<WarehouseProductsResponse> warehouseProductsListTemp = RxList([]);
+  RxList<Product> productListTemp = RxList([]);
+  late List<Product> temp;
 
   actionGoSales() {
     Get.toNamed(Routes.findCustomer)?.then((value) {
@@ -121,13 +126,19 @@ class DashboardScreenController extends BaseGetXController
   }
 
   _fetchCustomerListOff() async {
+    customerListRequest.page = 1;
+    customerListRequest.limit = 100;
+    productListRequest.limit = 100;
+    productListRequest.page = 1;
+
     UINotification.showLoading();
     desktopDataProvider.getMyInfo();
     desktopDataProvider.getCustomerGroupAndPriceGroup();
     desktopDataProvider.getWarehouse();
     desktopDataProvider.getCusGrpOff();
-    desktopDataProvider.getCusListOff();
+    desktopDataProvider.getCusListOff(customerListRequest);
     desktopDataProvider.getWarehouseProducts();
+    //  desktopDataProvider.getProducts(productListRequest);
     Future.delayed(const Duration(seconds: 2)).whenComplete(() {
       _getMyInfo();
       Get.back();
@@ -141,45 +152,34 @@ class DashboardScreenController extends BaseGetXController
   _getMyInfo() {
     final val = cache.getData(CacheDBPath.myInfo);
     info = MyInfoResponse.fromJSON(val);
-//    _getProducts();
-    //  _getCustomer();
-    //   _getCustomerTest();
+    _getProducts();
+    //_getCustomer();
   }
-
-  // _getCustomerTest() {
-  //   int currentPage = 1;
-  //   Map<String, String> queryCustomer = {
-  //     "page": "$currentPage",
-  //     "limit": "100"
-  //   };
-  //   desktopDataProvider.getCustomerListOff(queryCustomer);
-  // }
 
   _getProducts() async {
     for (var warehouse in info.warehouses!) {
-      dynamic pro;
+      temp = [];
+      d.Response pro;
       int currentPage = 1;
       Map<String, String> qp = {
         "warehouse_id": warehouse.id!,
         "page": "$currentPage",
         "limit": "100"
       };
+
       pro = await getProduct(qp);
-      // while (pro.data != []) {
-      //   currentPage++;
-      //   qp = {
-      //     "warehouse_id": warehouse.id!,
-      //     "page": "$currentPage",
-      //     "limit": "100"
-      //   };
-      //   pro = await getProduct(qp);
-      // }
+      while (pro.data.length != 0) {
+        currentPage++;
+        qp = {
+          "warehouse_id": warehouse.id!,
+          "page": "$currentPage",
+          "limit": "100"
+        };
+        pro = await getProduct(qp);
+      }
 
       for (var i = 0; i < temp.length; i++) {
-        await sembestCatch.setProductData(
-            Constants.warehouseProductsStore + warehouse.id.toString(),
-            temp[i]);
-        // await sembestCatch.setData( Constants.warehouseProductsStore + warehouse.id.toString(), temp[i]), "sasa"
+        await sembestCatch.setProductData(Constants.productsStore, temp[i]);
       }
     }
   }
@@ -194,32 +194,21 @@ class DashboardScreenController extends BaseGetXController
     }
   }
 
-  int currentPageCustomer = 1;
-  late d.Response pro;
   _getCustomer() async {
-    Map<String, String> queryCustomer = {
-      "page": "$currentPageCustomer",
-      "limit": "100"
-    };
+    int currentPage = 1;
+    late d.Response pro;
+    Map<String, String> queryCustomer = {"page": "$currentPage", "limit": "1"};
     pro = await getCustomer(queryCustomer);
-    if (pro.data != []) {
-      currentPageCustomer++;
-      queryCustomer = {"page": "$currentPageCustomer", "limit": "100"};
-      _getCustomer();
-    } else {
-      for (var i = 0; i < customerListTemp.length; i++) {
-        await sembestCatch.setCustomerData(customerListTemp[i]);
-      }
-    }
-    // while (pro.data != []) {
-    //   currentPage++;
-    //   queryCustomer = {"page": "$currentPage", "limit": "100"};
-    //   pro = await getCustomer(queryCustomer);
-    // }
 
-    // for (var i = 0; i < customerListTemp.length; i++) {
-    // await sembestCatch.setCustomerData(customerListTemp[i]);
-    // }
+    while (pro.data.length != 0) {
+      currentPage++;
+      queryCustomer = {"page": "$currentPage", "limit": "1"};
+      pro = await getCustomer(queryCustomer);
+    }
+
+    for (var i = 0; i < customerListTemp.length; i++) {
+      await sembestCatch.setCustomerData(customerListTemp[i]);
+    }
   }
 
   Future<d.Response> getCustomer(Map<String, String> customerQuery) async {
@@ -272,16 +261,17 @@ class DashboardScreenController extends BaseGetXController
   }
 
   @override
-  onCustomerOffListDone(List<CustomerListOffResponse> cListRes) {
-    //logger.e(cListRes);
-    //   logger.e(cListRes);
-    // logger.e(customerListTemp);
-    customerListTemp
-        .addAll(customerListOffResponseFromJson(jsonEncode(cListRes)));
-    //logger.w(customerListTemp);
-    // logger.e(customerListTemp);
-    // cache.setData( CacheDBPath.customers, cListRes?.map((e) => e.toJson()).toList());
-    // selectedCustomerName.value = cListRes!.first.name.toString();
+  onCustomerOffListDone(List<CustomerListOffResponse> cListRes) async {
+    customerListTemp.addAll(cListRes);
+    if (cListRes.isNotEmpty) {
+      customerListRequest.page = customerListRequest.page! + 1;
+      desktopDataProvider.getCusListOff(customerListRequest);
+    } else {
+      for (var i = 0; i < customerListTemp.length; i++) {
+        await sembestCatch.setCustomerData(customerListTemp[i]);
+      }
+    }
+
     UINotification.hideLoading();
   }
 
@@ -303,9 +293,17 @@ class DashboardScreenController extends BaseGetXController
   }
 
   @override
-  onWProductOffListDone(List<WarehouseProductsResponse>? wPListRes) {
-    cache.setData(CacheDBPath.warehouseProducts,
-        wPListRes?.map((e) => e.toJson()).toList());
+  onWProductOffListDone(List<WarehouseProductsResponse> wPListRes) async {
+    warehouseProductsListTemp.addAll(wPListRes);
+    // if (wPListRes.isNotEmpty) {
+    // warehouseProductRequest.page = warehouseProductRequest.page! + 1;
+    // desktopDataProvider.getWarehouseProducts(warehouseProductRequest);
+    // }
+    for (var i = 0; i < warehouseProductsListTemp.length; i++) {
+      await sembestCatch.setWarehouseProductData(
+          Constants.warehouseProductsStore, warehouseProductsListTemp[i]);
+    }
+
     UINotification.hideLoading();
   }
 
@@ -315,9 +313,12 @@ class DashboardScreenController extends BaseGetXController
   }
 
   @override
-  onWarehouseOffListDone(List<WarehouseListResponse>? wListRes) {
-    cache.setData(
-        CacheDBPath.warehouse, wListRes?.map((e) => e.toJson()).toList());
+  onWarehouseOffListDone(List<WarehouseListResponse>? wListRes) async {
+    for (var i = 0; i < wListRes!.length; i++) {
+      await sembestCatch.setWarehouseData(wListRes[i]);
+    }
+    //cache.setData(
+    //  CacheDBPath.warehouse, wListRes?.map((e) => e.toJson()).toList());
     UINotification.hideLoading();
   }
 
@@ -347,5 +348,28 @@ class DashboardScreenController extends BaseGetXController
   @override
   myInfoFetchError(ErrorMessage err) {
     UINotification.hideLoading();
+  }
+
+  @override
+  onProductListDone(List<Product> productRes) async {
+    temp.addAll(productRes);
+    logger.e("hello");
+    if (productRes.isNotEmpty) {
+      productListRequest.page = productListRequest.page! + 1;
+      desktopDataProvider.getProducts(productListRequest);
+    } else {
+      for (var i = 0; i < productListTemp.length; i++) {
+        await sembestCatch.setProductData(
+            Constants.productsStore, productListTemp[i]);
+      }
+    }
+
+    UINotification.hideLoading();
+  }
+
+  @override
+  onProductListError(ErrorMessage err) {
+    // TODO: implement onProductListError
+    throw UnimplementedError();
   }
 }

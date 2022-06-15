@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:posdelivery/models/constants.dart';
 import 'package:posdelivery/models/response/customer/customer_data.dart';
 import 'package:posdelivery/models/response/desktop/customer_list.dart';
 import 'package:posdelivery/models/response/desktop/warehouse_list.dart';
+import 'package:posdelivery/models/response/desktop/warehouse_products.dart';
 import 'package:posdelivery/models/response/pos/product.dart';
 import 'package:posdelivery/services/base/get_x_service.dart';
 // import 'package:posdelivery/services/file/file_storage_service.dart';
@@ -16,6 +18,55 @@ class CacheSembastService extends BaseGetXService {
   Future dependencies() async {}
 
   SembastStorage localStorage = Get.find<SembastStorage>();
+  final logger = Logger(
+      printer: PrettyPrinter(
+    methodCount: 0,
+    errorMethodCount: 5,
+    lineLength: 50,
+    colors: true,
+    printEmojis: true,
+    printTime: true,
+  ));
+
+  setWarehouseProductData(
+      String storeName, WarehouseProductsResponse item) async {
+    int key = int.parse(item.id.toString());
+    StoreRef store = localStorage.getMapStore(storeName);
+    Database? db = await localStorage.db;
+    await db!.transaction((transaction) async => {
+          await store.record(key).put(transaction, item.toJson())
+          //await store.add(transaction, item.toJson())
+        });
+    return item;
+  }
+
+  Future getWarehouseProductData(String storeName, int key) async {
+    StoreRef store = localStorage.getMapStore(storeName);
+    Database? db = await localStorage.db;
+    var record = await store.record(key).get(db!);
+    if (record != null) {
+      return record;
+    } else {
+      return null;
+    }
+  }
+
+  Future<List<WarehouseProductsResponse>> getAllWarehouseProducts(
+      String storeName) async {
+    StoreRef store = localStorage.getMapStore(storeName);
+    Database? db = await localStorage.db;
+    var records = await store.find(
+      db!,
+      finder: Finder(
+        sortOrders: [SortOrder('order')],
+      ),
+    );
+    List<WarehouseProductsResponse> result = [];
+    for (var record in records) {
+      result.add(WarehouseProductsResponse.fromJson(record.value));
+    }
+    return result;
+  }
 
   setWarehouseData(WarehouseListResponse warehouse) async {
     int key = int.parse(warehouse.id.toString());
@@ -39,7 +90,7 @@ class CacheSembastService extends BaseGetXService {
     }
   }
 
-  Future<List<dynamic>> getAllwarehouses() async {
+  Future<List<WarehouseListResponse>> getAllwarehouses() async {
     StoreRef store = localStorage.getMapStore(Constants.warehouseListStore);
     Database? db = await localStorage.db;
     var records = await store.find(
@@ -48,9 +99,9 @@ class CacheSembastService extends BaseGetXService {
         sortOrders: [SortOrder('order')],
       ),
     );
-    List<dynamic> result = [];
+    List<WarehouseListResponse> result = [];
     for (var record in records) {
-      result.add(record);
+      result.add(WarehouseListResponse.fromJson(record.value));
     }
     return result;
   }
@@ -66,18 +117,18 @@ class CacheSembastService extends BaseGetXService {
     return customer;
   }
 
-  Future getCustomerData(String storeName, int key) async {
-    StoreRef store = localStorage.getMapStore(storeName);
+  Future<CustomerListOffResponse> getCustomerData(int key) async {
+    StoreRef store = localStorage.getMapStore(Constants.customerListStore);
     Database? db = await localStorage.db;
     var record = await store.record(key).get(db!);
-    if (record != null) {
-      return record;
-    } else {
-      return null;
-    }
+    CustomerListOffResponse data;
+    logger.e(record);
+    //CustomerListOffResponse();
+    data = CustomerListOffResponse.fromJson(record);
+    return data;
   }
 
-  Future<List<dynamic>> getAllCustomers() async {
+  Future<List<CustomerListOffResponse>> getAllCustomers() async {
     StoreRef store = localStorage.getMapStore(Constants.customerListStore);
     Database? db = await localStorage.db;
     var records = await store.find(
@@ -86,9 +137,9 @@ class CacheSembastService extends BaseGetXService {
         sortOrders: [SortOrder('order')],
       ),
     );
-    List<dynamic> result = [];
+    List<CustomerListOffResponse> result = [];
     for (var record in records) {
-      result.add(record);
+      result.add(CustomerListOffResponse.fromJson(record.value));
     }
     return result;
   }
@@ -115,8 +166,8 @@ class CacheSembastService extends BaseGetXService {
     }
   }
 
-  Future<List<dynamic>> getAllProducts(String storeName) async {
-    StoreRef store = localStorage.getMapStore(storeName);
+  Future<List<Product>> getAllProducts() async {
+    StoreRef store = localStorage.getMapStore(Constants.productsStore);
     Database? db = await localStorage.db;
     var records = await store.find(
       db!,
@@ -124,9 +175,9 @@ class CacheSembastService extends BaseGetXService {
         sortOrders: [SortOrder('order')],
       ),
     );
-    List<dynamic> result = [];
+    List<Product> result = [];
     for (var record in records) {
-      result.add(record);
+      result.add(Product.fromJson(record.value));
     }
     return result;
   }

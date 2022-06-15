@@ -60,7 +60,7 @@ class Constants {
   static const Duration smallDuration = Duration(milliseconds: 300);
   static const Duration oneSecDuration = Duration(seconds: 1);
   static const Duration fourSec = Duration(seconds: 4);
-  static const databaseFileName = 'pos_desktop.db';
+  static const databaseFileName = 'pos_desktop.json';
   static const productsStore = 'products_warehouse';
   static const warehouseListStore = "warehouse_list";
   static const customerListStore = "customer_list";

@@ -90,7 +90,7 @@ class Row {
     code = json['code'];
     name = json['name'];
     unit = json['unit'];
-    price = num.parse(json['price']);
+    price = num.tryParse(json['price'].toString());
     alertQuantity = json['alert_quantity'];
     categoryId = json['category_id'];
     subcategoryId = json['subcategory_id'];
@@ -122,10 +122,10 @@ class Row {
     discount = json['discount'];
     serial = json['serial'];
     option = json['option'];
-    realUnitPrice = num.parse(json['real_unit_price']);
+    realUnitPrice = num.tryParse(json['real_unit_price'].toString());
     baseQuantity = json['base_quantity'];
     baseUnit = json['base_unit'];
-    baseUnitPrice = num.parse(json['base_unit_price']);
+    baseUnitPrice = num.tryParse(json['base_unit_price'].toString());
     comment = json['comment'];
   }
 
