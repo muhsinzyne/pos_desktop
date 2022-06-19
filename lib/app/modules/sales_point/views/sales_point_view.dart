@@ -2,12 +2,12 @@
 
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
 import 'package:posdelivery/models/response/customer/customer_group.dart';
 import 'package:posdelivery/models/response/customer/price_group.dart';
 import 'package:posdelivery/models/response/pos/product.dart';
-import 'package:textfield_search/textfield_search.dart';
 import 'package:searchfield/searchfield.dart';
 import '../controllers/sales_point_controller.dart';
 
@@ -133,28 +133,6 @@ class SalesPointView extends GetView<SalesPointController> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Obx(
-                //   () => Expanded(
-                //     flex: 92,
-                //     child: Container(
-                //       color: Colors.white,
-                //       child: TextFieldSearch(
-                //         getSelectedValue: (value, label) {},
-                //         initialList: controller.productListString,
-                //         // initialList: controller.product
-                //         controller: controller.textController,
-                //         decoration: const InputDecoration(
-                //             hintText: "Scan/Search product by name/code",
-                //             border: OutlineInputBorder(
-                //               borderRadius: BorderRadius.all(Radius.zero),
-                //             ),
-                //             contentPadding: EdgeInsets.symmetric(
-                //                 horizontal: 8.0, vertical: 5.0)),
-                //         label: '',
-                //       ),
-                //     ),
-                //   ),
-                // ),
                 Obx(
                   () => Expanded(
                     flex: 92,
@@ -162,8 +140,9 @@ class SalesPointView extends GetView<SalesPointController> {
                       //height: 300,
                       color: Colors.white,
                       child: SearchField<Product>(
+                        controller: controller.searchController,
                         onSuggestionTap: (value) {
-                          controller.addProduct(value.item!);
+                          controller.addProductOnClick(value.item!);
                         },
                         itemHeight: 35,
                         searchInputDecoration: const InputDecoration(
@@ -206,7 +185,7 @@ class SalesPointView extends GetView<SalesPointController> {
                     color: const Color(0xFF5D25DF),
                     child: Row(children: const [
                       Expanded(
-                          flex: 6,
+                          flex: 8,
                           child: Center(
                             child: Text(
                               "Product",
@@ -234,7 +213,7 @@ class SalesPointView extends GetView<SalesPointController> {
                         thickness: 0.5,
                       ),
                       Expanded(
-                          flex: 3,
+                          flex: 2,
                           child: Center(
                             child: Text(
                               "Qty",
@@ -262,6 +241,7 @@ class SalesPointView extends GetView<SalesPointController> {
                         thickness: 0.5,
                       ),
                       Expanded(
+                        flex: 2,
                         child: Center(
                           child: Icon(
                             Icons.delete_outlined,
@@ -281,6 +261,7 @@ class SalesPointView extends GetView<SalesPointController> {
               child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.47,
                 child: ListView.builder(
+                    controller: controller.scrollController,
                     itemCount: controller.selectedProducts.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
@@ -297,22 +278,31 @@ class SalesPointView extends GetView<SalesPointController> {
                         child: Column(
                           children: [
                             Container(
-                              height: 30,
-                              //color: const Color(0xFF5D25DF),
+                              height: 50,
+                              color: controller.selectedProducts[index].row!
+                                          .quantity !=
+                                      0
+                                  ? Colors.transparent
+                                  : Colors.redAccent[400],
                               child: Row(children: [
                                 Expanded(
-                                    flex: 6,
+                                    flex: 8,
                                     child: Center(
-                                      child: Text(
-                                        controller
-                                            .selectedProducts[index].label!,
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 3),
+                                        child: Text(
+                                          controller
+                                              .selectedProducts[index].label!,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.black87,
+                                              fontWeight: FontWeight.w500),
+                                        ),
                                       ),
                                     )),
                                 VerticalDivider(
-                                  color: Colors.black12,
+                                  color: Colors.black26,
                                   thickness: 0.5,
                                 ),
                                 Expanded(
@@ -322,54 +312,91 @@ class SalesPointView extends GetView<SalesPointController> {
                                         controller
                                             .selectedProducts[index].row!.price
                                             .toString(),
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
+                                            color: Colors.black87,
+                                            fontWeight: FontWeight.w500),
                                       ),
                                     )),
                                 VerticalDivider(
-                                  color: Colors.black12,
+                                  color: Colors.black26,
                                   thickness: 0.5,
                                 ),
                                 Expanded(
                                     flex: 3,
                                     child: Center(
-                                      child: Text(
-                                        controller
-                                            .selectedProducts[index].row!.qty
-                                            .toString(),
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
+                                      child: Container(
+                                        padding: EdgeInsets.only(bottom: 5),
+                                        //     color: Colors.white,
+                                        child: TextFormField(
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                          ),
+                                          decoration: InputDecoration(
+                                            filled: true,
+                                            fillColor: Colors.white,
+                                            border: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.white)),
+                                          ),
+                                          initialValue: controller
+                                              .selectedProducts[index].row!.qty
+                                              .toString(),
+                                          keyboardType: TextInputType.number,
+                                          onChanged: (value) {
+                                            controller.checkAvailableQuantity(
+                                                index, value);
+                                          },
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter
+                                                .digitsOnly
+                                          ], // Only numbers can be entered
+                                        ),
                                       ),
+                                      // Text(
+                                      //   controller
+                                      //       .selectedProducts[index].row!.qty
+                                      //       .toString(),
+                                      //   textAlign: TextAlign.center,
+                                      //   style: TextStyle(
+                                      //       color: Colors.black87,
+                                      //       fontWeight: FontWeight.w500),
+                                      //  ),
                                     )),
                                 VerticalDivider(
-                                  color: Colors.black12,
+                                  color: Colors.black26,
+                                  thickness: 0.5,
+                                ),
+                                Obx(
+                                  () => Expanded(
+                                      flex: 3,
+                                      child: Center(
+                                        child: Text(
+                                          controller.selectedProducts[index]
+                                              .row!.price!
+                                              .toString(),
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.black87,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      )),
+                                ),
+                                VerticalDivider(
+                                  color: Colors.black26,
                                   thickness: 0.5,
                                 ),
                                 Expanded(
-                                    flex: 3,
-                                    child: Center(
-                                      child: Text(
-                                        controller
-                                            .selectedProducts[index].row!.price
-                                            .toString(),
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    )),
-                                VerticalDivider(
-                                  color: Colors.black12,
-                                  thickness: 0.5,
-                                ),
-                                Expanded(
+                                  flex: 2,
                                   child: Center(
                                     child: IconButton(
-                                        icon: Icon(Icons.delete_outlined),
-                                        color: Colors.white,
+                                        icon: Icon(Icons.close_rounded),
+                                        color: Colors.black,
+                                        iconSize: 18,
                                         onPressed: () {
-                                          controller.removeProduct(index);
+                                          controller.removeProduct(controller
+                                              .selectedProducts[index]);
                                         }),
                                   ),
                                 )
@@ -469,53 +496,58 @@ class SalesPointView extends GetView<SalesPointController> {
               ),
             ),
           ),
-          SizedBox(
-            height: 70,
-            child: Row(
-              children: [
-                Expanded(
-                    child: InkWell(
-                  child: Container(
-                    color: Colors.amber,
-                    alignment: Alignment.center,
-                    child: const Text(
-                      "Suspend",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                )),
-                Expanded(
-                    child: InkWell(
-                  child: Container(
-                    color: Colors.red,
-                    alignment: Alignment.center,
-                    child: const Text(
-                      "Cancel",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                )),
-                Expanded(
-                    child: InkWell(
-                  onTap: () {
-                    showDialog(
-                        context: context, builder: (builder) => PaymentPopup());
-                  },
-                  child: Container(
-                    color: Colors.green,
-                    alignment: Alignment.center,
-                    child: const Text(
-                      "Payment",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                )),
-              ],
-            ),
-          )
+          Obx(() => SizedBox(
+                height: 70,
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: InkWell(
+                      child: Container(
+                        color: Colors.amber,
+                        alignment: Alignment.center,
+                        child: const Text(
+                          "Suspend",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    )),
+                    Expanded(
+                        child: InkWell(
+                      child: Container(
+                        color: Colors.red,
+                        alignment: Alignment.center,
+                        child: const Text(
+                          "Cancel",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    )),
+                    Expanded(
+                        child: InkWell(
+                      onTap: () {
+                        if (controller.paymentFlag.value) {
+                          showDialog(
+                              context: context,
+                              builder: (builder) => PaymentPopup());
+                        }
+                      },
+                      child: Container(
+                        color: controller.paymentFlag.value
+                            ? Colors.green
+                            : Colors.grey[600],
+                        alignment: Alignment.center,
+                        child: const Text(
+                          "Payment",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    )),
+                  ],
+                ),
+              ))
         ]),
       ),
     );
@@ -542,7 +574,9 @@ class PaymentPopup extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.back();
+                    },
                     icon: const Icon(
                       Icons.close,
                       size: 30,
@@ -1435,7 +1469,9 @@ class AddProductButton extends StatelessWidget {
                             children: [
                               const Text("ADD PRODUCT MANUALLY"),
                               IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Get.back();
+                                  },
                                   icon: const Icon(
                                     Icons.close,
                                     size: 30,

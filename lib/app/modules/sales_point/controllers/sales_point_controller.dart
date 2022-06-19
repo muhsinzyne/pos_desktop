@@ -63,10 +63,16 @@ class SalesPointController extends BaseGetXController
   MyInfoResponse info = MyInfoResponse();
   RxList<Product> product = RxList([]);
   RxList<Product> selectedProducts = RxList([]);
-  final _selectedProduct = Product().obs;
+  final ScrollController scrollController = ScrollController();
+  final RxString _subTotal = RxString("");
+  //final _selectedProduct = Product().obs;
   String get cWareHouseName => _cWareHouseName.value;
-  Product get selectedProduct => _selectedProduct.value;
 
+  //Product get selectedProduct => _selectedProduct.value;
+  RxBool paymentFlag = RxBool(true);
+
+  final searchController = TextEditingController();
+  @override
   final logger = Logger(
       printer: PrettyPrinter(
     methodCount: 0,
@@ -154,15 +160,83 @@ class SalesPointController extends BaseGetXController
     cPriceGroup.value = value;
   }
 
-  addProduct(Product value) {
+  addProductOnClick(Product value) {
     selectedProducts.add(value);
-
+    checkQuantity(value);
+    searchController.text = "";
     // _selectedProduct.value = value;
-    logger.wtf(_selectedProduct.value.label);
+    // logger.wtf(_selectedProduct.value.label);
   }
 
-  removeProduct(int i) {
-    selectedProducts.removeAt(i);
+  removeProduct(Product product) {
+    selectedProducts.remove(product);
+    bool status =
+        selectedProducts.every((item) => item.row!.quantity != 0); // false
+    if (status) {
+      paymentFlag.value = true;
+    }
+  }
+
+  addProduct() {
+    //logger.e(searchController)
+    Product? result = product.firstWhereOrNull(
+        (element) => element.row!.code == searchController.text);
+    if (result != null) {
+      selectedProducts.add(result);
+      checkQuantity(result);
+      searchController.text = "";
+    } else {
+      logger.e("not found");
+    }
+  }
+
+  checkProductCode(String a) {
+    var result = product.firstWhereOrNull((element) => element.row!.code == a);
+    if (result != null) {
+      logger.e("found product");
+    } else {
+      logger.e("not found");
+    }
+  }
+
+  checkQuantity(Product product) {
+    if (product.row!.quantity == 0) {
+      Get.defaultDialog(
+        title: "Out of stock",
+        middleText: "Add more stocks",
+        backgroundColor: Colors.white,
+        textCancel: "OK",
+        titleStyle: TextStyle(color: Colors.black),
+        middleTextStyle: TextStyle(color: Colors.black),
+      );
+
+      paymentFlag.value = false;
+    }
+  }
+
+  // String getSubTotal(int index) {
+  // int total = selectedProducts[index].row!.price!.toInt() *
+  // selectedProducts[index].row!.qty!.toInt();
+  // subTotal.value = total.toString();
+  // return subTotal.value;
+  // }
+
+  checkAvailableQuantity(int index, String? value) {
+    if (value!.isNotEmpty) {
+      if (int.parse(value) > selectedProducts[index].row!.quantity!) {
+        paymentFlag.value = false;
+        Get.defaultDialog(
+          title: "Not enough stock",
+          middleText: "Add more stocks",
+          backgroundColor: Colors.white,
+          textCancel: "OK",
+          titleStyle: TextStyle(color: Colors.black),
+          middleTextStyle: TextStyle(color: Colors.black),
+        );
+      } else {
+        selectedProducts[index].row!.qty = int.parse(value);
+      }
+    }
   }
 
   @override
@@ -173,6 +247,8 @@ class SalesPointController extends BaseGetXController
     _cBillerName.value = appService.myInfoResponse.cBiller.name ?? '';
     appService.cWareHouse = appService.myInfoResponse.cWareHouse.id!;
     appService.cBiller = appService.myInfoResponse.cBiller.id!;
+    searchController.addListener(addProduct);
+    scrollController.addListener(() {});
     super.onInit();
   }
 
@@ -233,7 +309,11 @@ class SalesPointController extends BaseGetXController
   }
 
   @override
-  void onClose() {}
+  void onClose() {
+    searchController.dispose();
+    scrollController.dispose();
+    super.onClose();
+  }
 
   @override
   onCustomerOffListDone(List<CustomerListOffResponse>? cListRes) {

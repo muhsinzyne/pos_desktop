@@ -137,7 +137,7 @@ class DashboardScreenController extends BaseGetXController
     desktopDataProvider.getWarehouse();
     desktopDataProvider.getCusGrpOff();
     desktopDataProvider.getCusListOff(customerListRequest);
-    desktopDataProvider.getWarehouseProducts();
+    // desktopDataProvider.getWarehouseProducts();
     //  desktopDataProvider.getProducts(productListRequest);
     Future.delayed(const Duration(seconds: 2)).whenComplete(() {
       _getMyInfo();
@@ -188,35 +188,6 @@ class DashboardScreenController extends BaseGetXController
     final val = await network.get(NetworkURL.products, queryParameters: qp);
     if (val.statusCode == 200 || val.statusCode == 201) {
       temp.addAll(productFromJson(jsonEncode(val.data)));
-      return val;
-    } else {
-      return val;
-    }
-  }
-
-  _getCustomer() async {
-    int currentPage = 1;
-    late d.Response pro;
-    Map<String, String> queryCustomer = {"page": "$currentPage", "limit": "1"};
-    pro = await getCustomer(queryCustomer);
-
-    while (pro.data.length != 0) {
-      currentPage++;
-      queryCustomer = {"page": "$currentPage", "limit": "1"};
-      pro = await getCustomer(queryCustomer);
-    }
-
-    for (var i = 0; i < customerListTemp.length; i++) {
-      await sembestCatch.setCustomerData(customerListTemp[i]);
-    }
-  }
-
-  Future<d.Response> getCustomer(Map<String, String> customerQuery) async {
-    final val = await network.get(NetworkURL.customerListOffline,
-        queryParameters: customerQuery);
-    if (val.statusCode == 200 || val.statusCode == 201) {
-      customerListTemp
-          .addAll(customerListOffResponseFromJson(jsonEncode(val.data)));
       return val;
     } else {
       return val;
