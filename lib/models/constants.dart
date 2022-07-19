@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:posdelivery/models/currency_format.dart';
 
 class Constants {
@@ -66,6 +67,16 @@ class Constants {
   static const customerListStore = "customer_list";
   static const customerGroupeStore = "customer_group";
   static const warehouseProductsStore = "warehouse_products";
+
+  static double screenHeight =
+      window.physicalSize.height / window.devicePixelRatio;
+  static double screenWidth =
+      window.physicalSize.width / window.devicePixelRatio;
+  static double screenHeightSafearea = screenHeight -
+      ((window.padding.top / window.devicePixelRatio) +
+          (window.padding.bottom / window.devicePixelRatio));
+//status bar height
+  // static double statusBarHeight = window.padding.top / window.devicePixelRatio;
 }
 
 class CurrencyConst {

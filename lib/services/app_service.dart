@@ -154,7 +154,7 @@ class AppService extends BaseGetXService {
   //
   // void stopBluetoothScan() async {
   //   //bluetoothPrint.stopScan();
-  // }
+  //}
 
   _preloadValues() {
     final String tempToken = localStorage.getString(Constants.authToken)!;

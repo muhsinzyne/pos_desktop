@@ -25,7 +25,6 @@ dependencies:
   flutter_spinkit: ^5.1.0
   flutter_svg: ^0.23.0+1
   flutter_typeahead: ^3.2.4
-  font_awesome_flutter: ^9.2.0
   get: 4.6.1
   google_fonts: ^2.1.0
   image_utils_class: ^2.0.0
@@ -46,6 +45,12 @@ dependencies:
   logger: ^1.1.0
   json_annotation: ^2.0.0
   searchfield: ^0.6.6
+  flutter_switch: ^0.3.2
+  flutter_advanced_switch: ^3.0.1
+  font_awesome_flutter: ^10.1.0
+
+
+
 
 
 dev_dependencies:
@@ -60,6 +65,8 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/sounds/
+    - assets/svg/
+
 
   fonts:
     - family: DIN Next LT Arabic
