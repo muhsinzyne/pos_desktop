@@ -3,7 +3,33 @@ part of 'app_pages.dart';
 
 abstract class Routes {
   Routes._();
+  //pos-delivery
+  static const deliverySplash = _Paths.deliverySplash;
+  static const deliveryHome = _Paths.deliveryHome;
+  static const deliveryAddStore = _Paths.deliveryAddStore;
+  static const deliveryAddStoreManullay = _Paths.deliveryAddStoreManually;
+  static const deliveryStoreDetails = _Paths.deliveryStoreDetails;
+  static const deliverySalesPayment = _Paths.deliverySalesPayment;
+  static const deliveryAddSales = _Paths.deliveryAddSales;
+  static const deliveryAddProducts = _Paths.deliveryAddProducts;
+  static const deliveryInvoice = _Paths.deliveryInvoice;
+  static const deliveryPaymentHome = _Paths.deliveryPaymentHome;
+  static const deliveryPaymentDue = _Paths.deliveryPaymentDue;
+  static const deliveryPaymentInvoice = _Paths.deliveryPaymentInvoice;
+  static const deliveryPaymentHistory = _Paths.deliveryPaymentHistory;
+  static const deliveryRegisterHistory = _Paths.deliveryRegisterHistory;
+  static const deliveryCashRegister = _Paths.deliveryCashRegister;
+  static const deliveryOpenRegister = _Paths.deliveryOpenRegister;
+  static const deliveryCloseRegister = _Paths.deliveryCloseRegister;
+  static const deliveryAmountTransfer = _Paths.deliveryAmountTransfer;
+  static const deliveryPendingPayment = _Paths.deliveryPendingPayment;
+  static const deliveryOrderPayment = _Paths.deliveryOrderPayment;
+  static const deliveryOrderInvoice = _Paths.deliveryOrderInvoice;
+  static const deliveryProductsForSales = _Paths.deliveryProductsForSales;
+  static const deliveryProductsForOrders = _Paths.deliveryProductsForOrders;
+  static const deliveryAddOrders = _Paths.deliveryAddOrders;
 
+  //pos-desktop
   static const home = _Paths.home;
   static const login = _Paths.login;
   static const dashboard = _Paths.dashboard;
@@ -35,6 +61,32 @@ abstract class Routes {
 }
 
 abstract class _Paths {
+  //pos-delivery routes
+  static const deliverySplash = '/delivery-splash';
+  static const deliveryHome = '/delivery-home';
+  static const deliveryAddStoreManually = '/delivery-addStoreManually';
+  static const deliveryAddStore = '/delivery-addStore';
+  static const deliveryStoreDetails = '/delivery-storDetails';
+  static const deliverySalesPayment = '/delivery-salesPayment';
+  static const deliveryAddSales = '/delivery-AddSales';
+  static const deliveryAddProducts = '/delivery-AddProducts';
+  static const deliveryInvoice = '/delivery-invoice';
+  static const deliveryPaymentHome = '/delivery-paymentHome';
+  static const deliveryPaymentDue = '/delivery-paymentDue';
+  static const deliveryPaymentInvoice = '/delivery-paymentInvoice';
+  static const deliveryPaymentHistory = '/delivery-paymentHistory';
+  static const deliveryRegisterHistory = '/delivery-registerHistory';
+  static const deliveryCashRegister = '/delivery-cashRegister';
+  static const deliveryOpenRegister = '/delivery-openRegister';
+  static const deliveryCloseRegister = '/delivery-closeRegister';
+  static const deliveryAmountTransfer = '/delivery-amountTransfer';
+  static const deliveryPendingPayment = '/delivery-pendingPayment';
+  static const deliveryOrderPayment = '/delivery-orderPayment';
+  static const deliveryOrderInvoice = '/delivery-orderInvoice';
+  static const deliveryProductsForSales = '/delivery-productsForSale';
+  static const deliveryProductsForOrders = '/delivery-productsForOrders';
+  static const deliveryAddOrders = '/delivery-AddOrders';
+
   static const home = '/splash';
   static const login = '/login';
   static const dashboard = '/dashboard';

@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:dio/dio.dart' as d;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:posdelivery/app/modules/dashboard/contracts.dart';
 import 'package:posdelivery/app/modules/dashboard/views/find_customer_search.dart';
 import 'package:posdelivery/app/routes/app_pages.dart';
@@ -12,10 +14,15 @@ import 'package:posdelivery/app/ui/components/ui_notification.dart';
 import 'package:posdelivery/app/ui/theme/app_colors.dart';
 import 'package:posdelivery/controllers/base_controller.dart';
 import 'package:posdelivery/models/cache_db_path.dart';
+import 'package:posdelivery/models/constants.dart';
 import 'package:posdelivery/models/requests/auth/register_close_summary_request.dart';
+import 'package:posdelivery/models/requests/pos/customer_list.dart';
+import 'package:posdelivery/models/requests/pos/product_list.dart';
+import 'package:posdelivery/models/requests/pos/warehouse_products.dart';
 import 'package:posdelivery/models/response/auth/current_register_response.dart';
 import 'package:posdelivery/models/response/auth/my_info_response.dart';
 import 'package:posdelivery/models/response/auth/register_close_summary.dart';
+import 'package:posdelivery/models/response/customer/customer_data.dart';
 import 'package:posdelivery/models/response/customer/customer_price_group_response.dart';
 import 'package:posdelivery/models/response/desktop/customer_group.dart';
 import 'package:posdelivery/models/response/desktop/customer_list.dart';
@@ -29,18 +36,38 @@ import 'package:posdelivery/providers/data/desktop_data_provider.dart';
 import 'package:posdelivery/providers/data/pos_data_provider.dart';
 import 'package:posdelivery/services/base/network.dart';
 import 'package:posdelivery/services/cache/cache_service.dart';
+import 'package:posdelivery/services/cache/cache_sembast_service.dart';
+import 'package:posdelivery/services/storage/sembast_storage_service.dart';
+import 'package:sembast/sembast.dart';
 
 class DashboardScreenController extends BaseGetXController
     implements IDashboardScreenController {
   PosDataProvider posDataProvider = Get.find<PosDataProvider>();
   MyInfoResponse info = MyInfoResponse();
+  CustomerListRequest customerListRequest = CustomerListRequest();
+  ProductListRequest productListRequest = ProductListRequest();
   DioNetwork network = Get.find<DioNetwork>();
   CacheService cache = Get.find<CacheService>();
+  final logger = Logger(
+      printer: PrettyPrinter(
+    methodCount: 0,
+    errorMethodCount: 5,
+    lineLength: 50,
+    colors: true,
+    printEmojis: true,
+    printTime: true,
+  ));
+  //SembastStorage _db = Get.find<SembastStorage>();
+  CacheSembastService sembestCatch = Get.find<CacheSembastService>();
+
   DesktopDataProvider desktopDataProvider = Get.find<DesktopDataProvider>();
   d.Dio dio = d.Dio();
   var cRegister = CurrentRegisterResponse().obs;
   var registerCloseSummary = RegisterCloseSummary().obs;
-  List<Product> temp = [];
+  RxList<CustomerListOffResponse> customerListTemp = RxList([]);
+  RxList<WarehouseProductsResponse> warehouseProductsListTemp = RxList([]);
+  RxList<Product> productListTemp = RxList([]);
+  late List<Product> temp;
 
   actionGoSales() {
     Get.toNamed(Routes.findCustomer)?.then((value) {
@@ -98,14 +125,20 @@ class DashboardScreenController extends BaseGetXController
     posDataProvider.myRegisterSummary();
   }
 
-  _fetchCustomerListOff() {
+  _fetchCustomerListOff() async {
+    customerListRequest.page = 1;
+    customerListRequest.limit = 100;
+    productListRequest.limit = 100;
+    productListRequest.page = 1;
+
     UINotification.showLoading();
     desktopDataProvider.getMyInfo();
     desktopDataProvider.getCustomerGroupAndPriceGroup();
-    desktopDataProvider.getCusListOff();
     desktopDataProvider.getWarehouse();
     desktopDataProvider.getCusGrpOff();
-    desktopDataProvider.getWarehouseProducts();
+    desktopDataProvider.getCusListOff(customerListRequest);
+    // desktopDataProvider.getWarehouseProducts();
+    //  desktopDataProvider.getProducts(productListRequest);
     Future.delayed(const Duration(seconds: 2)).whenComplete(() {
       _getMyInfo();
       Get.back();
@@ -120,30 +153,34 @@ class DashboardScreenController extends BaseGetXController
     final val = cache.getData(CacheDBPath.myInfo);
     info = MyInfoResponse.fromJSON(val);
     _getProducts();
+    //_getCustomer();
   }
 
   _getProducts() async {
     for (var warehouse in info.warehouses!) {
       temp = [];
+      d.Response pro;
       int currentPage = 1;
       Map<String, String> qp = {
         "warehouse_id": warehouse.id!,
         "page": "$currentPage",
         "limit": "100"
       };
-      final pro = await getProduct(qp);
-      while (pro.data != []) {
+
+      pro = await getProduct(qp);
+      while (pro.data.length != 0) {
         currentPage++;
-        Map<String, String> _qp = {
+        qp = {
           "warehouse_id": warehouse.id!,
           "page": "$currentPage",
           "limit": "100"
         };
-        getProduct(_qp);
+        pro = await getProduct(qp);
       }
-      print(temp.length);
-      cache.setData(CacheDBPath.warehouseProducts + warehouse.id!,
-          temp.map((e) => e.toJson()).toList());
+
+      for (var i = 0; i < temp.length; i++) {
+        await sembestCatch.setProductData(Constants.productsStore, temp[i]);
+      }
     }
   }
 
@@ -195,11 +232,17 @@ class DashboardScreenController extends BaseGetXController
   }
 
   @override
-  onCustomerOffListDone(List<CustomerListOffResponse>? cListRes) {
-    // cusList.value = cListRes;
-    cache.setData(
-        CacheDBPath.customers, cListRes?.map((e) => e.toJson()).toList());
-    // selectedCustomerName.value = cListRes!.first.name.toString();
+  onCustomerOffListDone(List<CustomerListOffResponse> cListRes) async {
+    customerListTemp.addAll(cListRes);
+    if (cListRes.isNotEmpty) {
+      customerListRequest.page = customerListRequest.page! + 1;
+      desktopDataProvider.getCusListOff(customerListRequest);
+    } else {
+      for (var i = 0; i < customerListTemp.length; i++) {
+        await sembestCatch.setCustomerData(customerListTemp[i]);
+      }
+    }
+
     UINotification.hideLoading();
   }
 
@@ -221,9 +264,17 @@ class DashboardScreenController extends BaseGetXController
   }
 
   @override
-  onWProductOffListDone(List<WarehouseProductsResponse>? wPListRes) {
-    cache.setData(CacheDBPath.warehouseProducts,
-        wPListRes?.map((e) => e.toJson()).toList());
+  onWProductOffListDone(List<WarehouseProductsResponse> wPListRes) async {
+    warehouseProductsListTemp.addAll(wPListRes);
+    // if (wPListRes.isNotEmpty) {
+    // warehouseProductRequest.page = warehouseProductRequest.page! + 1;
+    // desktopDataProvider.getWarehouseProducts(warehouseProductRequest);
+    // }
+    for (var i = 0; i < warehouseProductsListTemp.length; i++) {
+      await sembestCatch.setWarehouseProductData(
+          Constants.warehouseProductsStore, warehouseProductsListTemp[i]);
+    }
+
     UINotification.hideLoading();
   }
 
@@ -233,9 +284,12 @@ class DashboardScreenController extends BaseGetXController
   }
 
   @override
-  onWarehouseOffListDone(List<WarehouseListResponse>? wListRes) {
-    cache.setData(
-        CacheDBPath.warehouse, wListRes?.map((e) => e.toJson()).toList());
+  onWarehouseOffListDone(List<WarehouseListResponse>? wListRes) async {
+    for (var i = 0; i < wListRes!.length; i++) {
+      await sembestCatch.setWarehouseData(wListRes[i]);
+    }
+    //cache.setData(
+    //  CacheDBPath.warehouse, wListRes?.map((e) => e.toJson()).toList());
     UINotification.hideLoading();
   }
 
@@ -265,5 +319,28 @@ class DashboardScreenController extends BaseGetXController
   @override
   myInfoFetchError(ErrorMessage err) {
     UINotification.hideLoading();
+  }
+
+  @override
+  onProductListDone(List<Product> productRes) async {
+    temp.addAll(productRes);
+    logger.e("hello");
+    if (productRes.isNotEmpty) {
+      productListRequest.page = productListRequest.page! + 1;
+      desktopDataProvider.getProducts(productListRequest);
+    } else {
+      for (var i = 0; i < productListTemp.length; i++) {
+        await sembestCatch.setProductData(
+            Constants.productsStore, productListTemp[i]);
+      }
+    }
+
+    UINotification.hideLoading();
+  }
+
+  @override
+  onProductListError(ErrorMessage err) {
+    // TODO: implement onProductListError
+    throw UnimplementedError();
   }
 }

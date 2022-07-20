@@ -7,8 +7,8 @@ class PreSplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.primary,
+    return const Scaffold(
+      backgroundColor: Colors.yellow,
       body: SplashContent(),
     );
   }
