@@ -4,11 +4,8 @@ import 'package:posdelivery/app/modules/pos-delivery/add-store-manually/controll
 class DeliveryAddStoreManuallyScreenBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put<DeliveryAddStoreManuallyScreenController>(
-        DeliveryAddStoreManuallyScreenController());
-    // Get.lazyPut<AppController>(() => AppController());
-    // Get.lazyPut<HomeController>(
-    //   () => HomeController(),
-    // );
+    Get.lazyPut<DeliveryAddStoreManuallyScreenController>(
+      () => DeliveryAddStoreManuallyScreenController(),
+    );
   }
 }

@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-expenses/bindings/delivery_add_expenses_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-expenses/views/delivery_add_expenses_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-orders/bindings/delivery_add_orders_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-orders/views/delivery_add_orders_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-products/bindings/delivery_add_products_binding.dart';
@@ -225,6 +227,10 @@ class AppPages {
         name: _Paths.deliveryAddOrders,
         page: () => DeliveryAddOrdersScreen(),
         binding: DeliveryAddOrdersScreenBinding()),
+    GetPage(
+        name: _Paths.deliveryAddExpenses,
+        page: () => DeliveryAddExpensesScreen(),
+        binding: DeliveryAddExpensesScreenBinding()),
 
     //pos-desktop
     GetPage(

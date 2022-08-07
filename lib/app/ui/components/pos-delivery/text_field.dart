@@ -6,17 +6,16 @@ import 'package:posdelivery/app/ui/theme/app_colors.dart';
 class TextFieldDelivery extends StatelessWidget {
   final String hint;
   IconData? icon;
+  TextEditingController? controller;
   final int maxLine;
-  TextFieldDelivery({
-    Key? key,
-    this.hint = "",
-    this.maxLine = 1,
-    this.icon,
-  }) : super(key: key);
+  TextFieldDelivery(
+      {Key? key, this.hint = "", this.maxLine = 1, this.icon, this.controller})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
       maxLines: maxLine,
       decoration: InputDecoration(
           suffixIcon: icon != null

@@ -68,6 +68,11 @@ class Constants {
   static const customerGroupeStore = "customer_group";
   static const warehouseProductsStore = "warehouse_products";
 
+  //pos-delivery
+  static const deliveryDatabaseFileName = 'pos_delivery.db';
+  static const deliveryAddStoreForm = 'add_store_form';
+  static const deliveryAddExpenseForm = 'add_expense_form';
+
   static double screenHeight =
       window.physicalSize.height / window.devicePixelRatio;
   static double screenWidth =

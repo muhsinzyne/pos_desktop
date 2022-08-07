@@ -60,6 +60,20 @@ class DioNetwork extends BaseGetXService {
     return dio.post(url, data: data, queryParameters: queryParameters);
   }
 
+  Future<Response> upload(String url,
+      {dynamic? data, Map<String, dynamic>? queryParameters}) {
+    data ??= emptyRequest;
+    queryParameters ??= emptyRequest;
+    return dio.post(url,
+        data: data,
+        queryParameters: queryParameters,
+        options: Options(
+          validateStatus: (_) => true,
+          contentType: Headers.jsonContentType,
+          responseType: ResponseType.json,
+        ));
+  }
+
   Future<Response> put(String url,
       {Map<String, dynamic>? data, Map<String, dynamic>? queryParameters}) {
     data ??= emptyRequest;

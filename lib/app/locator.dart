@@ -6,12 +6,15 @@ import 'package:posdelivery/app/modules/pos/add-product/controllers/product_sugg
 import 'package:posdelivery/controllers/app_controller.dart';
 import 'package:posdelivery/models/enums.dart';
 import 'package:posdelivery/providers/data/auth_data_provider.dart';
+import 'package:posdelivery/providers/data/delivery_data_provider.dart';
 import 'package:posdelivery/providers/data/desktop_data_provider.dart';
 import 'package:posdelivery/providers/data/pos_data_provider.dart';
 import 'package:posdelivery/services/app_service.dart';
 import 'package:posdelivery/services/base/network.dart';
+import 'package:posdelivery/services/cache/cache_sembast_delivery_service.dart';
 import 'package:posdelivery/services/cache/cache_service.dart';
 import 'package:posdelivery/services/cache/cache_sembast_service.dart';
+import 'package:posdelivery/services/storage/sembast_delivery_storage_service.dart';
 import 'package:posdelivery/services/storage/sembast_storage_service.dart';
 import 'package:posdelivery/services/storage/local_storage_service.dart';
 
@@ -26,12 +29,15 @@ class AppServiceBinding implements Bindings {
     // Get.put(PrintProvider());
     Get.put<PosDataProvider>(PosDataProvider());
     Get.put<DesktopDataProvider>(DesktopDataProvider());
+    Get.put<DeliveryDataProvider>(DeliveryDataProvider());
     Get.put<ProductSuggestionController>(ProductSuggestionController());
     Get.lazyPut<HomeController>(() => HomeController());
     Get.put<CacheService>(
         CacheService(cacheAdaptor: CacheAdaptor.localStorage));
     Get.lazyPut(() => SembastStorage().init());
+    Get.lazyPut(() => SembastDeliveryStorage().init());
     Get.put(CacheSembastService());
+    Get.put(CacheSembastDeliveryService());
   }
 }
 

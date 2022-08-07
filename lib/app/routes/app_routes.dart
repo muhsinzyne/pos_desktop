@@ -28,6 +28,7 @@ abstract class Routes {
   static const deliveryProductsForSales = _Paths.deliveryProductsForSales;
   static const deliveryProductsForOrders = _Paths.deliveryProductsForOrders;
   static const deliveryAddOrders = _Paths.deliveryAddOrders;
+  static const deliveryAddExpenses = _Paths.deliveryAddExpenses;
 
   //pos-desktop
   static const home = _Paths.home;
@@ -86,6 +87,7 @@ abstract class _Paths {
   static const deliveryProductsForSales = '/delivery-productsForSale';
   static const deliveryProductsForOrders = '/delivery-productsForOrders';
   static const deliveryAddOrders = '/delivery-AddOrders';
+  static const deliveryAddExpenses = '/delivery-AddExpenses';
 
   static const home = '/splash';
   static const login = '/login';

@@ -48,6 +48,10 @@ dependencies:
   flutter_switch: ^0.3.2
   flutter_advanced_switch: ^3.0.1
   font_awesome_flutter: ^10.1.0
+  google_place: ^0.4.7
+  geolocator: ^9.0.1
+  connectivity_plus: ^2.3.6
+  file_picker: 
 
 
 

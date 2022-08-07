@@ -157,7 +157,12 @@ class AppService extends BaseGetXService {
   //}
 
   _preloadValues() {
-    final String tempToken = localStorage.getString(Constants.authToken)!;
+    // final String tempToken = localStorage.getString(Constants.authToken)!;
+    // dont know how to configure flavor so manually assigning auth token.. not safe!
+    // and its's not working in mobile build only in desktop buils
+    // will adapt to flavor after learning
+    final String tempToken =
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjciLCJ1c2VybmFtZSI6ImRlbW8iLCJlbWFpbCI6Im5hc2FydWRlZW4zNjdAZ21haWwuY29tIiwidmlld19yaWdodCI6IjAiLCJncm91cF9pZCI6IjEiLCJ3YXJlaG91c2VfaWQiOm51bGwsInRpbWUiOjE2NTk4NDgyMjZ9.VOsaYqCzu75MBzjRFnc39py09_7-mz-medjplC4k9XA";
     final String tempAppServer = localStorage.getString(Constants.appServer)!;
     final String tempAppPrefix = localStorage.getString(Constants.appPrefix)!;
     authToken = tempToken.toString();
