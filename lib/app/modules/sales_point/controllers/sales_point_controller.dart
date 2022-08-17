@@ -12,6 +12,9 @@ import 'package:posdelivery/controllers/base_controller.dart';
 import 'package:posdelivery/models/cache_db_path.dart';
 import 'package:posdelivery/models/constants.dart';
 import 'package:posdelivery/models/requests/customer/customer_add_request.dart';
+import 'package:posdelivery/models/requests/pos/cart_product.dart';
+import 'package:posdelivery/models/requests/pos/product_purchase_info.dart';
+import 'package:posdelivery/models/requests/pos/sale_request.dart';
 import 'package:posdelivery/models/response/auth/my_info_response.dart';
 import 'package:posdelivery/models/response/customer/customer_add_response.dart';
 import 'package:posdelivery/models/response/customer/customer_group.dart';
@@ -22,6 +25,7 @@ import 'package:posdelivery/models/response/desktop/customer_list.dart';
 import 'package:posdelivery/models/response/desktop/warehouse_products.dart';
 import 'package:posdelivery/models/response/desktop/warehouse_list.dart';
 import 'package:posdelivery/models/response/error_message.dart';
+import 'package:posdelivery/models/response/pos/add_sale_response.dart';
 import 'package:posdelivery/models/response/pos/product.dart';
 import 'package:posdelivery/providers/data/desktop_data_provider.dart';
 import 'package:posdelivery/providers/data/pos_data_provider.dart';
@@ -57,12 +61,17 @@ class SalesPointController extends BaseGetXController
   final RxString cCustomer = RxString('');
   final RxString selectedCustomerName = RxString('');
   final RxBool scanner = RxBool(false);
+  RxDouble cartTotal = RxDouble(0);
+  RxDouble totalPayable = RxDouble(0);
   var customerPriceGroup = CustomerPriceGroupsResponse().obs;
   var cCustomerGroup = CustomerGroups().obs;
   var cPriceGroup = PriceGroups().obs;
   MyInfoResponse info = MyInfoResponse();
   RxList<Product> product = RxList([]);
-  RxList<Product> selectedProducts = RxList([]);
+  // RxList<Product> selectedProducts = RxList([]);
+  // var selectedProducts = RxList<ProductPurchaseInfo>();
+
+  RxList<CartProduct> selectedProducts = RxList([]);
   final ScrollController scrollController = ScrollController();
   final RxString _subTotal = RxString("");
   //final _selectedProduct = Product().obs;
@@ -161,29 +170,64 @@ class SalesPointController extends BaseGetXController
   }
 
   addProductOnClick(Product value) {
-    selectedProducts.add(value);
+    if (selectedProducts.any((element) => element.itemId == value.itemId)) {
+      Get.defaultDialog(
+        title: "Already in cart",
+        middleText: "Please change the quantity in cart",
+        backgroundColor: Colors.white,
+        textCancel: "OK",
+        titleStyle: TextStyle(color: Colors.black),
+        middleTextStyle: TextStyle(color: Colors.black),
+      );
+      //   int index = selectedProducts
+      //       .indexWhere((element) => element.itemId == value.itemId);
+      //   value.row!.qty! + 1;
+      //   Product temp = value;
+      //   selectedProducts.removeAt(index);
+      //   selectedProducts.insert(index, temp);
+    } else {
+      var product = CartProduct();
+      // cartTotal.value += double.parse(value.row!.price!.toString());
+      product.itemId = value.itemId;
+      product.subTotal = double.parse(value.row!.price!.toString());
+      product.subQty = 1;
+      product.isAvailable = true;
+      product.quantity = value.row!.quantity;
+      product.cartItem = value;
+      selectedProducts.add(product);
+      calculateTotal();
+    }
     checkQuantity(value);
     searchController.text = "";
     // _selectedProduct.value = value;
     // logger.wtf(_selectedProduct.value.label);
   }
 
-  removeProduct(Product product) {
+  removeProduct(CartProduct product) {
     selectedProducts.remove(product);
-    bool status =
-        selectedProducts.every((item) => item.row!.quantity != 0); // false
+    bool status = selectedProducts.every((item) => item.quantity != 0); // false
     if (status) {
       paymentFlag.value = true;
     }
+    calculateTotal();
   }
 
   addProduct() {
     //logger.e(searchController)
-    Product? result = product.firstWhereOrNull(
+    Product? value = product.firstWhereOrNull(
         (element) => element.row!.code == searchController.text);
-    if (result != null) {
-      selectedProducts.add(result);
-      checkQuantity(result);
+    if (value != null) {
+      // cartTotal.value += double.parse(value.row!.price!.toString());
+      var product = CartProduct();
+      product.itemId = value.itemId;
+      product.subTotal = double.parse(value.row!.price!.toString());
+      product.subQty = 1;
+      product.isAvailable = true;
+      product.quantity = value.row!.quantity;
+      product.cartItem = value;
+      selectedProducts.add(product);
+      checkQuantity(value);
+      calculateTotal();
       searchController.text = "";
     } else {
       logger.e("not found");
@@ -209,8 +253,9 @@ class SalesPointController extends BaseGetXController
         titleStyle: TextStyle(color: Colors.black),
         middleTextStyle: TextStyle(color: Colors.black),
       );
-
-      paymentFlag.value = false;
+      removeProduct(selectedProducts
+          .firstWhere((cartItem) => cartItem.cartItem!.id == product.id));
+      paymentFlag.value = checkAvailability();
     }
   }
 
@@ -223,8 +268,9 @@ class SalesPointController extends BaseGetXController
 
   checkAvailableQuantity(int index, String? value) {
     if (value!.isNotEmpty) {
-      if (int.parse(value) > selectedProducts[index].row!.quantity!) {
+      if (int.parse(value) > selectedProducts[index].cartItem!.row!.quantity!) {
         paymentFlag.value = false;
+        selectedProducts[index].isAvailable = false;
         Get.defaultDialog(
           title: "Not enough stock",
           middleText: "Add more stocks",
@@ -234,8 +280,25 @@ class SalesPointController extends BaseGetXController
           middleTextStyle: TextStyle(color: Colors.black),
         );
       } else {
-        selectedProducts[index].row!.qty = int.parse(value);
+        int _qty = int.parse(value);
+        selectedProducts[index].subQty = _qty;
+        selectedProducts[index].isAvailable = true;
+        selectedProducts[index].subTotal =
+            selectedProducts[index].cartItem!.row!.price!.toDouble() * _qty;
+        calculateTotal();
+        paymentFlag.value = checkAvailability();
       }
+    } else {
+      Get.defaultDialog(
+        title: "Quantity cannot be zero",
+        middleText: "Please change the quantity in cart or remove the product",
+        backgroundColor: Colors.white,
+        textCancel: "OK",
+        titleStyle: TextStyle(color: Colors.black),
+        middleTextStyle: TextStyle(color: Colors.black),
+      );
+      calculateTotal();
+      // removeProduct(selectedProducts[index]);
     }
   }
 
@@ -375,5 +438,143 @@ class SalesPointController extends BaseGetXController
   @override
   onCustomerAddError(ErrorMessage err) {
     UINotification.showNotification(color: Colors.red, title: err.message);
+  }
+
+  void calculateTotal() {
+    cartTotal(0);
+    for (var each in selectedProducts) {
+      cartTotal.value += each.subTotal;
+      totalPayable(cartTotal.value);
+    }
+  }
+
+  bool checkAvailability() {
+    bool _isAvailable = true;
+    for (var each in selectedProducts) {
+      if (each.isAvailable == true && _isAvailable == true) {
+        _isAvailable = true;
+      } else {
+        _isAvailable = false;
+      }
+    }
+    return _isAvailable;
+  }
+
+  // CartProduct getCartProduct(Product value) {
+  //   CartProduct cartProduct = CartProduct(
+  //       itemId: value.itemId,
+  //       // itemName: value.row!.name,
+  //       subTotal: value.row!.price,
+  //       subQty: 1,
+  //       quantity: value.row!.quantity,
+  //       cartItem: value);
+  //   return cartProduct;
+  // }
+  Rx<TextEditingController> paymentAmount = TextEditingController().obs;
+  continuePayment() {
+    UINotification.showLoading();
+    SaleRequest saleRequest = SaleRequest();
+    saleRequest.test = '';
+    saleRequest.customer = "2";
+    saleRequest.warehouse = appService.cWareHouse;
+    saleRequest.addItem = '';
+    saleRequest.biller = appService.cBiller;
+    saleRequest.posNote = '';
+    saleRequest.staffNote = '';
+    for (var element in selectedProducts) {
+      saleRequest.productId.add(element.cartItem!.row!.id!);
+      saleRequest.productType.add(element.cartItem!.row!.type!);
+      saleRequest.productCode.add(element.cartItem!.row!.code!);
+      saleRequest.productName.add(element.cartItem!.row!.name!);
+      saleRequest.productOption.add('false');
+      saleRequest.productComment.add('');
+      saleRequest.serial.add('');
+      saleRequest.productDiscount.add('0');
+      if (element.cartItem!.taxRate != null) {
+        saleRequest.productTax.add(Constants.isTaxProduct);
+      } else {
+        saleRequest.productTax.add(Constants.nonTaxProduct);
+      }
+      // saleRequest.productTax.add('1');
+      // change to net price
+      saleRequest.netPrice.add(element.subTotal.toStringAsFixed(2));
+      saleRequest.unitPrice.add((element.cartItem!.row!.price! -
+              double.parse(element.cartItem!.row!.discount!))
+          .toStringAsFixed(2));
+      saleRequest.realUnitPrice
+          .add(element.cartItem!.row!.realUnitPrice!.toStringAsFixed(2));
+      saleRequest.quantity.add(element.subQty.toString());
+      saleRequest.productUnit.add('');
+      saleRequest.productBaseQuantity
+          .add(element.cartItem!.row!.baseQuantity!.toString());
+      //print(element.toJson());
+    }
+    // saleRequest.amount.add(paymentAmount.value.text);
+    saleRequest.amount.add(totalPayable.toString());
+
+    // var amountBalance = double.tryParse(changeAmount.text)!.abs() -
+    //     (double.tryParse(balanceAmount.text)!);
+    // var amountBalanceString = amountBalance.toStringAsFixed(2);
+    saleRequest.balanceAmount.add("0");
+    saleRequest.paidBy.add('cash');
+    saleRequest.ccNo.add('');
+    saleRequest.payingGiftCardNo.add('');
+    saleRequest.ccHolder.add('');
+    saleRequest.chequeNo.add('');
+    saleRequest.ccMonth.add('');
+    saleRequest.ccYear.add('');
+    saleRequest.ccType.add('');
+    saleRequest.ccCvv2.add('');
+    saleRequest.paymentNote.add('');
+    saleRequest.orderTax = '0';
+    saleRequest.discount = '0';
+    saleRequest.shipping = '0';
+    saleRequest.rPaidBy = 'cash';
+    saleRequest.totalItems = selectedProducts.length.toString();
+    var data = jsonEncode(saleRequest.toJson());
+    print(data);
+    desktopDataProvider.saleOrderRequest(saleRequest);
+  }
+
+  void actionOnPayment() {
+    paymentAmount.value.text = totalPayable.toString();
+  }
+
+  @override
+  onSaleDone(AddSaleResponse addSaleResponse) {
+    print(addSaleResponse.toJson());
+    selectedProducts.clear();
+    calculateTotal();
+    totalPayable(0.0);
+    Get.back();
+    // TODO: implement onSaleDone
+    throw UnimplementedError();
+  }
+
+  @override
+  onSaleError(ErrorMessage err) {
+    // TODO: implement onSaleError
+    throw UnimplementedError();
+  }
+
+  void clearCart() {
+    if (selectedProducts.isNotEmpty) {
+      Get.defaultDialog(
+        middleText: "Are you sure to Cancel",
+        // middleText: "Please change the quantity in cart or remove the product",
+        backgroundColor: Colors.white,
+        textConfirm: "Confirm",
+        textCancel: "Cancel",
+        onConfirm: () {
+          selectedProducts.clear();
+          calculateTotal();
+          totalPayable(0.0);
+          Get.back();
+        },
+        // onCancel: () {
+        //   Get.back();
+        // },
+      );
+    }
   }
 }

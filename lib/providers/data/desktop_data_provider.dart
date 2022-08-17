@@ -9,6 +9,7 @@ import 'package:posdelivery/app/modules/sales_point/contracts.dart';
 import 'package:posdelivery/models/requests/customer/customer_add_request.dart';
 import 'package:posdelivery/models/requests/pos/customer_list.dart';
 import 'package:posdelivery/models/requests/pos/product_list.dart';
+import 'package:posdelivery/models/requests/pos/sale_request.dart';
 import 'package:posdelivery/models/requests/pos/warehouse_products.dart';
 import 'package:posdelivery/models/response/auth/my_info_response.dart';
 import 'package:posdelivery/models/response/customer/customer_add_response.dart';
@@ -16,6 +17,7 @@ import 'package:posdelivery/models/response/customer/customer_price_group_respon
 import 'package:posdelivery/models/response/desktop/warehouse_list.dart';
 import 'package:posdelivery/models/response/desktop/warehouse_products.dart';
 import 'package:posdelivery/models/response/error_message.dart';
+import 'package:posdelivery/models/response/pos/add_sale_response.dart';
 import 'package:posdelivery/models/response/pos/product.dart';
 import 'package:posdelivery/models/status_codes.dart';
 import 'package:posdelivery/models/url.dart';
@@ -242,6 +244,28 @@ class DesktopDataProvider extends BaseDataProvider {
           ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
       if (err.response?.statusCode == StatusCodes.status400BadRequest) {
         sPCtrl.onCustomerAddError(errMsg);
+      }
+    });
+  }
+
+  saleOrderRequest(SaleRequest saleRequest) {
+    // print(saleRequest.toJson());
+    final obs =
+        network.post(NetworkURL.addSale, data: saleRequest.toJson()).asStream();
+    obs.listen((data) {
+      try {
+        // AddSaleResponse addSaleResponse = AddSaleResponse.fromJSON(data.data);
+        // sPCtrl.onSaleDone(addSaleResponse);
+      } on Exception {
+        final ErrorMessage errMsg = ErrorMessage();
+        errMsg.message = 'invalid_response'.tr;
+        sPCtrl.onSaleError(errMsg);
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+          ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      if (err.response?.statusCode == StatusCodes.status400BadRequest) {
+        //saleListCtrl.onSalesListResponseBadRequest(errMsg);
       }
     });
   }
