@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:posdelivery/app/modules/pos-delivery/add-expenses/contracts.dart';
 import 'package:posdelivery/models/delivery/requests/expense_add_request.dart';
+import 'package:posdelivery/models/delivery/response/store_add_response.dart';
 import 'package:posdelivery/providers/data/base_data_provider.dart';
 import 'dart:io';
 
@@ -19,7 +21,8 @@ import 'package:posdelivery/services/cache/cache_service.dart';
 import 'package:posdelivery/services/location_service.dart';
 import 'dart:async';
 
-class DeliveryAddExpensesScreenController extends BaseGetXController {
+class DeliveryAddExpensesScreenController extends BaseGetXController
+    implements IDeliveryExpenseAddController {
   final TextEditingController reference = TextEditingController();
   String? category;
   final TextEditingController amount = TextEditingController();
@@ -28,11 +31,11 @@ class DeliveryAddExpensesScreenController extends BaseGetXController {
   form.MultipartFile? file;
   RxBool isFile = false.obs;
 
+  // bool isOnline = false;
   late bool isOnline;
   late DioNetwork network = DioNetwork();
   List<ExpenseAddRequest> formData = [];
   DeliveryDataProvider deliveryDataProvider = Get.find<DeliveryDataProvider>();
-  StoreAddRequest storeAddRequest = StoreAddRequest();
   CacheSembastDeliveryService sembastCache =
       Get.find<CacheSembastDeliveryService>();
 
@@ -145,6 +148,18 @@ class DeliveryAddExpensesScreenController extends BaseGetXController {
     amount.dispose();
     address.dispose();
     super.onClose();
+  }
+
+  @override
+  onExpenseAddDone(StoreAddResponse customerAddResponse) {
+    // TODO: implement onExpenseAddDone
+    throw UnimplementedError();
+  }
+
+  @override
+  onExpenseAddError(ErrorMessage err) {
+    // TODO: implement onExpenseAddError
+    throw UnimplementedError();
   }
 }
 

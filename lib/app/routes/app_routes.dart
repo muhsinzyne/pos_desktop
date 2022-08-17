@@ -11,7 +11,7 @@ abstract class Routes {
   static const deliveryStoreDetails = _Paths.deliveryStoreDetails;
   static const deliverySalesPayment = _Paths.deliverySalesPayment;
   static const deliveryAddSales = _Paths.deliveryAddSales;
-  static const deliveryAddProducts = _Paths.deliveryAddProducts;
+  static const deliveryAddProductsSales = _Paths.deliveryAddProductsSales;
   static const deliveryInvoice = _Paths.deliveryInvoice;
   static const deliveryPaymentHome = _Paths.deliveryPaymentHome;
   static const deliveryPaymentDue = _Paths.deliveryPaymentDue;
@@ -29,6 +29,7 @@ abstract class Routes {
   static const deliveryProductsForOrders = _Paths.deliveryProductsForOrders;
   static const deliveryAddOrders = _Paths.deliveryAddOrders;
   static const deliveryAddExpenses = _Paths.deliveryAddExpenses;
+  static const deliveryAddProductsOrder = _Paths.deliveryAddProductsOrder;
 
   //pos-desktop
   static const home = _Paths.home;
@@ -69,8 +70,8 @@ abstract class _Paths {
   static const deliveryAddStore = '/delivery-addStore';
   static const deliveryStoreDetails = '/delivery-storDetails';
   static const deliverySalesPayment = '/delivery-salesPayment';
-  static const deliveryAddSales = '/delivery-AddSales';
-  static const deliveryAddProducts = '/delivery-AddProducts';
+  static const deliveryAddSales = '/delivery-addSales';
+  static const deliveryAddProductsSales = '/delivery-addProductsSales';
   static const deliveryInvoice = '/delivery-invoice';
   static const deliveryPaymentHome = '/delivery-paymentHome';
   static const deliveryPaymentDue = '/delivery-paymentDue';
@@ -86,8 +87,9 @@ abstract class _Paths {
   static const deliveryOrderInvoice = '/delivery-orderInvoice';
   static const deliveryProductsForSales = '/delivery-productsForSale';
   static const deliveryProductsForOrders = '/delivery-productsForOrders';
-  static const deliveryAddOrders = '/delivery-AddOrders';
-  static const deliveryAddExpenses = '/delivery-AddExpenses';
+  static const deliveryAddOrders = '/delivery-addOrders';
+  static const deliveryAddExpenses = '/delivery-addExpenses';
+  static const deliveryAddProductsOrder = '/delivery-addProductsOrder';
 
   static const home = '/splash';
   static const login = '/login';

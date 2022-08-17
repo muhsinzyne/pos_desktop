@@ -52,16 +52,84 @@ class DeliveryAddStoreManuallyScreen
                           SizedBox(
                             height: 8,
                           ),
-                          TextFieldDelivery(
-                            controller: controller.customerGroup,
-                            hint: "Customer Group",
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Container(
+                                width: double.maxFinite,
+                                padding: EdgeInsets.symmetric(horizontal: 15.0),
+                                decoration: BoxDecoration(
+                                    color: Color(0x99E5E5E5),
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    border: Border.all(
+                                        color: AppColors.deliverySecondary,
+                                        width: 0,
+                                        style: BorderStyle.solid)),
+                                child: DropdownButtonFormField<CustomerOption>(
+                                  decoration: InputDecoration(
+                                      hintText: "Customer group",
+                                      enabledBorder: InputBorder.none,
+                                      border: InputBorder.none),
+                                  onChanged: (value) {
+                                    controller.customerGroup =
+                                        value!.key.toString();
+                                  },
+                                  items: controller.customerCategory
+                                      .map((selectedType) {
+                                    return DropdownMenuItem<CustomerOption>(
+                                      child: Text(
+                                        selectedType.fullName,
+                                      ),
+                                      value: selectedType,
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            ],
                           ),
                           SizedBox(
                             height: 8,
                           ),
-                          TextFieldDelivery(
-                            controller: controller.priceGroup,
-                            hint: "Price Group",
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Container(
+                                width: double.maxFinite,
+                                padding: EdgeInsets.symmetric(horizontal: 15.0),
+                                decoration: BoxDecoration(
+                                    color: Color(0x99E5E5E5),
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    border: Border.all(
+                                        color: AppColors.deliverySecondary,
+                                        width: 0,
+                                        style: BorderStyle.solid)),
+                                child: DropdownButtonFormField<PriceOption>(
+                                  decoration: InputDecoration(
+                                      hintText: "Price Group",
+                                      enabledBorder: InputBorder.none,
+                                      border: InputBorder.none),
+                                  onChanged: (value) {
+                                    controller.priceGroup =
+                                        value!.key.toString();
+                                  },
+                                  items: controller.priceCategory
+                                      .map((selectedType) {
+                                    return DropdownMenuItem<PriceOption>(
+                                      child: Text(
+                                        selectedType.fullName,
+                                      ),
+                                      value: selectedType,
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            ],
                           ),
                           SizedBox(
                             height: 8,

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:posdelivery/models/constants.dart';
 import 'package:posdelivery/models/delivery/requests/expense_add_request.dart';
+import 'package:posdelivery/models/delivery/requests/order_add_request.dart';
 import 'package:posdelivery/models/delivery/requests/store_add_request.dart';
 import 'package:posdelivery/models/response/customer/customer_data.dart';
 import 'package:posdelivery/models/response/desktop/customer_list.dart';
@@ -32,6 +33,29 @@ class CacheSembastDeliveryService extends BaseGetXService {
   ));
 
 //delivery
+  setAddOrderFormData(OrderAddRequest item) async {
+    StoreRef store = localStorage.getMapStore(Constants.deliveryAddOrderForm);
+    Database? db = await localStorage.db;
+    await db!.transaction(
+        (transaction) async => {await store.add(transaction, item.toJson())});
+    return item;
+  }
+
+  Future<List<OrderAddRequest>> getAddFormData() async {
+    StoreRef store = localStorage.getMapStore(Constants.deliveryAddOrderForm);
+    Database? db = await localStorage.db;
+    var records = await store.find(
+      db!,
+      finder: Finder(
+        sortOrders: [SortOrder('order')],
+      ),
+    );
+    List<OrderAddRequest> result = [];
+    for (var record in records) {
+      result.add(OrderAddRequest.fromJson(record.value));
+    }
+    return result;
+  }
 
   Future<bool> deleteAddExpenseFormData() async {
     StoreRef store = localStorage.getMapStore(Constants.deliveryAddExpenseForm);

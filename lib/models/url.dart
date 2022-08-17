@@ -9,6 +9,7 @@ class NetworkURL {
   static var salesList = base + 'pos/sales_list';
   static var allCustomerList = base + 'customers/customer_sujession';
   static var productSuj = base + 'pos/product_sujession';
+  static var productByCode = base + 'pos/product_by_code';
   static var addSale = base + 'pos/add_sale';
   static var saleView = base + 'pos/sales_view';
   static var customerAndPriceGroup =
@@ -25,7 +26,7 @@ class NetworkURL {
   static var customerGroupOffline = base + 'offline/customer_groups';
   static var warehouseProductOffline = base + 'offline/warehouse_products';
   static var products = base + 'offline/product_list';
-  
+
   //delivery
   static var storeAdd = base + 'offline/add_store';
 }

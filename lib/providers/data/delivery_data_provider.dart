@@ -5,15 +5,22 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:posdelivery/app/modules/dashboard/contracts.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-expenses/contracts.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-products-order/contracts.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-products-sales/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-store-manually/contracts.dart';
+import 'package:posdelivery/app/modules/pos-delivery/products-for-orders/contracts.dart';
+import 'package:posdelivery/app/modules/pos-delivery/products-for-sales/contracts.dart';
 import 'package:posdelivery/app/modules/product_list/contracts.dart';
 import 'package:posdelivery/app/modules/sales_point/contracts.dart';
 import 'package:posdelivery/models/delivery/requests/expense_add_request.dart';
+import 'package:posdelivery/models/delivery/requests/order_add_request.dart';
 import 'package:posdelivery/models/delivery/requests/store_add_request.dart';
 import 'package:posdelivery/models/delivery/response/expense_add_response.dart';
 import 'package:posdelivery/models/delivery/response/store_add_response.dart';
 import 'package:posdelivery/models/requests/customer/customer_add_request.dart';
 import 'package:posdelivery/models/requests/pos/customer_list.dart';
+import 'package:posdelivery/models/requests/pos/product_by_code.dart';
 import 'package:posdelivery/models/requests/pos/product_list.dart';
 import 'package:posdelivery/models/requests/pos/warehouse_products.dart';
 import 'package:posdelivery/models/response/auth/my_info_response.dart';
@@ -35,6 +42,16 @@ class DeliveryDataProvider extends BaseDataProvider {
   late IProductListController pLCtrl;
   // late IStoreAddController cAddCtrl;
   late IDashboardScreenController dashboardCtrl;
+
+  //delivery
+  late IDeliveryProductForSaleScreenController deliveryProductForSaleCtrl;
+  late IDeliveryProductForOrderScreenController deliveryProductForOrderCtrl;
+  late IDeliveryStoreAddController deliveryStoreAddCtrl;
+  late IDeliveryExpenseAddController deliveryExpenseAddCtrl;
+  late IDeliveryAddProductsOrderScreenController
+      deliveryAddProductsOrderScreenCtrl;
+  late IDeliveryAddProductsSaleScreenController
+      deliveryAddProductsSaleScreenCtrl;
   final logger = Logger(
       printer: PrettyPrinter(
     methodCount: 0,
@@ -58,7 +75,175 @@ class DeliveryDataProvider extends BaseDataProvider {
   }
 
   //delivery
+  set deliveryAddProductsOrderCallBack(
+      IDeliveryAddProductsOrderScreenController controller) {
+    deliveryAddProductsOrderScreenCtrl = controller;
+  }
 
+  set deliveryAddProductsSaleCallBack(
+      IDeliveryAddProductsSaleScreenController controller) {
+    deliveryAddProductsSaleScreenCtrl = controller;
+  }
+
+  set deliveryProductForSaleCallBack(
+      IDeliveryProductForSaleScreenController controller) {
+    deliveryProductForSaleCtrl = controller;
+  }
+
+  set deliveryProductForOrderCallBack(
+      IDeliveryProductForOrderScreenController controller) {
+    deliveryProductForOrderCtrl = controller;
+  }
+
+  set deliveryStoreAddCallBack(IDeliveryStoreAddController controller) {
+    deliveryStoreAddCtrl = controller;
+  }
+
+  set deliveryExpenseAddCallBack(IDeliveryExpenseAddController controller) {
+    deliveryExpenseAddCtrl = controller;
+  }
+
+  //delivery
+  getSaleProductByCode(ProductByCodeRequest productByCodeRequest) {
+    final obs = network
+        .get(NetworkURL.productByCode,
+            queryParameters: productByCodeRequest.toJson())
+        .asStream();
+    obs.listen((data) {
+      try {
+        Product product = Product.fromJson(data.data);
+        deliveryAddProductsSaleScreenCtrl.onProductDone(product);
+      } on Exception {
+        final ErrorMessage errMsg = ErrorMessage();
+        errMsg.message = 'warehouse_not_loaded'.tr;
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+          ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      if (err.response.statusCode == StatusCodes.status404NotFound) {
+        deliveryAddProductsSaleScreenCtrl.onProductError(errMsg);
+      } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
+        deliveryAddProductsSaleScreenCtrl.onProductError(errMsg);
+      } else {
+        deliveryAddProductsSaleScreenCtrl.onProductError(errMsg);
+      }
+    });
+  }
+
+  getProductsSales(ProductListRequest productListRequest) {
+    final obs = network
+        .get(NetworkURL.products, queryParameters: productListRequest.toJson())
+        .asStream();
+    obs.listen((data) {
+      try {
+        List<Product> product = productFromJson(jsonEncode(data.data));
+        deliveryProductForSaleCtrl.onProductListDone(product);
+      } on Exception {
+        logger.wtf("error 1");
+        final ErrorMessage errMsg = ErrorMessage();
+        errMsg.message = 'warehouse_not_loaded'.tr;
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+          ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      logger.wtf("error 2");
+      if (err.response.statusCode == StatusCodes.status404NotFound) {
+        deliveryProductForOrderCtrl.onProductListError(errMsg);
+      } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
+        logger.e("error 3");
+        deliveryProductForSaleCtrl.onProductListError(errMsg);
+      } else {
+        logger.e("error 4");
+        deliveryProductForSaleCtrl.onProductListError(errMsg);
+      }
+    });
+  }
+
+  getProductByCode(ProductByCodeRequest productByCodeRequest) {
+    final obs = network
+        .get(NetworkURL.productByCode,
+            queryParameters: productByCodeRequest.toJson())
+        .asStream();
+    obs.listen((data) {
+      try {
+        Product product = Product.fromJson(data.data);
+        deliveryAddProductsOrderScreenCtrl.onProductDone(product);
+      } on Exception {
+        final ErrorMessage errMsg = ErrorMessage();
+        errMsg.message = 'warehouse_not_loaded'.tr;
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+          ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      if (err.response.statusCode == StatusCodes.status404NotFound) {
+        deliveryAddProductsOrderScreenCtrl.onProductError(errMsg);
+      } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
+        deliveryAddProductsOrderScreenCtrl.onProductError(errMsg);
+      } else {
+        deliveryProductForOrderCtrl.onProductListError(errMsg);
+      }
+    });
+  }
+
+  //api not avalable in production
+  orderAddRequest(OrderAddRequest orderAddRequest) {
+    final obs = network
+        .post(
+          "http://test.pos.local/api/offline/add_order",
+          data: orderAddRequest.toJson(),
+        )
+        .asStream();
+    obs.listen((data) {
+      try {
+        // StoreAddResponse addResponse = StoreAddResponse.fromJson(data.data);
+        logger.w(data.data);
+        // logger.w(data.data);
+        // cAddCtrlonCustomerAddDone(addResponse);
+
+      } catch (msg) {
+        logger.e("error");
+        logger.e(msg);
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+          ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      logger.e("exception");
+      if (err.response?.statusCode == StatusCodes.status400BadRequest) {
+        // cAddCtrl.onCustomerAddError(errMsg);
+      }
+    });
+  }
+
+  getProducts(ProductListRequest productListRequest) {
+    final obs = network
+        .get(NetworkURL.products, queryParameters: productListRequest.toJson())
+        .asStream();
+    obs.listen((data) {
+      try {
+        List<Product> product = productFromJson(jsonEncode(data.data));
+        deliveryProductForOrderCtrl.onProductListDone(product);
+      } on Exception {
+        logger.wtf("error 1");
+        final ErrorMessage errMsg = ErrorMessage();
+        errMsg.message = 'warehouse_not_loaded'.tr;
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+          ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      logger.wtf("error 2");
+      if (err.response.statusCode == StatusCodes.status404NotFound) {
+        deliveryProductForOrderCtrl.onProductListError(errMsg);
+      } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
+        logger.e("error 3");
+        deliveryProductForOrderCtrl.onProductListError(errMsg);
+      } else {
+        logger.e("error 4");
+        deliveryProductForOrderCtrl.onProductListError(errMsg);
+      }
+    });
+  }
+
+  //api not avalable in production
   //only worrks when sending as formdata.. error when sending as json don't know why!!
   expenseAddRequestWithoutFile(ExpenseAddRequest expenseAddRequest) async {
     var formData = form.FormData.fromMap({
@@ -92,6 +277,7 @@ class DeliveryDataProvider extends BaseDataProvider {
     });
   }
 
+  //api not avalable in production
   expenseAddRequest(dynamic formData) async {
     final obs = network
         .upload(
@@ -120,6 +306,7 @@ class DeliveryDataProvider extends BaseDataProvider {
     });
   }
 
+  //api not avalable in production
   storeAddRequest(StoreAddRequest storeAddRequest) {
     final obs = network
         .post(
@@ -133,8 +320,7 @@ class DeliveryDataProvider extends BaseDataProvider {
         StoreAddResponse addResponse = StoreAddResponse.fromJson(data.data);
         logger.e("worked");
         // logger.w(data.data);
-        // cAddCtrl.onCustomerAddDone(addResponse);
-
+        deliveryStoreAddCtrl.onStoreAddDone(addResponse);
       } catch (msg) {
         logger.e("error");
         logger.e(msg);
@@ -144,7 +330,7 @@ class DeliveryDataProvider extends BaseDataProvider {
           ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
       logger.e("exception");
       if (err.response?.statusCode == StatusCodes.status400BadRequest) {
-        // cAddCtrl.onCustomerAddError(errMsg);
+        deliveryStoreAddCtrl.onStoreAddError(errMsg);
       }
     });
   }
@@ -196,35 +382,6 @@ class DeliveryDataProvider extends BaseDataProvider {
         dashboardCtrl.onWarehouseOffListError(errMsg);
       } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
         dashboardCtrl.onWarehouseOffListError(errMsg);
-      }
-    });
-  }
-
-  getProducts(ProductListRequest productListRequest) {
-    final obs = network
-        .get(NetworkURL.products, queryParameters: productListRequest.toJson())
-        .asStream();
-    obs.listen((data) {
-      try {
-        logger.e(data.data);
-        logger.e("messag");
-        List<Product> product = productFromJson(jsonEncode(data.data));
-        logger.e(product);
-        dashboardCtrl.onProductListDone(product);
-      } on Exception {
-        logger.wtf("amir");
-        final ErrorMessage errMsg = ErrorMessage();
-        errMsg.message = 'warehouse_not_loaded'.tr;
-      }
-    }, onError: (err) {
-      final ErrorMessage errMsg =
-          ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
-      logger.wtf("hel");
-      if (err.response.statusCode == StatusCodes.status404NotFound) {
-        dashboardCtrl.onProductListError(errMsg);
-      } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
-        logger.e("messagworlde");
-        dashboardCtrl.onProductListError(errMsg);
       }
     });
   }

@@ -4,17 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-store-manually/contracts.dart';
 import 'package:posdelivery/controllers/base_controller.dart';
 import 'package:posdelivery/models/delivery/requests/store_add_request.dart';
+import 'package:posdelivery/models/response/error_message.dart';
+import 'package:posdelivery/models/delivery/response/store_add_response.dart';
 import 'package:posdelivery/providers/data/delivery_data_provider.dart';
 import 'package:posdelivery/services/cache/cache_sembast_delivery_service.dart';
 import 'package:posdelivery/services/cache/cache_service.dart';
 import 'package:posdelivery/services/location_service.dart';
 import 'dart:async';
 
-class DeliveryAddStoreManuallyScreenController extends BaseGetXController {
-  final TextEditingController customerGroup = TextEditingController();
-  final TextEditingController priceGroup = TextEditingController();
+class DeliveryAddStoreManuallyScreenController extends BaseGetXController
+    implements IDeliveryStoreAddController {
   final TextEditingController storeName = TextEditingController();
   final TextEditingController companyName = TextEditingController();
   final TextEditingController gst_vatNumber = TextEditingController();
@@ -26,6 +28,7 @@ class DeliveryAddStoreManuallyScreenController extends BaseGetXController {
   late String longitude = "67.232";
 
   late bool isOnline;
+  // bool isOnline = false;
   // late String country;
   // late String postalCode;
   // late String state;
@@ -36,6 +39,11 @@ class DeliveryAddStoreManuallyScreenController extends BaseGetXController {
 
   List<StoreAddRequest> formData = [];
 
+  List<CustomerOption> customerCategory = CustomerOption.allCustomer;
+  List<PriceOption> priceCategory = PriceOption.allPrices;
+
+  String? customerGroup;
+  String? priceGroup;
   Future<bool> hasNetwork() async {
     try {
       final result = await InternetAddress.lookup('google.com');
@@ -59,8 +67,8 @@ class DeliveryAddStoreManuallyScreenController extends BaseGetXController {
     storeAddRequest.latitude = latitude;
     storeAddRequest.longitude = longitude;
     storeAddRequest.city = place.text;
-    storeAddRequest.customerGroup = customerGroup.text;
-    storeAddRequest.priceGroup = priceGroup.text;
+    storeAddRequest.customerGroup = customerGroup;
+    storeAddRequest.priceGroup = priceGroup;
     storeAddRequest.name = storeName.text;
     storeAddRequest.company = companyName.text;
     storeAddRequest.vatNo = gst_vatNumber.text;
@@ -68,7 +76,6 @@ class DeliveryAddStoreManuallyScreenController extends BaseGetXController {
     storeAddRequest.address = address.text;
     if (isOnline) {
       deliveryDataProvider.storeAddRequest(storeAddRequest);
-      Get.snackbar("Saved", "Saved Succesfully");
     } else {
       await sembastCache.setAddstoreFormData(storeAddRequest);
       Get.snackbar("internet",
@@ -104,8 +111,8 @@ class DeliveryAddStoreManuallyScreenController extends BaseGetXController {
   }
 
   void vaidate() async {
-    if (customerGroup.text.isNotEmpty &&
-        priceGroup.text.isNotEmpty &&
+    if (customerGroup!.isNotEmpty &&
+        priceGroup!.isNotEmpty &&
         storeName.text.isNotEmpty &&
         companyName.text.isNotEmpty &&
         gst_vatNumber.text.isNotEmpty &&
@@ -133,8 +140,6 @@ class DeliveryAddStoreManuallyScreenController extends BaseGetXController {
 
   @override
   void onClose() {
-    customerGroup.dispose();
-    priceGroup.dispose();
     storeName.dispose();
     companyName.dispose();
     gst_vatNumber.dispose();
@@ -143,4 +148,38 @@ class DeliveryAddStoreManuallyScreenController extends BaseGetXController {
     email.dispose();
     super.onClose();
   }
+
+  @override
+  onStoreAddDone(StoreAddResponse customerAddResponse) {
+    Get.snackbar("Saved", "Saved Succesfully");
+  }
+
+  @override
+  onStoreAddError(ErrorMessage err) {
+    // TODO: implement onStoreAddError
+    throw UnimplementedError();
+  }
+}
+
+class CustomerOption {
+  final String key;
+  final String fullName;
+
+  CustomerOption(this.key, this.fullName);
+
+  static List<CustomerOption> get allCustomer => [
+        CustomerOption('1', 'Route Cusomter'),
+      ];
+}
+
+class PriceOption {
+  final String key;
+  final String fullName;
+
+  PriceOption(this.key, this.fullName);
+
+  static List<PriceOption> get allPrices => [
+        PriceOption('1', 'Exclusive'),
+        PriceOption('2', 'Offer25'),
+      ];
 }

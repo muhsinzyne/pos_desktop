@@ -106,12 +106,10 @@ class DesktopDataProvider extends BaseDataProvider {
     obs.listen((data) {
       try {
         logger.e(data.data);
-        logger.e("messag");
         List<Product> product = productFromJson(jsonEncode(data.data));
         logger.e(product);
         dashboardCtrl.onProductListDone(product);
       } on Exception {
-        logger.wtf("amir");
         final ErrorMessage errMsg = ErrorMessage();
         errMsg.message = 'warehouse_not_loaded'.tr;
       }

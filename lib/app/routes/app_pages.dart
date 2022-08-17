@@ -3,8 +3,10 @@ import 'package:posdelivery/app/modules/pos-delivery/add-expenses/bindings/deliv
 import 'package:posdelivery/app/modules/pos-delivery/add-expenses/views/delivery_add_expenses_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-orders/bindings/delivery_add_orders_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-orders/views/delivery_add_orders_screen.dart';
-import 'package:posdelivery/app/modules/pos-delivery/add-products/bindings/delivery_add_products_binding.dart';
-import 'package:posdelivery/app/modules/pos-delivery/add-products/views/delivery_add_products_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-products-order/bindings/delivery_add_products_order_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-products-order/views/delivery_add_products_order_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-products-sales/bindings/delivery_add_products_sales_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-products-sales/views/delivery_add_products_sales_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-sales/bindings/delivery_add_sales_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-sales/views/delivery_add_sales_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-store-manually/bindings/delivery_add_store_manually_binding.dart';
@@ -153,9 +155,9 @@ class AppPages {
       binding: DeliveryAddSalesScreenBinding(),
     ),
     GetPage(
-      name: _Paths.deliveryAddProducts,
-      page: () => DeliveryAddProductsScreen(),
-      binding: DeliveryAddProductsScreenBinding(),
+      name: _Paths.deliveryAddProductsSales,
+      page: () => DeliveryAddProductsSalesScreen(),
+      binding: DeliveryAddProductsSalesScreenBinding(),
     ),
     GetPage(
       name: _Paths.deliveryInvoice,
@@ -231,6 +233,11 @@ class AppPages {
         name: _Paths.deliveryAddExpenses,
         page: () => DeliveryAddExpensesScreen(),
         binding: DeliveryAddExpensesScreenBinding()),
+    GetPage(
+      name: _Paths.deliveryAddProductsOrder,
+      page: () => DeliveryAddProductsOrderScreen(),
+      binding: DeliveryAddProductsOrderScreenBinding(),
+    ),
 
     //pos-desktop
     GetPage(
