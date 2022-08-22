@@ -81,7 +81,7 @@ class BaseGetXController extends GetxController implements IBaseGetXController {
     appService.myInfoResponse = myInfoResponse;
     await Future.delayed(Constants.smallDuration);
     // Get.offNamed(Routes.dashboard);
-    Get.offNamed(Routes.deliveryProductsForSales);
+    Get.offNamed(Routes.deliverySales);
   }
 
   @override

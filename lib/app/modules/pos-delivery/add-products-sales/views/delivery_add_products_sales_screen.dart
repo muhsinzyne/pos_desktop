@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-products-order/controllers/delivery_add_products_order_controller.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-products-sales/controllers/delivery_add_products_sales_controller.dart';
+import 'package:posdelivery/app/routes/app_pages.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/text_field.dart';
 import 'package:posdelivery/app/ui/theme/app_colors.dart';
 import 'package:posdelivery/app/ui/theme/delivery_textStyle.dart';
@@ -95,7 +96,7 @@ class DeliveryAddProductsSalesScreen
                                     border: InputBorder.none),
                                 onChanged: (value) {
                                   controller.selectedUnit = value;
-                                  controller.calTotal();
+                                  controller.calculateTotal();
                                 },
                                 items: controller.units.map((selectedType) {
                                   return DropdownMenuItem<Units>(
@@ -185,7 +186,7 @@ class DeliveryAddProductsSalesScreen
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            "Tax Peercentage",
+                                            "Tax Percentage",
                                             style: TextStyle(
                                                 fontSize: 15,
                                                 color: Colors.black54),
@@ -245,33 +246,45 @@ class DeliveryAddProductsSalesScreen
                       children: [
                         Expanded(
                           flex: 1,
-                          child: Container(
-                            height: 85,
-                            // width: Constants.screenWidth / 2,
-                            color: AppColors.deliverySecondary,
-                            child: Center(
-                                child: Text(
-                              "Add New",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500),
-                            )),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            height: 85,
-                            // width: Constants.screenWidth / 2,
-                            color: AppColors.deliveryPrimary,
-                            child: Center(
-                              child: Text(
-                                "Add",
+                          child: GestureDetector(
+                            onTap: () {
+                              controller.isAddNew = true;
+                              controller.addNew();
+                            },
+                            child: Container(
+                              height: 85,
+                              // width: Constants.screenWidth / 2,
+                              color: AppColors.deliverySecondary,
+                              child: Center(
+                                  child: Text(
+                                "Add New",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 20,
                                     fontWeight: FontWeight.w500),
+                              )),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: GestureDetector(
+                            onTap: () {
+                              controller.isAddNew = false;
+                              controller.addAsExist();
+                            },
+                            child: Container(
+                              height: 85,
+                              // width: Constants.screenWidth / 2,
+                              color: AppColors.deliveryPrimary,
+                              child: Center(
+                                child: Text(
+                                  "Add",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500),
+                                ),
                               ),
                             ),
                           ),

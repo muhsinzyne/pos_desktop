@@ -165,9 +165,9 @@ class DeliveryAddProductsOrderScreenController extends BaseGetXController
   }
 }
 
-class UnitOption {
-  final String key;
-  final String fullName;
+// class UnitOption {
+//   final String key;
+//   final String fullName;
 
-  UnitOption(this.key, this.fullName);
-}
+//   UnitOption(this.key, this.fullName);
+// }

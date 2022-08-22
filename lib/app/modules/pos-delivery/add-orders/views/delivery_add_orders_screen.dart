@@ -61,9 +61,9 @@ class DeliveryAddOrdersScreen extends StatelessWidget {
                           SizedBox(
                             height: 35,
                           ),
-                          DeliveyProductTile(),
-                          DeliveyProductTile(),
-                          DeliveyProductTile(),
+                          // DeliveyProductTile(),
+                          // DeliveyProductTile(),
+                          // DeliveyProductTile(),
                         ],
                       ),
                     ),

@@ -3,17 +3,22 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:get/get.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-sales/controllers/delivery_sales_controller.dart';
 import 'package:posdelivery/app/modules/pos/pos_bill/views/pos_bill_screen.dart';
+import 'package:posdelivery/app/routes/app_pages.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/productTile.dart';
 import 'package:posdelivery/app/ui/theme/app_colors.dart';
 import 'package:posdelivery/app/ui/theme/delivery_textStyle.dart';
 import 'package:posdelivery/models/constants.dart';
 
-class DeliveryAddSalesScreen extends StatelessWidget {
-  const DeliveryAddSalesScreen({Key? key}) : super(key: key);
+class DeliverySalesScreen extends GetView<DeliverySalesScreenController> {
+  const DeliverySalesScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    controller.init();
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -44,19 +49,24 @@ class DeliveryAddSalesScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 6, horizontal: 10),
-                                decoration: BoxDecoration(
-                                  color: AppColors.deliveryPrimary,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: Text(
-                                  "Add Product",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 18,
-                                      color: Colors.white),
+                              InkWell(
+                                onTap: () async {
+                                  Get.toNamed(Routes.deliveryProductsForSales);
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 6, horizontal: 10),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.deliveryPrimary,
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Text(
+                                    "Add Product",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 18,
+                                        color: Colors.white),
+                                  ),
                                 ),
                               )
                             ],
@@ -66,6 +76,7 @@ class DeliveryAddSalesScreen extends StatelessWidget {
                           ),
                           Container(
                             width: double.infinity,
+                            height: Constants.screenHeight * 0.3,
                             decoration: BoxDecoration(
                                 color: Color(0xffDFD7E8),
                                 borderRadius: BorderRadius.circular(20)),
@@ -101,12 +112,14 @@ class DeliveryAddSalesScreen extends StatelessWidget {
                                                   fontSize: 15,
                                                   color: Colors.black54),
                                             ),
-                                            Text(
-                                              "2467.00",
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: Colors.black54),
-                                            )
+                                            Obx(() {
+                                              return Text(
+                                                controller.totalProducts.value,
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.black54),
+                                              );
+                                            })
                                           ]),
                                     ),
                                     Container(
@@ -122,12 +135,14 @@ class DeliveryAddSalesScreen extends StatelessWidget {
                                                   fontSize: 15,
                                                   color: Colors.black54),
                                             ),
-                                            Text(
-                                              "643",
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: Colors.black54),
-                                            )
+                                            Obx(() {
+                                              return Text(
+                                                controller.totalQuantity.value,
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.black54),
+                                              );
+                                            })
                                           ]),
                                     ),
                                     Container(
@@ -143,12 +158,14 @@ class DeliveryAddSalesScreen extends StatelessWidget {
                                                   fontSize: 15,
                                                   color: Colors.black54),
                                             ),
-                                            Text(
-                                              "11%",
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: Colors.black54),
-                                            )
+                                            Obx(() {
+                                              return Text(
+                                                controller.totalTax.value,
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.black54),
+                                              );
+                                            })
                                           ]),
                                     ),
                                     Container(
@@ -164,12 +181,14 @@ class DeliveryAddSalesScreen extends StatelessWidget {
                                                   fontSize: 15,
                                                   color: Colors.black54),
                                             ),
-                                            Text(
-                                              "240",
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: Colors.black54),
-                                            )
+                                            Obx(() {
+                                              return Text(
+                                                controller.subTotal.value,
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.black54),
+                                              );
+                                            })
                                           ]),
                                     ),
                                     SizedBox(
@@ -187,11 +206,13 @@ class DeliveryAddSalesScreen extends StatelessWidget {
                                               style: CustomTextStyle.mainTitle
                                                   .copyWith(fontSize: 17),
                                             ),
-                                            Text(
-                                              "29219.00",
-                                              style: CustomTextStyle.mainTitle
-                                                  .copyWith(fontSize: 17),
-                                            )
+                                            Obx(() {
+                                              return Text(
+                                                controller.grandTotal.value,
+                                                style: CustomTextStyle.mainTitle
+                                                    .copyWith(fontSize: 17),
+                                              );
+                                            })
                                           ]),
                                     ),
                                     SizedBox(
@@ -241,9 +262,49 @@ class DeliveryAddSalesScreen extends StatelessWidget {
                           SizedBox(
                             height: 15,
                           ),
-                          DeliveyProductTile(),
-                          DeliveyProductTile(),
-                          DeliveyProductTile(),
+                          Obx(() {
+                            return Container(
+                                height: Constants.screenHeight * 0.3,
+                                width: Constants.screenWidth,
+                                child: RefreshIndicator(
+                                  onRefresh: () {
+                                    return Future.delayed(Duration(seconds: 1),
+                                        () {
+                                      controller.init();
+                                    });
+                                  },
+                                  child: ListView.builder(
+                                    itemCount: controller.cartItems.length,
+                                    itemBuilder: (context, i) => InkWell(
+                                      onTap: () {
+                                        Get.toNamed(Routes.deliverySalesPayment,
+                                            arguments: {
+                                              "key":
+                                                  controller.cartItems[i].key!,
+                                              "code":
+                                                  controller.cartItems[i].itemId
+                                            });
+                                      },
+                                      child: DeliveyProductTile(
+                                          id: i,
+                                          item: controller.cartItems[i],
+                                          delete: controller.deleteCartItem,
+                                          productName: controller
+                                              .cartItems[i].cartItem!.label!,
+                                          price: controller
+                                              .cartItems[i].cartItem!.row!.price
+                                              .toString(),
+                                          qty: controller.cartItems[i].quantity
+                                              .toString(),
+                                          tax: controller.cartItems[i].tax
+                                              .toString(),
+                                          totalPrice: controller
+                                              .cartItems[i].grandTotal
+                                              .toString()),
+                                    ),
+                                  ),
+                                ));
+                          })
                         ],
                       ),
                     ),
@@ -254,13 +315,16 @@ class DeliveryAddSalesScreen extends StatelessWidget {
                           width: Constants.screenWidth / 2,
                           color: AppColors.deliverySecondary,
                           child: Center(
-                              child: Text(
-                            "29,383.00",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500),
-                          )),
+                            child: Obx(() {
+                              return Text(
+                                controller.grandTotal.value,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500),
+                              );
+                            }),
+                          ),
                         ),
                         Container(
                           height: 85,

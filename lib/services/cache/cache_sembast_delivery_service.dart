@@ -4,9 +4,11 @@ import 'package:dio/dio.dart' as form;
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:posdelivery/models/constants.dart';
+import 'package:posdelivery/models/delivery/requests/cart_product.dart';
 import 'package:posdelivery/models/delivery/requests/expense_add_request.dart';
 import 'package:posdelivery/models/delivery/requests/order_add_request.dart';
 import 'package:posdelivery/models/delivery/requests/store_add_request.dart';
+import 'package:posdelivery/models/requests/pos/sale_request.dart';
 import 'package:posdelivery/models/response/customer/customer_data.dart';
 import 'package:posdelivery/models/response/desktop/customer_list.dart';
 import 'package:posdelivery/models/response/desktop/warehouse_list.dart';
@@ -33,6 +35,125 @@ class CacheSembastDeliveryService extends BaseGetXService {
   ));
 
 //delivery
+
+  Future<bool> deleteAddSaleFormData() async {
+    StoreRef store = localStorage.getMapStore(Constants.deliveryAddSaleForm);
+    Database? db = await localStorage.db;
+    try {
+      await db?.transaction((transaction) async {
+        await store.drop(transaction);
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<List<SaleRequest>> getAllAddSaleFormData() async {
+    StoreRef store = localStorage.getMapStore(Constants.deliveryAddSaleForm);
+    Database? db = await localStorage.db;
+    var records = await store.find(
+      db!,
+      finder: Finder(
+        sortOrders: [SortOrder('order')],
+      ),
+    );
+    List<SaleRequest> result = [];
+    for (var record in records) {
+      result.add(SaleRequest.fromJson(record.value));
+    }
+    return result;
+  }
+
+  setAddSaleFormData(SaleRequest item) async {
+    StoreRef store = localStorage.getMapStore(Constants.deliveryAddSaleForm);
+    Database? db = await localStorage.db;
+    await db!.transaction((transaction) async => {
+          // await store.record(key).put(transaction, item.toJson())
+          await store.add(transaction, item.toJson())
+        });
+    return item;
+  }
+
+  Future<bool> deleteCartProductData(int id) async {
+    StoreRef store = localStorage.getMapStore(Constants.deliveryCartProducts);
+    Database? db = await localStorage.db;
+    try {
+      await db?.transaction((transaction) async {
+        await store.record(id).delete(transaction);
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<CartProduct> getCartProductForSaleData(int key) async {
+    StoreRef store = localStorage.getMapStore(Constants.deliveryCartProducts);
+    Database? db = await localStorage.db;
+    var record = await store.record(key).get(db!);
+    return CartProduct.fromJson(record);
+  }
+
+  Future getCartProductData(String key) async {
+    StoreRef store = localStorage.getMapStore(Constants.deliveryCartProducts);
+    Database? db = await localStorage.db;
+    var finder = Finder(filter: Filter.equals('itemId', key));
+    var record = await store.findFirst(db!, finder: finder);
+    logger.wtf(record);
+    // var record = await store.record(key).get(db!);
+    if (record != null) {
+      return CartProduct.fromJson(record.value);
+    } else {
+      return null;
+    }
+  }
+
+  Future updateCartProductData(CartProduct item) async {
+    // int key = int.parse(item.itemId.toString());
+    StoreRef store = localStorage.getMapStore(Constants.deliveryCartProducts);
+    Database? db = await localStorage.db;
+    var finder = Finder(filter: Filter.equals('itemId', item.itemId));
+    var record = await store.findFirst(db!, finder: finder);
+    if (record != null) {
+      await db.transaction((transaction) async =>
+          {await store.record(record.key).put(transaction, item.toJson())});
+    } else {
+      return null;
+    }
+  }
+
+  Future<List<CartProduct>> getAllCartProducts() async {
+    StoreRef store = localStorage.getMapStore(Constants.deliveryCartProducts);
+    Database? db = await localStorage.db;
+    var records = await store.find(
+      db!,
+      finder: Finder(
+        sortOrders: [SortOrder('order')],
+      ),
+    );
+    List<CartProduct> result = [];
+    for (var record in records) {
+      result.add(CartProduct.fromJson(record.value));
+      // result.add(jsonEncode(record.value));
+      // result.add(CartProduct.fromJson(record.value));
+    }
+    return result;
+  }
+
+  setCartProductsData(CartProduct item) async {
+    // int key = int.parse(item.itemId.toString());
+    StoreRef store = localStorage.getMapStore(Constants.deliveryCartProducts);
+    Database? db = await localStorage.db;
+    await db!.transaction((transaction) async {
+      // await store.record(key).put(transaction, item.toJson())
+      var id = await store.add(transaction, item.toJson());
+      item.key = id;
+      await store.record(id).put(transaction, item.toJson());
+    });
+    return item;
+  }
+
   setAddOrderFormData(OrderAddRequest item) async {
     StoreRef store = localStorage.getMapStore(Constants.deliveryAddOrderForm);
     Database? db = await localStorage.db;
@@ -264,19 +385,20 @@ class CacheSembastDeliveryService extends BaseGetXService {
     return item;
   }
 
-  Future getProductData(String storeName, int key) async {
+  Future<Product> getProductData(String storeName, int key) async {
     StoreRef store = localStorage.getMapStore(storeName);
     Database? db = await localStorage.db;
     var record = await store.record(key).get(db!);
-    if (record != null) {
-      return record;
-    } else {
-      return null;
-    }
+    // if (record != null) {
+    return Product.fromJson(record);
+    // }
+    // else {
+    //   return null;
+    // }
   }
 
-  Future<List<Product>> getAllProducts() async {
-    StoreRef store = localStorage.getMapStore(Constants.productsStore);
+  Future<List<Product>> getAllProducts(String storeName) async {
+    StoreRef store = localStorage.getMapStore(storeName);
     Database? db = await localStorage.db;
     var records = await store.find(
       db!,

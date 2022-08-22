@@ -122,8 +122,7 @@ class DeliveryProductsForSalesScreen
                                                   arguments: {
                                                     "code": controller
                                                         .filteredProducts[index]
-                                                        .row!
-                                                        .code
+                                                        .itemId
                                                   });
                                             },
                                             child: ListTile(

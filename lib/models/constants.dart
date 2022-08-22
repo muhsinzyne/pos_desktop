@@ -71,8 +71,11 @@ class Constants {
   //pos-delivery
   static const deliveryDatabaseFileName = 'pos_delivery.db';
   static const deliveryAddStoreForm = 'add_store_form';
+  static const deliveryAddSaleForm = 'add_sale_form';
   static const deliveryAddExpenseForm = 'add_expense_form';
   static const deliveryAddOrderForm = 'add_order_form';
+  static const deliveryProductsSales = 'delivery_products_sales';
+  static const deliveryCartProducts = 'delivery_cart_products';
 
   static double screenHeight =
       window.physicalSize.height / window.devicePixelRatio;

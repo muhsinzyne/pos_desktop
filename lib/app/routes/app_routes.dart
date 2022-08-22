@@ -10,7 +10,7 @@ abstract class Routes {
   static const deliveryAddStoreManullay = _Paths.deliveryAddStoreManually;
   static const deliveryStoreDetails = _Paths.deliveryStoreDetails;
   static const deliverySalesPayment = _Paths.deliverySalesPayment;
-  static const deliveryAddSales = _Paths.deliveryAddSales;
+  static const deliverySales = _Paths.deliverySales;
   static const deliveryAddProductsSales = _Paths.deliveryAddProductsSales;
   static const deliveryInvoice = _Paths.deliveryInvoice;
   static const deliveryPaymentHome = _Paths.deliveryPaymentHome;
@@ -70,7 +70,7 @@ abstract class _Paths {
   static const deliveryAddStore = '/delivery-addStore';
   static const deliveryStoreDetails = '/delivery-storDetails';
   static const deliverySalesPayment = '/delivery-salesPayment';
-  static const deliveryAddSales = '/delivery-addSales';
+  static const deliverySales = '/delivery-sales';
   static const deliveryAddProductsSales = '/delivery-addProductsSales';
   static const deliveryInvoice = '/delivery-invoice';
   static const deliveryPaymentHome = '/delivery-paymentHome';

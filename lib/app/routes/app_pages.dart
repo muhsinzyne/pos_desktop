@@ -7,8 +7,8 @@ import 'package:posdelivery/app/modules/pos-delivery/add-products-order/bindings
 import 'package:posdelivery/app/modules/pos-delivery/add-products-order/views/delivery_add_products_order_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-products-sales/bindings/delivery_add_products_sales_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-products-sales/views/delivery_add_products_sales_screen.dart';
-import 'package:posdelivery/app/modules/pos-delivery/add-sales/bindings/delivery_add_sales_binding.dart';
-import 'package:posdelivery/app/modules/pos-delivery/add-sales/views/delivery_add_sales_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-sales/bindings/delivery_sales_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-sales/views/delivery_sales_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-store-manually/bindings/delivery_add_store_manually_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-store-manually/views/delivery_add_store_manually_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-store/bindings/delivery_add_store_binding.dart';
@@ -150,9 +150,9 @@ class AppPages {
       binding: DeliverySalesPaymentScreenBinding(),
     ),
     GetPage(
-      name: _Paths.deliveryAddSales,
-      page: () => DeliveryAddSalesScreen(),
-      binding: DeliveryAddSalesScreenBinding(),
+      name: _Paths.deliverySales,
+      page: () => DeliverySalesScreen(),
+      binding: DeliverySalesScreenBinding(),
     ),
     GetPage(
       name: _Paths.deliveryAddProductsSales,
