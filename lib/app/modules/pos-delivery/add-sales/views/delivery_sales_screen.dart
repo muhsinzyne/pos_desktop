@@ -326,17 +326,22 @@ class DeliverySalesScreen extends GetView<DeliverySalesScreenController> {
                             }),
                           ),
                         ),
-                        Container(
-                          height: 85,
-                          width: Constants.screenWidth / 2,
-                          color: AppColors.deliveryPrimary,
-                          child: Center(
-                            child: Text(
-                              "Proceed",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500),
+                        InkWell(
+                          onTap: () {
+                            Get.toNamed(Routes.deliverySalesPayment);
+                          },
+                          child: Container(
+                            height: 85,
+                            width: Constants.screenWidth / 2,
+                            color: AppColors.deliveryPrimary,
+                            child: Center(
+                              child: Text(
+                                "Proceed",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500),
+                              ),
                             ),
                           ),
                         ),

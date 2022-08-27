@@ -68,7 +68,7 @@ class DeliverySalesPaymentScreen
                                 height: 5,
                               ),
                               TextFieldDelivery(
-                                controller: controller.dueAmount,
+                                controller: controller.totalPayableAmount,
                               )
                             ],
                           ),

@@ -31,7 +31,7 @@ class InvoiceResponse {
   String? v;
   String? dtLang;
   String? dpLang;
-  List<Rows> rows = [];
+  List<ProductRows> rows = [];
   SalesBiller? biller;
   SalesCustomer? customer;
   List<Payments>? payments;
@@ -158,9 +158,9 @@ class InvoiceResponse {
     dtLang = json['dt_lang'];
     dpLang = json['dp_lang'];
     if (json['rows'] != null) {
-      rows = <Rows>[];
+      rows = <ProductRows>[];
       json['rows'].forEach((v) {
-        rows.add(Rows.fromJson(v));
+        rows.add(ProductRows.fromJson(v));
       });
     }
     biller =

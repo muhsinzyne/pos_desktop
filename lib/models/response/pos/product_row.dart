@@ -1,4 +1,4 @@
-class Rows {
+class ProductRows {
   String? id;
   String? saleId;
   String? productId;
@@ -36,7 +36,7 @@ class Rows {
   String? secondName;
   String? taxMethod;
 
-  Rows.fromJson(Map<String, dynamic> json) {
+  ProductRows.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     saleId = json['sale_id'];
     productId = json['product_id'];

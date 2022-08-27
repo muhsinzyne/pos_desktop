@@ -21,8 +21,6 @@ import 'package:posdelivery/app/modules/pos-delivery/close-register/bindings/del
 import 'package:posdelivery/app/modules/pos-delivery/close-register/views/delivery_close_register_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/home/bindings/delivery_home_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/home/views/delivery_home_screen.dart';
-import 'package:posdelivery/app/modules/pos-delivery/invoice/bindings/delivery_invoice_binding.dart';
-import 'package:posdelivery/app/modules/pos-delivery/invoice/views/delivery_invoice_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/open-register/bindings/delivery_open_register_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/open-register/views/delivery_open_register_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/order-invoice/bindings/delivery_order_invoice_binding.dart';
@@ -45,6 +43,8 @@ import 'package:posdelivery/app/modules/pos-delivery/products-for-sales/bindings
 import 'package:posdelivery/app/modules/pos-delivery/products-for-sales/views/delivery_products_for_sales_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/register-history/bindings/delivery_register_history_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/register-history/views/delivery_register_history_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/sale-invoice/bindings/delivery_sale_invoice_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/sale-invoice/views/delivery_sale_invoice_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/sales-payment/bindings/delivery_sales_payment_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/sales-payment/views/delivery_sales_payment_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/splash/bindings/delivery_splash_binding.dart';
@@ -160,9 +160,9 @@ class AppPages {
       binding: DeliveryAddProductsSalesScreenBinding(),
     ),
     GetPage(
-      name: _Paths.deliveryInvoice,
-      page: () => DeliveryInvoiceScreen(),
-      binding: DeliveryInvoiceScreenBinding(),
+      name: _Paths.deliverySaleInvoice,
+      page: () => DeliverySaleInvoiceScreen(),
+      binding: DeliverySaleInvoiceScreenBinding(),
     ),
     GetPage(
       name: _Paths.deliveryPaymentHome,

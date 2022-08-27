@@ -11,6 +11,7 @@ import 'package:posdelivery/app/modules/pos-delivery/add-products-sales/contract
 import 'package:posdelivery/app/modules/pos-delivery/add-store-manually/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/products-for-orders/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/products-for-sales/contracts.dart';
+import 'package:posdelivery/app/modules/pos-delivery/sale-invoice/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/sales-payment/contracts.dart';
 import 'package:posdelivery/app/modules/product_list/contracts.dart';
 import 'package:posdelivery/app/modules/sales_point/contracts.dart';
@@ -24,6 +25,7 @@ import 'package:posdelivery/models/requests/pos/customer_list.dart';
 import 'package:posdelivery/models/requests/pos/product_by_code.dart';
 import 'package:posdelivery/models/requests/pos/product_list.dart';
 import 'package:posdelivery/models/requests/pos/sale_request.dart';
+import 'package:posdelivery/models/requests/pos/sale_view_request.dart';
 import 'package:posdelivery/models/requests/pos/warehouse_products.dart';
 import 'package:posdelivery/models/response/auth/my_info_response.dart';
 import 'package:posdelivery/models/response/customer/customer_add_response.dart';
@@ -32,6 +34,7 @@ import 'package:posdelivery/models/response/desktop/warehouse_list.dart';
 import 'package:posdelivery/models/response/desktop/warehouse_products.dart';
 import 'package:posdelivery/models/response/error_message.dart';
 import 'package:posdelivery/models/response/pos/add_sale_response.dart';
+import 'package:posdelivery/models/response/pos/invoice_response.dart';
 import 'package:posdelivery/models/response/pos/product.dart';
 import 'package:posdelivery/models/status_codes.dart';
 import 'package:posdelivery/models/url.dart';
@@ -52,6 +55,7 @@ class DeliveryDataProvider extends BaseDataProvider {
   late IDeliveryProductForOrderScreenController deliveryProductForOrderCtrl;
   late IDeliveryStoreAddController deliveryStoreAddCtrl;
   late IDeliveryExpenseAddController deliveryExpenseAddCtrl;
+  late IDeliverySaleInvoiceScreenController deliverySaleInvoiceCtrl;
   late IDeliveryAddProductsOrderScreenController
       deliveryAddProductsOrderScreenCtrl;
   late IDeliveryAddProductsSaleScreenController
@@ -111,7 +115,33 @@ class DeliveryDataProvider extends BaseDataProvider {
     deliverySalePaymentCtrl = controller;
   }
 
+  set printCtrlCallBack(IDeliverySaleInvoiceScreenController controller) {
+    deliverySaleInvoiceCtrl = controller;
+  }
+
   //delivery
+  getSaleInvoice(SaleViewRequest saleViewRequest) {
+    final obs = network
+        .get(NetworkURL.saleView, queryParameters: saleViewRequest.toJson())
+        .asStream();
+    obs.listen((data) {
+      try {
+        InvoiceResponse invoiceResponse = InvoiceResponse.fromJson(data.data);
+        deliverySaleInvoiceCtrl.onSaleViewFetchDone(invoiceResponse);
+      } on Exception {
+        final ErrorMessage errMsg = ErrorMessage();
+        errMsg.message = 'invalid_response'.tr;
+        deliverySaleInvoiceCtrl.onSaleViewError(errMsg);
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+          ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      if (err.response?.statusCode == StatusCodes.status400BadRequest) {
+        //saleListCtrl.onSalesListResponseBadRequest(errMsg);
+      }
+    });
+  }
+
   saleOrderRequestOffline(SaleRequest saleRequest) {
     final obs =
         network.post(NetworkURL.addSale, data: saleRequest.toJson()).asStream();

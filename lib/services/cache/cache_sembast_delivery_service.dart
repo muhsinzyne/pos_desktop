@@ -75,6 +75,19 @@ class CacheSembastDeliveryService extends BaseGetXService {
     return item;
   }
 
+  Future<bool> deleteAllCartProductsData() async {
+    StoreRef store = localStorage.getMapStore(Constants.deliveryCartProducts);
+    Database? db = await localStorage.db;
+    try {
+      await db?.transaction((transaction) async {
+        await store.drop(transaction);
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<bool> deleteCartProductData(int id) async {
     StoreRef store = localStorage.getMapStore(Constants.deliveryCartProducts);
     Database? db = await localStorage.db;

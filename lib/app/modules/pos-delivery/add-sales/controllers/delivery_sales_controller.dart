@@ -44,9 +44,10 @@ class DeliverySalesScreenController extends BaseGetXController {
         cartItems.fold<int>(0, (sum, item) => sum + item.quantity!).toString();
     subTotal.value = cartItems
         .fold<double>(0, (sum, item) => sum + item.subTotal!)
-        .toString();
-    totalTax.value =
-        cartItems.fold<double>(0, (sum, item) => sum + item.tax!).toString();
+        .toStringAsFixed(2);
+    totalTax.value = cartItems
+        .fold<double>(0, (sum, item) => sum + item.tax!)
+        .toStringAsFixed(2);
     grandTotal.value = cartItems
         .fold<double>(0, (sum, item) => sum + item.grandTotal!)
         .toStringAsFixed(2);

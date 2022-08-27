@@ -9,6 +9,8 @@ import 'package:posdelivery/providers/data/auth_data_provider.dart';
 import 'package:posdelivery/providers/data/delivery_data_provider.dart';
 import 'package:posdelivery/providers/data/desktop_data_provider.dart';
 import 'package:posdelivery/providers/data/pos_data_provider.dart';
+import 'package:posdelivery/providers/local/pdf_invoice_provider.dart';
+import 'package:posdelivery/providers/local/print_provider.dart';
 import 'package:posdelivery/services/app_service.dart';
 import 'package:posdelivery/services/base/network.dart';
 import 'package:posdelivery/services/cache/cache_sembast_delivery_service.dart';
@@ -36,6 +38,8 @@ class AppServiceBinding implements Bindings {
         CacheService(cacheAdaptor: CacheAdaptor.localStorage));
     Get.lazyPut(() => SembastStorage().init());
     Get.lazyPut(() => SembastDeliveryStorage().init());
+    Get.lazyPut(() => PrintProvider());
+    Get.lazyPut(() => PdfInvoiceProvider());
     Get.put(CacheSembastService());
     Get.put(CacheSembastDeliveryService());
   }
