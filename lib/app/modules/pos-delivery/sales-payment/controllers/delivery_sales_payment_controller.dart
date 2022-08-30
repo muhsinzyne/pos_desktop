@@ -30,6 +30,7 @@ class DeliverySalesPaymentScreenController extends BaseGetXController
   final TextEditingController dueDate = TextEditingController();
   RxList<CartProduct> cartProducts = RxList([]);
   RxBool isDue = RxBool(false);
+  String totalTax = '';
   late bool isOnline;
   int? id;
   DeliveryDataProvider deliveryDataProvider = Get.find<DeliveryDataProvider>();
@@ -63,6 +64,10 @@ class DeliverySalesPaymentScreenController extends BaseGetXController
         .fold<double>(0, (sum, item) => sum + item.grandTotal!)
         .toStringAsFixed(2)
         .toString();
+
+    totalTax = cartProducts
+        .fold<double>(0, (sum, item) => sum + item.tax!)
+        .toStringAsFixed(2);
     // dueAmount.text = cartProduct.grandTotal.toString();
     if (isOnline) {
       List<SaleRequest> formData = await sembastCache.getAllAddSaleFormData();
@@ -145,6 +150,7 @@ class DeliverySalesPaymentScreenController extends BaseGetXController
       saleRequest.productDiscount.add('0');
       if (element.cartItem!.taxRate != null) {
         saleRequest.productTax.add(Constants.isTaxProduct);
+        saleRequest.productTax.add(element.tax!.toStringAsFixed(2));
       } else {
         saleRequest.productTax.add(Constants.nonTaxProduct);
       }
@@ -164,7 +170,6 @@ class DeliverySalesPaymentScreenController extends BaseGetXController
     }
     // saleRequest.amount.add(paymentAmount.value.text);
     saleRequest.amount.add(paymentAmount.text);
-
     // var amountBalance = double.tryParse(changeAmount.text)!.abs() -
     //     (double.tryParse(balanceAmount.text)!);
     // var amountBalanceString = amountBalance.toStringAsFixed(2);
@@ -179,7 +184,7 @@ class DeliverySalesPaymentScreenController extends BaseGetXController
     saleRequest.ccType.add('');
     saleRequest.ccCvv2.add('');
     saleRequest.paymentNote.add('');
-    saleRequest.orderTax = '0';
+    saleRequest.orderTax = totalTax;
     saleRequest.discount = '0';
     saleRequest.shipping = '0';
     saleRequest.rPaidBy = 'cash';

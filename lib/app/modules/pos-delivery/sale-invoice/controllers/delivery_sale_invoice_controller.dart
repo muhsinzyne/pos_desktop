@@ -13,6 +13,7 @@ import 'package:posdelivery/models/response/pos/invoice_response.dart';
 import 'package:posdelivery/providers/data/delivery_data_provider.dart';
 import 'package:posdelivery/providers/data/pos_data_provider.dart';
 import 'package:posdelivery/providers/local/pdf_invoice_provider.dart';
+import 'package:posdelivery/providers/local/pdf_small_invoice_provider.dart';
 import 'package:posdelivery/providers/local/print_provider.dart';
 
 class DeliverySaleInvoiceScreenController extends BaseGetXController
@@ -37,19 +38,19 @@ class DeliverySaleInvoiceScreenController extends BaseGetXController
   // late EmployeeDataSource employeeDataSource;
   @override
   void onInit() {
-    deliveryDataProvider.deliverySaleInvoiceCtrl = this;
-    params = Get.arguments;
-    if (params!.refId != null) {
-      _fetchInvoice();
-    }
+    // deliveryDataProvider.deliverySaleInvoiceCtrl = this;
+    // params = Get.arguments;
+    // if (params!.refId != null) {
+    _fetchInvoice();
+    // }
 
     super.onInit();
   }
 
   _fetchInvoice() {
     SaleViewRequest saleViewRequest = SaleViewRequest();
-    saleViewRequest.saleId = params!.refId;
-    // saleViewRequest.saleId = "165";
+    // saleViewRequest.saleId = params!.refId;
+    saleViewRequest.saleId = "174";
     deliveryDataProvider.getSaleInvoice(saleViewRequest);
   }
 
@@ -81,8 +82,9 @@ class DeliverySaleInvoiceScreenController extends BaseGetXController
     // printProvider.loadImage(invoiceResponse.value.logoPath);
     // PdfInvoiceProvider.loadImage(invoiceResponse.value.logoPath);
     await Future.delayed(Constants.smallDuration);
-    final pffFile = await PdfInvoiceProvider.generate(invoiceResponse.value);
-    PdfInvoiceProvider.openFile(pffFile);
+    final pffFile =
+        await PdfSmallInvoiceProvider.generate(invoiceResponse.value);
+    PdfSmallInvoiceProvider.openFile(pffFile);
 
     // printProvider.printPosInvoice(invoiceResponse.value);
 

@@ -46,6 +46,19 @@ class DeliverySaleInvoiceScreen
                           SizedBox(
                             height: 10,
                           ),
+                          Obx(() {
+                            return Text(
+                              controller
+                                  .invoiceResponse.value.inv!.orderDiscountId
+                                  .toString()
+                              // .toStringAsFixed(2),
+                              ,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500),
+                            );
+                          }),
                         ],
                       ),
                     ),

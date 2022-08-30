@@ -14,7 +14,7 @@ import 'package:posdelivery/models/constants.dart';
 import 'package:posdelivery/models/response/pos/invoice_response.dart';
 import 'package:posdelivery/models/response/pos/sales_customer.dart';
 
-class PdfInvoiceProvider {
+class PdfSmallInvoiceProvider {
   static Future<File> saveDocument({
     required String name,
     required pw.Document pdf,
@@ -39,6 +39,7 @@ class PdfInvoiceProvider {
     final logoImage = await networkImage(invoice.logoPath);
     final pdf = pw.Document();
     pdf.addPage(pw.MultiPage(
+      pageFormat: PdfPageFormat.a4,
       build: (context) => [
         buildTitle(invoice, logoImage),
       ],
@@ -76,155 +77,48 @@ class PdfInvoiceProvider {
                       fontWeight: pw.FontWeight.values[0],
                       fontSize: 22,
                     )),
-                pw.SizedBox(
-                  height: 10,
-                ),
                 pw.Text("${invoice.customer?.address}",
                     style: pw.TextStyle(
-                      fontSize: 15,
+                      fontSize: 12,
                     )),
                 pw.Text("Tel: ${invoice.customer?.phone} ",
                     style: pw.TextStyle(
-                      fontSize: 15,
+                      fontSize: 12,
                     )),
                 pw.Text("VatNo: ${invoice.biller?.vatNo} ",
                     style: pw.TextStyle(
-                      fontSize: 15,
+                      fontSize: 12,
                     )),
-                pw.SizedBox(height: 10),
                 pw.Text("Simple Tax Invoice",
                     style: pw.TextStyle(
                       fontWeight: pw.FontWeight.bold,
                       fontSize: 22,
                     )),
-              ],
-            ),
-            pw.Row(
-              children: [
-                pw.Column(
-                  mainAxisAlignment: pw.MainAxisAlignment.start,
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  children: [
-                    pw.SizedBox(
-                      height: 10,
-                    ),
-                    pw.Text("Date: ${invoice.inv?.date} ",
-                        style: pw.TextStyle(
-                          fontSize: 15,
-                        )),
-                    pw.SizedBox(
-                      height: 10,
-                    ),
-                    pw.Text("sl no: ${invoice.inv?.saleId} ",
-                        style: pw.TextStyle(
-                          fontSize: 15,
-                        )),
-                    pw.Text("Sale No/Ref: ${invoice.inv?.referenceNo} ",
-                        style: pw.TextStyle(
-                          fontSize: 15,
-                        )),
-                    pw.Text("Sales Associate: MUHAMMED MUHSIN",
-                        style: pw.TextStyle(
-                          fontSize: 15,
-                        )),
-                    pw.SizedBox(
-                      height: 10,
-                    ),
-                    pw.Text("Customer: ${invoice.inv?.customer}",
-                        style: pw.TextStyle(
-                          fontSize: 15,
-                        )),
-                  ],
-                ),
-              ],
-            ),
-            pw.SizedBox(
-              height: 10,
-            ),
-            buildItems(invoice),
-            pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-              children: [
-                pw.Text("Total",
+                pw.Text("Date: ${invoice.inv?.date} ",
                     style: pw.TextStyle(
-                      fontWeight: pw.FontWeight.bold,
-                      fontSize: 15,
+                      fontSize: 12,
                     )),
-                pw.Text(
-                    "${invoice.defaultCurrency?.name} ${invoice.inv?.grandTotal}",
+                pw.Text("sl no: ${invoice.inv?.saleId} ",
                     style: pw.TextStyle(
-                      fontWeight: pw.FontWeight.bold,
-                      fontSize: 15,
-                    ))
-              ],
-            ),
-            pw.Divider(
-              color: PdfColors.grey300,
-            ),
-            pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-              children: [
-                pw.Text("Grand Total",
-                    style: pw.TextStyle(
-                      fontWeight: pw.FontWeight.bold,
-                      fontSize: 15,
+                      fontSize: 12,
                     )),
-                pw.Text(
-                    "${invoice.defaultCurrency?.name} ${invoice.inv?.grandTotal}",
+                pw.Text("Sale No/Ref: ${invoice.inv?.referenceNo} ",
                     style: pw.TextStyle(
-                      fontWeight: pw.FontWeight.bold,
-                      fontSize: 15,
-                    ))
-              ],
-            ),
-            pw.SizedBox(
-              height: 10,
-            ),
-            pw.Divider(
-              color: PdfColors.grey300,
-            ),
-            pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-              children: [
-                pw.Text(
-                  "Paid by: ${invoice.inv?.paymentMethod}  ",
-                  style: pw.TextStyle(
-                    fontSize: 15,
-                  ),
-                  maxLines: 2,
-                ),
-                pw.Text(
-                    "Amount: ${invoice.defaultCurrency?.name} ${invoice.payments?[0].posPaid}",
-                    style: pw.TextStyle(
-                      fontSize: 15,
+                      fontSize: 12,
                     )),
-                pw.Text(
-                  "balance: ${invoice.payments?[0].posBalance}",
-                  style: pw.TextStyle(
-                    fontSize: 15,
-                  ),
-                  maxLines: 2,
-                ),
+                pw.Text("Sales Associate: MUHAMMED MUHSIN",
+                    style: pw.TextStyle(
+                      fontSize: 12,
+                    )),
+                pw.Text("Customer: ${invoice.inv?.customer}",
+                    style: pw.TextStyle(
+                      fontSize: 12,
+                    )),
               ],
-            ),
-            pw.SizedBox(
-              height: 40,
-            ),
-            pw.Align(
-              alignment: pw.Alignment.topLeft,
-              child: pw.Text("Tax Summary",
-                  style: pw.TextStyle(
-                    fontWeight: pw.FontWeight.bold,
-                    fontSize: 22,
-                  )),
-            ),
-            pw.SizedBox(
-              height: 10,
             ),
             buildInvoice(invoice),
             pw.Divider(),
             buildTotal(invoice),
-            buildFooter(invoice)
           ]);
   static pw.Widget buildItems(InvoiceResponse invoice) => pw.Column(
         children: [
@@ -238,12 +132,12 @@ class PdfInvoiceProvider {
                       children: [
                         pw.Text("#${i + 1}: ${invoice.rows[i].productName}",
                             style: pw.TextStyle(
-                              fontSize: 15,
+                              fontSize: 12,
                             )),
                         if (invoice.rows[i].tax != "") ...[
                           pw.Text(" ${invoice.rows[i].taxCode}",
                               style: pw.TextStyle(
-                                fontSize: 15,
+                                fontSize: 12,
                               )),
                         ] else
                           ...[],
@@ -254,12 +148,12 @@ class PdfInvoiceProvider {
                       pw.Text(
                           "${invoice.rows[i].unitQuantity} x ${invoice.defaultCurrency?.name} ${invoice.rows[i].unitPrice}",
                           style: pw.TextStyle(
-                            fontSize: 15,
+                            fontSize: 12,
                           )),
                       pw.Text(
                           "${invoice.defaultCurrency?.name} ${invoice.rows[i].subtotal}",
                           style: pw.TextStyle(
-                            fontSize: 15,
+                            fontSize: 12,
                           ))
                     ],
                   ),
@@ -275,30 +169,21 @@ class PdfInvoiceProvider {
   static pw.Widget buildInvoice(InvoiceResponse invoice) {
     final headers = [
       'Name',
-      'Code',
       'Qty',
-      'Tax Excl',
-      'Tax Amt',
+      'MRP',
+      'Rate',
+      'Total',
     ];
     final data = invoice.rows.map((item) {
       // final total = item.unitPrice * item.quantity * (1 + item.vat);
-      if (item.tax != "") {
-        return [
-          item.taxName,
-          item.taxCode,
-          '${item.unitQuantity}',
-          ' ${item.unitPrice}',
-          '${item.taxRate} %',
-        ];
-      } else {
-        return [
-          "",
-          "",
-          '${item.unitQuantity}',
-          ' ${item.unitPrice}',
-          "",
-        ];
-      }
+
+      return [
+        item.productName,
+        item.unitQuantity,
+        '0.00',
+        ' ${item.unitPrice}',
+        '${item.subtotal}',
+      ];
     }).toList();
 
     return pw.Table.fromTextArray(
@@ -321,20 +206,26 @@ class PdfInvoiceProvider {
   static formatPrice(double price, InvoiceResponse invoice) =>
       '${invoice.defaultCurrency?.name} ${price.toStringAsFixed(2)}';
   static pw.Widget buildTotal(InvoiceResponse invoice) {
+    final total = invoice.inv!.total;
+    final grandTotal = invoice.inv!.grandTotal;
+    final amountReicieved = invoice.payments![0].posPaid;
+    final balance = invoice.payments![0].posBalance;
+    final items = invoice.inv!.totalItems;
     final netTotal = invoice.rows
         .map((item) =>
             double.parse(item.unitPrice!) * double.parse(item.quantity!))
         .reduce((item1, item2) => item1 + item2);
     // final vatPercent = invoice.rows.first.taxRate;
-    final vatPercent = 15;
-    final vat = netTotal * vatPercent;
-    final total = netTotal + vat;
+    // final vatPercent = 15;
+    // final vat = netTotal * vatPercent;
+    // final total = netTotal + vat;
 
     return pw.Container(
       alignment: pw.Alignment.centerRight,
       child: pw.Row(
+        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
         children: [
-          pw.Spacer(flex: 4),
+          // pw.Spacer(flex: 4),
           pw.SizedBox(
             height: 10,
           ),
@@ -344,13 +235,78 @@ class PdfInvoiceProvider {
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
                 buildText(
-                  title: 'Total Tax Amount',
+                  title: 'Total Amount',
                   titleStyle: pw.TextStyle(
-                    fontSize: 15,
+                    fontSize: 12,
                     fontWeight: pw.FontWeight.bold,
                   ),
-                  value: formatPrice(total, invoice),
+                  value: formatPrice(double.parse(grandTotal!), invoice),
                   unite: true,
+                ),
+                pw.Divider(
+                  color: PdfColors.grey500,
+                ),
+                buildText(
+                  title: 'Discount',
+                  titleStyle: pw.TextStyle(
+                    fontSize: 12,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                  value: formatPrice(0.00, invoice),
+                  unite: true,
+                ),
+                pw.Divider(
+                  color: PdfColors.grey500,
+                ),
+                buildText(
+                  title: 'Grand Total',
+                  titleStyle: pw.TextStyle(
+                    fontSize: 12,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                  value: formatPrice(double.parse(grandTotal), invoice),
+                  unite: true,
+                ),
+                pw.Divider(
+                  color: PdfColors.grey500,
+                ),
+                buildText(
+                  title: 'Cash Recieved',
+                  titleStyle: pw.TextStyle(
+                    fontSize: 12,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                  value: formatPrice(double.parse(amountReicieved!), invoice),
+                  unite: true,
+                ),
+                pw.Divider(
+                  color: PdfColors.grey500,
+                ),
+                buildText(
+                  title: 'Balance',
+                  titleStyle: pw.TextStyle(
+                    fontSize: 12,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                  value: formatPrice(double.parse(balance!), invoice),
+                  unite: true,
+                ),
+                pw.Divider(
+                  color: PdfColors.grey500,
+                ),
+                pw.Text(
+                  'You saved SR',
+                  style: pw.TextStyle(
+                    fontSize: 12,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+                pw.Text(
+                  'Items: ${invoice.inv!.totalItems}',
+                  style: pw.TextStyle(
+                    fontSize: 12,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
                 ),
                 pw.SizedBox(
                   height: 15,
