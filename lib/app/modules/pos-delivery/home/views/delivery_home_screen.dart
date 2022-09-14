@@ -121,6 +121,15 @@ class DeliveryHomeScreen extends GetView<DeliveryHomeScreenController> {
                     SizedBox(),
                     InkWell(
                       onTap: () {
+                        Get.toNamed(Routes.deliverySales);
+                      },
+                      child: QuickLink(
+                        title: "Sales",
+                        iconData: FontAwesomeIcons.tag,
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
                         Get.toNamed(Routes.deliveryAddStoreManullay);
                       },
                       child: QuickLink(

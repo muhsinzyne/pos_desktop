@@ -79,7 +79,7 @@ class DeliveryAddProductsSalesScreenController extends BaseGetXController
   }
 
   void calculateTotal() {
-    if (quantity.text == "") {
+    if (quantity.text == "" || quantity.text == "0") {
       subTotal.value = "0";
       totalQty = "0";
       totalAmount.value = "0";
@@ -93,7 +93,7 @@ class DeliveryAddProductsSalesScreenController extends BaseGetXController
       subTotal.value = ((qty * unt) * cost).toString();
       double tax = double.parse(taxPercentage.value);
       double subAmount = double.parse(subTotal.value);
-      taxAmount.value = ((tax / 100) * subAmount).toPrecision(1).toString();
+      taxAmount.value = ((tax / 100) * subAmount).toStringAsFixed(2);
       double taxA = double.parse(taxAmount.value);
       totalAmount.value = (taxA + subAmount).toString();
       totalQty = (qty * unt).toString();

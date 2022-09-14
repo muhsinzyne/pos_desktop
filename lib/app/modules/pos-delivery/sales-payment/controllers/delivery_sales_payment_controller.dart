@@ -31,6 +31,7 @@ class DeliverySalesPaymentScreenController extends BaseGetXController
   RxList<CartProduct> cartProducts = RxList([]);
   RxBool isDue = RxBool(false);
   String totalTax = '';
+  String totalItems = '';
   late bool isOnline;
   int? id;
   DeliveryDataProvider deliveryDataProvider = Get.find<DeliveryDataProvider>();
@@ -68,10 +69,13 @@ class DeliverySalesPaymentScreenController extends BaseGetXController
     totalTax = cartProducts
         .fold<double>(0, (sum, item) => sum + item.tax!)
         .toStringAsFixed(2);
+    totalItems = cartProducts
+        .fold<int>(0, (sum, item) => sum + item.quantity!)
+        .toString();
+    logger.e(totalTax);
     // dueAmount.text = cartProduct.grandTotal.toString();
     if (isOnline) {
       List<SaleRequest> formData = await sembastCache.getAllAddSaleFormData();
-      logger.w(formData.length);
       if (formData.isNotEmpty) {
         var i;
         for (i = 0; i < formData.length; i++) {
@@ -188,9 +192,7 @@ class DeliverySalesPaymentScreenController extends BaseGetXController
     saleRequest.discount = '0';
     saleRequest.shipping = '0';
     saleRequest.rPaidBy = 'cash';
-    saleRequest.totalItems = cartProducts.length.toString();
-    var data = jsonEncode(saleRequest.toJson());
-    print(data);
+    saleRequest.totalItems = totalItems;
     deliveryDataProvider.saleOrderRequest(saleRequest);
     // // UINotification.showLoading();
     // SaleRequest saleRequest = SaleRequest();
@@ -272,11 +274,11 @@ class DeliverySalesPaymentScreenController extends BaseGetXController
     double pay = double.parse(paymentAmount.text);
     // int pay = 276;
     if (due > pay) {
-      balanceAmount.text = (due - pay).toStringAsFixed(3);
+      balanceAmount.text = (due - pay).toStringAsFixed(2);
       changeAmount.text = "0";
     } else {
       balanceAmount.text = "0";
-      changeAmount.text = (pay - due).toStringAsFixed(3);
+      changeAmount.text = (pay - due).toStringAsFixed(2);
     }
     if (balancePayment == duePayment || balancePayment > 0) {
       isDue.value = true;
