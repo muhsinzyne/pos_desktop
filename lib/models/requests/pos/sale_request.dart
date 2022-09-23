@@ -39,8 +39,48 @@ class SaleRequest {
   String? rPaidBy;
   String? totalItems;
   SaleRequest();
-  SaleRequest.fromJSON(Map<String, dynamic> parsedJson) {
-    test = parsedJson['test'];
+  SaleRequest.fromJSON(Map<String, dynamic> json) {
+    test = json["test"];
+    customer = json["customer"];
+    warehouse = json["warehouse"];
+    addItem = json["add_item"];
+    productId = List<String>.from(json["product_id"].map((x) => x));
+    productType = List<String>.from(json["product_type"].map((x) => x));
+    productCode = List<String>.from(json["product_code"].map((x) => x));
+    productName = List<String>.from(json["product_name"].map((x) => x));
+    productOption = List<String>.from(json["product_option"].map((x) => x));
+    productComment = List<String>.from(json["product_comment"].map((x) => x));
+    serial = List<String>.from(json["serial"].map((x) => x));
+    productDiscount = List<String>.from(json["product_discount"].map((x) => x));
+    productTax = List<String>.from(json["product_tax"].map((x) => x));
+    netPrice = List<String>.from(json["net_price"].map((x) => x));
+    unitPrice = List<String>.from(json["unit_price"].map((x) => x));
+    realUnitPrice = List<String>.from(json["real_unit_price"].map((x) => x));
+    quantity = List<String>.from(json["quantity"].map((x) => x));
+    productUnit = List<String>.from(json["product_unit"].map((x) => x));
+    productBaseQuantity =
+        List<String>.from(json["product_base_quantity"].map((x) => x));
+    biller = json["biller"];
+    posNote = json["pos_note"];
+    staffNote = json["staff_note"];
+    amount = List<String>.from(json["amount"].map((x) => x));
+    balanceAmount = List<String>.from(json["balance_amount"].map((x) => x));
+    paidBy = List<String>.from(json["paid_by"].map((x) => x));
+    ccNo = List<String>.from(json["cc_no"].map((x) => x));
+    payingGiftCardNo =
+        List<String>.from(json["paying_gift_card_no"].map((x) => x));
+    ccHolder = List<String>.from(json["cc_holder"].map((x) => x));
+    chequeNo = List<String>.from(json["cheque_no"].map((x) => x));
+    ccMonth = List<String>.from(json["cc_month"].map((x) => x));
+    ccYear = List<String>.from(json["cc_year"].map((x) => x));
+    ccType = List<String>.from(json["cc_type"].map((x) => x));
+    ccCvv2 = List<String>.from(json["cc_cvv2"].map((x) => x));
+    paymentNote = List<String>.from(json["payment_note"].map((x) => x));
+    orderTax = json["order_tax"];
+    discount = json["discount"];
+    shipping = json["shipping"];
+    rPaidBy = json["rpaidby"];
+    totalItems = json["total_items"];
   }
 
   Map<String, dynamic> toJson() => <String, dynamic>{

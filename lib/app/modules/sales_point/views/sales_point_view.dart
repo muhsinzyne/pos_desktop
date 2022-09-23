@@ -939,7 +939,7 @@ class PaymentPopup extends GetView<SalesPointController> {
               ),
               child: ElevatedButton(
                 onPressed: () {
-                  controller.continuePayment();
+                  controller.connectPrinter();
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

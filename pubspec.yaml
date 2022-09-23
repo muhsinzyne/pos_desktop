@@ -48,6 +48,15 @@ dependencies:
   flutter_switch: ^0.3.2
   flutter_advanced_switch: ^3.0.1
   font_awesome_flutter: ^10.1.0
+  flutter_esc_pos_utils: ^0.1.7
+  pdf: ^3.8.3
+  printing: ^5.9.2
+  flutter_esc_pos_network: ^1.0.1
+  flutter_pos_printer_platform: ^1.0.4
+  # network_pos_printer: ^1.1.4+3
+  # syncfusion_flutter_datagrid: ^20.2.45
+  # pdf: ^3.8.2
+  # printing: ^5.9.2
 
 
 

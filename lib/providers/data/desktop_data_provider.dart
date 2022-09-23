@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:posdelivery/app/modules/dashboard/contracts.dart';
@@ -10,7 +9,6 @@ import 'package:posdelivery/models/requests/customer/customer_add_request.dart';
 import 'package:posdelivery/models/requests/pos/customer_list.dart';
 import 'package:posdelivery/models/requests/pos/product_list.dart';
 import 'package:posdelivery/models/requests/pos/sale_request.dart';
-import 'package:posdelivery/models/requests/pos/warehouse_products.dart';
 import 'package:posdelivery/models/response/auth/my_info_response.dart';
 import 'package:posdelivery/models/response/customer/customer_add_response.dart';
 import 'package:posdelivery/models/response/customer/customer_price_group_response.dart';
@@ -23,8 +21,10 @@ import 'package:posdelivery/models/status_codes.dart';
 import 'package:posdelivery/models/url.dart';
 import 'package:posdelivery/providers/data/base_data_provider.dart';
 
+import '../../models/requests/pos/sale_view_request.dart';
 import '../../models/response/desktop/customer_group.dart';
 import '../../models/response/desktop/customer_list.dart';
+import '../../models/response/pos/invoice_response.dart';
 
 class DesktopDataProvider extends BaseDataProvider {
   late ISalesPointController sPCtrl;
@@ -249,17 +249,40 @@ class DesktopDataProvider extends BaseDataProvider {
   }
 
   saleOrderRequest(SaleRequest saleRequest) {
-    // print(saleRequest.toJson());
+    print(jsonEncode(saleRequest.toJson()));
     final obs =
         network.post(NetworkURL.addSale, data: saleRequest.toJson()).asStream();
     obs.listen((data) {
       try {
-        // AddSaleResponse addSaleResponse = AddSaleResponse.fromJSON(data.data);
-        // sPCtrl.onSaleDone(addSaleResponse);
+        print(data);
+        AddSaleResponse addSaleResponse = AddSaleResponse.fromJSON(data.data);
+        sPCtrl.onSaleDone(addSaleResponse);
       } on Exception {
         final ErrorMessage errMsg = ErrorMessage();
         errMsg.message = 'invalid_response'.tr;
         sPCtrl.onSaleError(errMsg);
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+          ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      if (err.response?.statusCode == StatusCodes.status400BadRequest) {
+        //saleListCtrl.onSalesListResponseBadRequest(errMsg);
+      }
+    });
+  }
+
+  getSaleInvoice(SaleViewRequest saleViewRequest) {
+    final obs = network
+        .get(NetworkURL.saleView, queryParameters: saleViewRequest.toJson())
+        .asStream();
+    obs.listen((data) {
+      try {
+        InvoiceResponse invoiceResponse = InvoiceResponse.fromJson(data.data);
+        sPCtrl.onSaleViewFetchDone(invoiceResponse);
+      } on Exception {
+        final ErrorMessage errMsg = ErrorMessage();
+        errMsg.message = 'invalid_response'.tr;
+        sPCtrl.onSaleViewError(errMsg);
       }
     }, onError: (err) {
       final ErrorMessage errMsg =
