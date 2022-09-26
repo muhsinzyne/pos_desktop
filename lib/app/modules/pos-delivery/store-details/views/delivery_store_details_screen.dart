@@ -3,6 +3,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:posdelivery/app/routes/app_pages.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/quicklink.dart';
 import 'package:posdelivery/app/ui/theme/app_colors.dart';
 import 'package:posdelivery/app/ui/theme/delivery_textStyle.dart';
@@ -109,15 +111,34 @@ class DeliveryStoreDetailsScreen extends StatelessWidget {
                       SizedBox(
                         height: 35,
                       ),
-                      QuickLink(
-                        title: "Sales",
-                        iconData: FontAwesomeIcons.tag,
+                      InkWell(
+                        onTap: () {
+                          Get.toNamed(Routes.deliveryAddStore);
+                        },
+                        child: QuickLink(
+                          title: "Add Stores",
+                          iconData: Icons.storefront_outlined,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Get.toNamed(Routes.deliverySales);
+                        },
+                        child: QuickLink(
+                          title: "Sales",
+                          iconData: FontAwesomeIcons.tag,
+                        ),
                       ),
                       SizedBox(
                         height: 10,
                       ),
-                      QuickLink(
-                          title: "Payment", iconData: Icons.payment_outlined),
+                      InkWell(
+                        onTap: () {
+                          Get.toNamed(Routes.deliveryPaymentHome);
+                        },
+                        child: QuickLink(
+                            title: "Payment", iconData: Icons.payment_outlined),
+                      ),
                       SizedBox(
                         height: 10,
                       ),
@@ -125,9 +146,14 @@ class DeliveryStoreDetailsScreen extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      QuickLink(
-                        title: "Orders",
-                        iconData: Icons.file_copy_outlined,
+                      InkWell(
+                        onTap: () {
+                          Get.toNamed(Routes.deliveryOrders);
+                        },
+                        child: QuickLink(
+                          title: "Orders",
+                          iconData: Icons.add_shopping_cart,
+                        ),
                       ),
                       SizedBox(
                         height: 10,

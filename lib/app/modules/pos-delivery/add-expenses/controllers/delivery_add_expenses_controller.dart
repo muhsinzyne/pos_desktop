@@ -89,6 +89,7 @@ class DeliveryAddExpensesScreenController extends BaseGetXController
         'reference': reference.text,
         'attachment': file,
       });
+      logger.e(file!.filename.toString());
       deliveryDataProvider.expenseAddRequest(formData);
       Get.snackbar("Saved", "Saved Succesfully");
     } else {

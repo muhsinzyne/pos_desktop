@@ -6,6 +6,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:posdelivery/app/routes/app_pages.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/dropdown.dart';
 import 'package:posdelivery/app/ui/theme/app_colors.dart';
 import 'package:posdelivery/app/ui/theme/delivery_textStyle.dart';
@@ -90,12 +92,17 @@ class _DeliveryAddStoreScreenState extends State<DeliveryAddStoreScreen> {
                             color: AppColors.deliveryPrimary,
                             borderRadius: BorderRadius.circular(6),
                           ),
-                          child: Text(
-                            "Add Store",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 18,
-                                color: Colors.white),
+                          child: InkWell(
+                            onTap: () {
+                              Get.toNamed(Routes.deliveryAddStoreManullay);
+                            },
+                            child: Text(
+                              "Add Store",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 18,
+                                  color: Colors.white),
+                            ),
                           ),
                         )
                       ],

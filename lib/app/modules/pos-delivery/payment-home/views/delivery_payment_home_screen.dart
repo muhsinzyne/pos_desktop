@@ -3,6 +3,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:posdelivery/app/routes/app_pages.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/quicklink.dart';
 import 'package:posdelivery/app/ui/theme/app_colors.dart';
 import 'package:posdelivery/models/constants.dart';
@@ -88,16 +90,30 @@ class DeliveryPaymentHomeScreen extends StatelessWidget {
                           SizedBox(
                             height: 25,
                           ),
-                          QuickLink(
-                            title: "Pay",
-                            iconData: FontAwesomeIcons.moneyCheck,
+                          InkWell(
+                            onTap: () {
+                              Get.toNamed(Routes.deliveryPaymentDue);
+                            },
+                            child: QuickLink(
+                              title: "Pay",
+                              iconData: FontAwesomeIcons.moneyCheck,
+                            ),
                           ),
-                          QuickLink(
-                              title: "Pending Payments",
-                              iconData: Icons.attach_money_outlined),
-                          QuickLink(
-                            title: "Pending History",
-                            iconData: Icons.history,
+                          InkWell(
+                            onTap: () {
+                              Get.toNamed(Routes.deliveryPendingPayment);
+                            },
+                            child: QuickLink(
+                                title: "Pending Payments",
+                                iconData: Icons.attach_money_outlined),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Get.toNamed(Routes.deliveryPaymentHistory);
+                            },
+                            child: QuickLink(
+                                title: "Payment History",
+                                iconData: Icons.history),
                           ),
                           QuickLink(
                             title: "Settings",

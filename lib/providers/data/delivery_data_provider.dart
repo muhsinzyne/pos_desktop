@@ -363,6 +363,7 @@ class DeliveryDataProvider extends BaseDataProvider {
 
   //api not avalable in production
   expenseAddRequest(dynamic formData) async {
+    logger.w("hi");
     final obs = network
         .upload(
           "http://test.pos.local/api/offline/add_expense",

@@ -27,7 +27,7 @@ abstract class Routes {
   static const deliveryOrderInvoice = _Paths.deliveryOrderInvoice;
   static const deliveryProductsForSales = _Paths.deliveryProductsForSales;
   static const deliveryProductsForOrders = _Paths.deliveryProductsForOrders;
-  static const deliveryAddOrders = _Paths.deliveryAddOrders;
+  static const deliveryOrders = _Paths.deliveryOrders;
   static const deliveryAddExpenses = _Paths.deliveryAddExpenses;
   static const deliveryAddProductsOrder = _Paths.deliveryAddProductsOrder;
 
@@ -87,7 +87,7 @@ abstract class _Paths {
   static const deliveryOrderInvoice = '/delivery-orderInvoice';
   static const deliveryProductsForSales = '/delivery-productsForSale';
   static const deliveryProductsForOrders = '/delivery-productsForOrders';
-  static const deliveryAddOrders = '/delivery-addOrders';
+  static const deliveryOrders = '/delivery-orders';
   static const deliveryAddExpenses = '/delivery-addExpenses';
   static const deliveryAddProductsOrder = '/delivery-addProductsOrder';
 

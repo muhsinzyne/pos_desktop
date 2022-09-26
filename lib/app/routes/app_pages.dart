@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-expenses/bindings/delivery_add_expenses_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-expenses/views/delivery_add_expenses_screen.dart';
-import 'package:posdelivery/app/modules/pos-delivery/add-orders/bindings/delivery_add_orders_binding.dart';
-import 'package:posdelivery/app/modules/pos-delivery/add-orders/views/delivery_add_orders_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-orders/bindings/delivery_orders_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-orders/views/delivery_orders_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-products-order/bindings/delivery_add_products_order_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-products-order/views/delivery_add_products_order_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-products-sales/bindings/delivery_add_products_sales_binding.dart';
@@ -226,9 +226,9 @@ class AppPages {
         page: () => DeliveryProductsForOrdersScreen(),
         binding: DeliveryProductsForOrdersScreenBinding()),
     GetPage(
-        name: _Paths.deliveryAddOrders,
-        page: () => DeliveryAddOrdersScreen(),
-        binding: DeliveryAddOrdersScreenBinding()),
+        name: _Paths.deliveryOrders,
+        page: () => DeliveryOrdersScreen(),
+        binding: DeliveryOrdersScreenBinding()),
     GetPage(
         name: _Paths.deliveryAddExpenses,
         page: () => DeliveryAddExpensesScreen(),

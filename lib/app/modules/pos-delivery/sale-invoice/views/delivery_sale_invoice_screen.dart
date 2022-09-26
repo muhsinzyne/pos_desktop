@@ -297,7 +297,7 @@ class DeliverySaleInvoiceScreen
                                   if (controller.ipController.text.isNotEmpty)
                                     controller.setIpAddress(
                                         controller.ipController.text);
-                                  controller.printReceiveTest();
+                                  // controller.printReceiveTest();
                                 },
                                 child: const Padding(
                                   padding: EdgeInsets.symmetric(
@@ -314,14 +314,23 @@ class DeliverySaleInvoiceScreen
                     Row(
                       children: [
                         InkWell(
-                          onTap: controller.actionOnPrint,
+                          onTap: () {
+                            if (controller.selectedPrinter.value == null ||
+                                !controller.isConnected.value) {
+                            } else {
+                              if (controller.selectedPrinter.value != null)
+                                controller.actionOnPrint();
+                            }
+                          },
+
+                          // onTap: controller.actionOnPrint,
                           child: Container(
                             height: 85,
                             width: Constants.screenWidth / 2,
                             color: AppColors.deliverySecondary,
                             child: Center(
                                 child: Text(
-                              "PDF Small",
+                              "Print",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,

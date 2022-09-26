@@ -103,9 +103,9 @@ class DeliverySaleInvoiceScreenController extends BaseGetXController
   }
 
   @override
-  void onReady() {
+  void onReady() async {
     UINotification.showLoading();
-    initPlatformState();
+    await initPlatformState();
     super.onReady();
   }
 
@@ -198,63 +198,18 @@ class DeliverySaleInvoiceScreenController extends BaseGetXController
   }
 
   void loadImage(String url) async {
-    print(url);
+    // url = "http://demo.pos.slasah.com/assets/uploads/demo/logos/New_Project.png";
     var filename = Uri.parse(url).pathSegments.last;
     await downloadImage(filename, url).then((bytes) {
       return true;
     });
   }
 
-  // Future printReceiveTest() async {
-  //   final profile = await CapabilityProfile.load();
-  //   final generator = Generator(PaperSize.mm58, profile);
-  //   List<int> bytes = [];
-  //   final Uint8List imgBytes = logoBytes!;
-  //   final img.Image? image = img.decodeImage(imgBytes);
-  //   bytes += generator.image(
-  //     image!,
-  //   );
-  //   bytes += generator.text('${invoiceResponse.value.inv?.biller}',
-  //       styles: PosStyles(
-  //         align: PosAlign.center,
-  //         height: PosTextSize.size2,
-  //         width: PosTextSize.size2,
-  //       ),
-  //       linesAfter: 1);
-  //   bytes += generator.text(
-  //     '${invoiceResponse.value.customer?.address}',
-  //     styles: const PosStyles(
-  //       align: PosAlign.center,
-  //     ),
-  //     linesAfter: 1,
-  //   );
-  //   bytes += generator.row([
-  //     PosColumn(
-  //       text: 'col3',
-  //       width: 3,
-  //       styles: const PosStyles(align: PosAlign.center, underline: true),
-  //     ),
-  //     PosColumn(
-  //       text: 'col6',
-  //       width: 6,
-  //       styles: const PosStyles(align: PosAlign.center, underline: true),
-  //     ),
-  //     PosColumn(
-  //       text: 'col3',
-  //       width: 3,
-  //       styles: const PosStyles(align: PosAlign.center, underline: true),
-  //     ),
-  //   ]);
-
-  //   bytes += generator.qrcode(invoiceResponse.value.qrCodeString,
-  //       size: QRSize.Size7);
-  //   bytes += generator.setGlobalCodeTable('CP1252');
-  //   printEscPos(bytes, generator);
-  // }
   Future printReceiveTest() async {
     final profile = await CapabilityProfile.load();
     final generator = Generator(PaperSize.mm58, profile);
     List<int> bytes = [];
+
     final Uint8List imgBytes = logoBytes!;
     final img.Image? image = img.decodeImage(imgBytes);
     InvoiceResponse invoice = invoiceResponse.value;
@@ -615,33 +570,21 @@ class DeliverySaleInvoiceScreenController extends BaseGetXController
     printEmojis: true,
     printTime: true,
   ));
-  // List<Employee> employees = <Employee>[];
 
-  // late EmployeeDataSource employeeDataSource;
-  // @override
-  // void onInit() {
-  //   deliveryDataProvider.deliverySaleInvoiceCtrl = this;
-  //   // params = Get.arguments;
-  //   // if (params!.refId != null) {
-  //   _fetchInvoice();
-  //   // }
-
-  //   super.onInit();
-  // }
   @override
   void onInit() {
     deliveryDataProvider.deliverySaleInvoiceCtrl = this;
     params = Get.arguments;
-    // if (params?.refId != null) {
-    _fetchInvoice();
-    // }
+    if (params?.refId != null) {
+      _fetchInvoice();
+    }
     super.onInit();
   }
 
   _fetchInvoice() {
     SaleViewRequest saleViewRequest = SaleViewRequest();
-    // saleViewRequest.saleId = params!.refId;
-    saleViewRequest.saleId = "220";
+    saleViewRequest.saleId = params!.refId;
+    // saleViewRequest.saleId = "220";
     deliveryDataProvider.getSaleInvoice(saleViewRequest);
   }
 
@@ -662,35 +605,16 @@ class DeliverySaleInvoiceScreenController extends BaseGetXController
   @override
   actionOnPrint() async {
     UINotification.showLoading();
-    // printProvider.loadImage(invoiceResponse.value.logoPath);
     loadImage(invoiceResponse.value.logoPath);
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 2));
     printReceiveTest();
-
-    // logger.e(invoiceResponse.value.totalTax);
-    // logger.e(invoiceResponse.value.inv?.totalTax);
-    // logger.e(invoiceResponse.value.inv?.orderTax);
-    // logger.e(invoiceResponse.value.inv?.productTax);
-    // final pffFile =
-    // await PdfSmallInvoiceProvider.generate(invoiceResponse.value);
-    // PdfSmallInvoiceProvider.openFile(pffFile);
-
-    // printProvider.printPosInvoice(invoiceResponse.value);
-
     UINotification.hideLoading();
   }
 
   printBig() async {
-    // UINotification.showLoading();
-    // printProvider.loadImage(invoiceResponse.value.logoPath);
-    // PdfInvoiceProvider.loadImage(invoiceResponse.value.logoPath);
     await Future.delayed(Constants.smallDuration);
     final pffFile = await PdfInvoiceProvider.generate(invoiceResponse.value);
     PdfInvoiceProvider.openFile(pffFile);
-
-    // printProvider.connect();
-    // printProvider.printPosInvoice(invoiceResponse.value);
-
     UINotification.hideLoading();
   }
 }

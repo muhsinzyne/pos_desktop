@@ -119,27 +119,32 @@ class DeliveryHomeScreen extends GetView<DeliveryHomeScreenController> {
                       height: 25,
                     ),
                     SizedBox(),
+                    // InkWell(
+                    //   onTap: () {
+                    //     Get.toNamed(Routes.deliverySales);
+                    //   },
+                    //   child: QuickLink(
+                    //     title: "Sales",
+                    //     iconData: FontAwesomeIcons.tag,
+                    //   ),
+                    // ),
                     InkWell(
                       onTap: () {
-                        Get.toNamed(Routes.deliverySales);
-                      },
-                      child: QuickLink(
-                        title: "Sales",
-                        iconData: FontAwesomeIcons.tag,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Get.toNamed(Routes.deliveryAddStoreManullay);
+                        Get.toNamed(Routes.deliveryStoreDetails);
                       },
                       child: QuickLink(
                         title: "Stores",
-                        iconData: Icons.storefront_outlined,
+                        iconData: Icons.store_rounded,
                       ),
                     ),
-                    QuickLink(
-                      title: "Cash Register",
-                      iconData: Icons.payments_outlined,
+                    InkWell(
+                      onTap: () {
+                        Get.toNamed(Routes.deliveryCashRegister);
+                      },
+                      child: QuickLink(
+                        title: "Cash Register",
+                        iconData: Icons.payments_outlined,
+                      ),
                     ),
                     QuickLink(
                       title: "Stock Register",
