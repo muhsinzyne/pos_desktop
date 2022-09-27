@@ -136,6 +136,7 @@ class PosPaymentController extends BaseGetXController
     saleRequest.rPaidBy = 'cash';
     saleRequest.totalItems = appService.productPurchaseList.length.toString();
     var data = jsonEncode(saleRequest.toJson());
+
     posDataProvider.saleOrderRequest(saleRequest);
   }
 

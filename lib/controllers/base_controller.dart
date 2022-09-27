@@ -86,8 +86,8 @@ class BaseGetXController extends GetxController implements IBaseGetXController {
 
   @override
   void validateLicence() async {
-    //appService.appServer = Constants.none;
-    //appService.authToken = Constants.none;
+    // appService.appServer = Constants.none;
+    // appService.authToken = Constants.none;
     if (localStorage.isAppServer) {
       onValidLicence();
     } else {

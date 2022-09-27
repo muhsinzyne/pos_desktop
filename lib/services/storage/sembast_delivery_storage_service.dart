@@ -17,7 +17,8 @@ class SembastDeliveryStorage {
       return _db;
     }
     Directory appDocDirectory = await getApplicationDocumentsDirectory();
-    String dbFilePath = "${appDocDirectory.path}/${Constants.deliveryDatabaseFileName}";
+    String dbFilePath =
+        "${appDocDirectory.path}/${Constants.deliveryDatabaseFileName}";
     DatabaseFactory dbFactory = databaseFactoryIo;
     _db = await dbFactory.openDatabase(dbFilePath);
     return _db;

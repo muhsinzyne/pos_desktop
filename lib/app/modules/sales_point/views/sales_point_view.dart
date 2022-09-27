@@ -261,9 +261,10 @@ class SalesPointView extends GetView<SalesPointController> {
               child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.47,
                 child: ListView.builder(
-                    controller: controller.scrollController,
+                    // controller: controller.scrollController,
                     itemCount: controller.selectedProducts.length,
                     itemBuilder: (BuildContext context, int index) {
+                      var currentProduct = controller.selectedProducts[index];
                       return Container(
                         decoration: BoxDecoration(
                           border: Border(
@@ -279,9 +280,7 @@ class SalesPointView extends GetView<SalesPointController> {
                           children: [
                             Container(
                               height: 50,
-                              color: controller.selectedProducts[index].row!
-                                          .quantity !=
-                                      0
+                              color: currentProduct.quantity != 0
                                   ? Colors.transparent
                                   : Colors.redAccent[400],
                               child: Row(children: [
@@ -292,8 +291,7 @@ class SalesPointView extends GetView<SalesPointController> {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 3),
                                         child: Text(
-                                          controller
-                                              .selectedProducts[index].label!,
+                                          currentProduct.cartItem!.label!,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               color: Colors.black87,
@@ -309,8 +307,7 @@ class SalesPointView extends GetView<SalesPointController> {
                                     flex: 3,
                                     child: Center(
                                       child: Text(
-                                        controller
-                                            .selectedProducts[index].row!.price
+                                        currentProduct.cartItem!.row!.price
                                             .toString(),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
@@ -340,9 +337,8 @@ class SalesPointView extends GetView<SalesPointController> {
                                                 borderSide: BorderSide(
                                                     color: Colors.white)),
                                           ),
-                                          initialValue: controller
-                                              .selectedProducts[index].row!.qty
-                                              .toString(),
+                                          initialValue:
+                                              currentProduct.subQty.toString(),
                                           keyboardType: TextInputType.number,
                                           onChanged: (value) {
                                             controller.checkAvailableQuantity(
@@ -368,20 +364,19 @@ class SalesPointView extends GetView<SalesPointController> {
                                   color: Colors.black26,
                                   thickness: 0.5,
                                 ),
-                                Obx(
-                                  () => Expanded(
-                                      flex: 3,
-                                      child: Center(
-                                        child: Text(
-                                          controller.selectedProducts[index]
-                                              .row!.price!
-                                              .toString(),
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: Colors.black87,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      )),
+                                Expanded(
+                                  flex: 3,
+                                  child: Center(
+                                    child: Obx(
+                                      () => Text(
+                                        "${currentProduct.subTotal}",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.black87,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                                 VerticalDivider(
                                   color: Colors.black26,
@@ -395,8 +390,8 @@ class SalesPointView extends GetView<SalesPointController> {
                                         color: Colors.black,
                                         iconSize: 18,
                                         onPressed: () {
-                                          controller.removeProduct(controller
-                                              .selectedProducts[index]);
+                                          controller
+                                              .removeProduct(currentProduct);
                                         }),
                                   ),
                                 )
@@ -419,12 +414,12 @@ class SalesPointView extends GetView<SalesPointController> {
                   Expanded(
                       child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Text("Items"),
-                      Text(
-                        "0 (0.00)",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      )
+                      Obx(() => Text(
+                            "${controller.selectedProducts.length}",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ))
                     ],
                   )),
                   const SizedBox(
@@ -433,12 +428,12 @@ class SalesPointView extends GetView<SalesPointController> {
                   Expanded(
                       child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Text("Total"),
-                      Text(
-                        "0.00",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      )
+                      Obx(() => Text(
+                            controller.cartTotal.toStringAsFixed(2),
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ))
                     ],
                   )),
                 ]),
@@ -481,17 +476,17 @@ class SalesPointView extends GetView<SalesPointController> {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   Text(
                     "Total Payable",
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    "0.00",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.white),
-                  ),
+                  Obx(() => Text(
+                        controller.totalPayable.toStringAsFixed(2),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.white),
+                      )),
                 ],
               ),
             ),
@@ -514,6 +509,9 @@ class SalesPointView extends GetView<SalesPointController> {
                     )),
                     Expanded(
                         child: InkWell(
+                      onTap: () {
+                        controller.clearCart();
+                      },
                       child: Container(
                         color: Colors.red,
                         alignment: Alignment.center,
@@ -528,6 +526,7 @@ class SalesPointView extends GetView<SalesPointController> {
                         child: InkWell(
                       onTap: () {
                         if (controller.paymentFlag.value) {
+                          controller.actionOnPayment();
                           showDialog(
                               context: context,
                               builder: (builder) => PaymentPopup());
@@ -554,7 +553,7 @@ class SalesPointView extends GetView<SalesPointController> {
   }
 }
 
-class PaymentPopup extends StatelessWidget {
+class PaymentPopup extends GetView<SalesPointController> {
   const PaymentPopup({
     Key? key,
   }) : super(key: key);
@@ -656,12 +655,17 @@ class PaymentPopup extends StatelessWidget {
                                             color: Colors.white,
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(10))),
-                                        child: const TextField(
-                                            decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.symmetric(
-                                              horizontal: 20, vertical: 3),
-                                          border: OutlineInputBorder(),
-                                        )),
+                                        child: Obx(() => TextField(
+                                              controller: controller
+                                                  .paymentAmount.value,
+                                              decoration: InputDecoration(
+                                                contentPadding:
+                                                    EdgeInsets.symmetric(
+                                                        horizontal: 20,
+                                                        vertical: 3),
+                                                border: OutlineInputBorder(),
+                                              ),
+                                            )),
                                       ),
                                     ),
                                   ),
@@ -737,17 +741,19 @@ class PaymentPopup extends StatelessWidget {
                                   child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                children: const [
+                                children: [
                                   Text(
                                     "Total Items",
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ),
-                                  Text(
-                                    "2",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  )
+                                  Obx(
+                                    () => Text(
+                                      "${controller.selectedProducts.length}",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
                                 ],
                               )),
                               const VerticalDivider(),
@@ -755,17 +761,20 @@ class PaymentPopup extends StatelessWidget {
                                   child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                children: const [
+                                children: [
                                   Text(
                                     "Total Payable",
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ),
-                                  Text(
-                                    "100.00",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  )
+                                  Obx(
+                                    () => Text(
+                                      controller.totalPayable
+                                          .toStringAsFixed(2),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
                                 ],
                               )),
                             ],
@@ -776,37 +785,41 @@ class PaymentPopup extends StatelessWidget {
                                   child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                children: const [
+                                children: [
                                   Text(
                                     "Total Paying",
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ),
-                                  Text(
-                                    "100.00",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  )
+                                  Obx(
+                                    () => Text(
+                                      controller.totalPayable
+                                          .toStringAsFixed(2),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
                                 ],
                               )),
                               const VerticalDivider(),
                               Expanded(
-                                  child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: const [
-                                  Text(
-                                    "Balance",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    "0.00",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              )),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: const [
+                                    Text(
+                                      "Balance",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      "0.00",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ],
                           )
                         ],
@@ -826,10 +839,12 @@ class PaymentPopup extends StatelessWidget {
                       ListTile(
                         onTap: (() {}),
                         tileColor: Colors.blue,
-                        title: const Text(
-                          "199",
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
+                        title: Obx(
+                          () => Text(
+                            controller.totalPayable.toStringAsFixed(2),
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
                       ListTile(
@@ -896,7 +911,9 @@ class PaymentPopup extends StatelessWidget {
                         ),
                       ),
                       ListTile(
-                        onTap: (() {}),
+                        onTap: (() {
+                          controller.paymentAmount.value.clear();
+                        }),
                         tileColor: Colors.red,
                         title: const Text(
                           "Clear",
@@ -921,7 +938,9 @@ class PaymentPopup extends StatelessWidget {
                 vertical: 10,
               ),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  controller.connectPrinter();
+                },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [

@@ -266,6 +266,8 @@ class DashboardScreenController extends BaseGetXController
   @override
   onWProductOffListDone(List<WarehouseProductsResponse> wPListRes) async {
     warehouseProductsListTemp.addAll(wPListRes);
+    print("wPListRes.length");
+    print(wPListRes.length);
     // if (wPListRes.isNotEmpty) {
     // warehouseProductRequest.page = warehouseProductRequest.page! + 1;
     // desktopDataProvider.getWarehouseProducts(warehouseProductRequest);

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:posdelivery/models/constants.dart';
+import 'package:posdelivery/models/requests/pos/sale_request.dart';
 import 'package:posdelivery/models/response/customer/customer_data.dart';
 import 'package:posdelivery/models/response/desktop/customer_list.dart';
 import 'package:posdelivery/models/response/desktop/warehouse_list.dart';
@@ -188,6 +189,43 @@ class CacheSembastService extends BaseGetXService {
     try {
       await db?.transaction((transaction) async {
         await store.record(id).delete(transaction);
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  setAddSaleData(SaleRequest saleRequest) async {
+    StoreRef store = localStorage.getMapStore(Constants.desktopAddSale);
+    Database? db = await localStorage.db;
+    await db!.transaction((transaction) async =>
+        {await store.add(transaction, saleRequest.toJson())});
+    return saleRequest;
+  }
+
+  Future<List<SaleRequest>> getAddSaleData() async {
+    StoreRef store = localStorage.getMapStore(Constants.desktopAddSale);
+    Database? db = await localStorage.db;
+    var records = await store.find(
+      db!,
+      finder: Finder(
+        sortOrders: [SortOrder('order')],
+      ),
+    );
+    List<SaleRequest> result = [];
+    for (var record in records) {
+      result.add(SaleRequest.fromJson(record.value));
+    }
+    return result;
+  }
+
+  Future<bool> deleteAddSaleFormData() async {
+    StoreRef store = localStorage.getMapStore(Constants.desktopAddSale);
+    Database? db = await localStorage.db;
+    try {
+      await db?.transaction((transaction) async {
+        await store.drop(transaction);
       });
       return true;
     } catch (e) {

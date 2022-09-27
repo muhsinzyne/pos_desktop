@@ -21,7 +21,7 @@ void main() async {
   await SharedPreferences.getInstance();
   FlavorConfig(flavor: Flavor.development, flavorValues: AppFlavors.devFlavor);
   AppServiceBinding().dependencies();
-  await Future.delayed(Duration(
+  await Future.delayed(const Duration(
     seconds: 1,
   ));
   runApp(const MyApp());
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           //platform: TargetPlatform.android,
           fontFamily: fontFamily,
-          colorScheme: ColorScheme.light().copyWith(
+          colorScheme: const ColorScheme.light().copyWith(
             primary: AppColors.primary,
             secondary: AppColors.secondary,
           ),
