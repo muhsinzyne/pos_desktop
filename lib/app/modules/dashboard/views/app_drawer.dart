@@ -63,6 +63,11 @@ class _AppDrawerState extends State<AppDrawer> {
                   // ),
                   //DrawerBodyItemButton(icon: Icon(FontAwesomeIcons.user), text: 'app_my_services', onTap: () {}),
                   DrawerBodyItemButton(
+                    icon: Icon(Icons.shopping_cart),
+                    text: 'add_product'.tr,
+                    onTap: appController.actionAddProductOffline,
+                  ),
+                  DrawerBodyItemButton(
                     icon: Icon(Icons.language),
                     text: 'change_language'.tr,
                     onTap: appController.actionChangeLanguage,

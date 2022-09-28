@@ -6,6 +6,7 @@ import 'package:posdelivery/models/constants.dart';
 import 'package:posdelivery/models/requests/pos/sale_request.dart';
 import 'package:posdelivery/models/response/customer/customer_data.dart';
 import 'package:posdelivery/models/response/desktop/customer_list.dart';
+import 'package:posdelivery/models/response/desktop/product_offline.dart';
 import 'package:posdelivery/models/response/desktop/warehouse_list.dart';
 import 'package:posdelivery/models/response/desktop/warehouse_products.dart';
 import 'package:posdelivery/models/response/pos/product.dart';
@@ -28,6 +29,17 @@ class CacheSembastService extends BaseGetXService {
     printEmojis: true,
     printTime: true,
   ));
+
+  setProductsOfflineData(ProductOffline item) async {
+    // int key = int.parse(item.code!);
+    StoreRef store = localStorage.getMapStore(Constants.productsOfflineStore);
+    Database? db = await localStorage.db;
+    await db!.transaction((transaction) async => {
+          // await store.record(key).put(transaction, item.toJson())
+          await store.add(transaction, item.toJson())
+        });
+    return item;
+  }
 
   setWarehouseProductData(
       String storeName, WarehouseProductsResponse item) async {

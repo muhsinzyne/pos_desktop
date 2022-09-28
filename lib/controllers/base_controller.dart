@@ -80,8 +80,8 @@ class BaseGetXController extends GetxController implements IBaseGetXController {
   void onTokenValid(MyInfoResponse myInfoResponse) async {
     appService.myInfoResponse = myInfoResponse;
     await Future.delayed(Constants.smallDuration);
-    Get.offNamed(Routes.deliveryHome);
-    // Get.offNamed(Routes.dashboard);
+    // Get.offNamed(Routes.deliveryHome);
+    Get.offNamed(Routes.dashboard);
   }
 
   @override

@@ -68,6 +68,7 @@ class Constants {
   static const customerGroupeStore = "customer_group";
   static const warehouseProductsStore = "warehouse_products";
   static const desktopAddSale = "desktop_add_sale";
+  static const productsOfflineStore = "products_offline";
 
   //pos-delivery
   static const deliveryDatabaseFileName = 'pos_delivery.db';

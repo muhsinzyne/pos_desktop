@@ -8,6 +8,7 @@ import 'package:posdelivery/app/ui/components/ui_notification.dart';
 import 'package:posdelivery/models/app_languages.dart';
 import 'package:posdelivery/models/constants.dart';
 import 'package:posdelivery/services/app_service.dart';
+import 'package:posdelivery/services/location_service.dart';
 import 'package:uuid/uuid.dart';
 
 class AppController extends GetxController {
@@ -61,6 +62,11 @@ class AppController extends GetxController {
   void actionChangeLanguage() {
     _closeDrawer();
     Get.toNamed(Routes.changeLanguage);
+  }
+
+  void actionAddProductOffline() {
+    _closeDrawer();
+    Get.toNamed(Routes.addProductOffline);
   }
 
   void actionMyAccount() {
