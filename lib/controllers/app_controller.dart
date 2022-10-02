@@ -7,6 +7,7 @@ import 'package:posdelivery/app/routes/app_pages.dart';
 import 'package:posdelivery/app/ui/components/ui_notification.dart';
 import 'package:posdelivery/models/app_languages.dart';
 import 'package:posdelivery/models/constants.dart';
+import 'package:posdelivery/providers/local/pdf_barcode_provider.dart';
 import 'package:posdelivery/services/app_service.dart';
 import 'package:posdelivery/services/location_service.dart';
 import 'package:uuid/uuid.dart';
@@ -57,6 +58,13 @@ class AppController extends GetxController {
     await Future.delayed(Constants.oneSecDuration);
     UINotification.hideLoading();
     Get.offNamed(Routes.login);
+  }
+
+  void labelPrint() async {
+    _closeDrawer();
+    final pffFile = await PdfBarcodeProvider.generate();
+    PdfBarcodeProvider.openFile(pffFile);
+    // UINotification.hideLoading();
   }
 
   void actionChangeLanguage() {

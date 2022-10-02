@@ -77,6 +77,11 @@ class _AppDrawerState extends State<AppDrawer> {
                     text: 'app_logout'.tr,
                     onTap: appController.appBarLogout,
                   ),
+                  DrawerBodyItemButton(
+                    icon: Icon(Icons.logout),
+                    text: 'label_printing'.tr,
+                    onTap: appController.labelPrint,
+                  ),
                 ],
               ),
             ),

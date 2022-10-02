@@ -164,19 +164,19 @@ class DashboardScreenController extends BaseGetXController
       Map<String, String> qp = {
         "warehouse_id": warehouse.id!,
         "page": "$currentPage",
-        "limit": "100"
+        "limit": "10"
       };
 
       pro = await getProduct(qp);
-      while (pro.data.length != 0) {
-        currentPage++;
-        qp = {
-          "warehouse_id": warehouse.id!,
-          "page": "$currentPage",
-          "limit": "100"
-        };
-        pro = await getProduct(qp);
-      }
+      // while (pro.data.length != 0) {
+      //   currentPage++;
+      //   qp = {
+      //     "warehouse_id": warehouse.id!,
+      //     "page": "$currentPage",
+      //     "limit": "100"
+      //   };
+      //   pro = await getProduct(qp);
+      // }
 
       for (var i = 0; i < temp.length; i++) {
         await sembestCatch.setProductData(Constants.productsStore, temp[i]);

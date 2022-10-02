@@ -71,12 +71,16 @@ class AddProductOfflineController extends GetxController {
           temp.taxMethod = csvConverted[i][12];
           temp.productImage = csvConverted[i][13];
           temp.subCategory = csvConverted[i][14];
-          temp.quantity = int.tryParse(csvConverted[i][22]);
-          // products.add(temp);
+          temp.quantity = int.tryParse(csvConverted[i][22].toString());
           await sembestCache.setProductsOfflineData(temp);
         }
+        UINotification.hideLoading();
+        Get.defaultDialog(
+          title: "Added",
+          middleText: "New Product Added",
+          middleTextStyle: TextStyle(color: Colors.black),
+        );
       }
-      UINotification.hideLoading();
     } catch (e) {
       UINotification.hideLoading();
       Get.defaultDialog(
@@ -97,6 +101,11 @@ class AddProductOfflineController extends GetxController {
     offlineProduct.tax = selectedTax;
     offlineProduct.unit = selectedTax;
     sembestCache.setProductsOfflineData(offlineProduct);
+    Get.defaultDialog(
+      title: "Added",
+      middleText: "New Product Added",
+      middleTextStyle: TextStyle(color: Colors.black),
+    );
   }
 
   void importExcel() async {
@@ -104,19 +113,20 @@ class AddProductOfflineController extends GetxController {
       try {
         UINotification.showLoading();
         List<dynamic> map = jsonDecode(onValue!);
-        logger.e(map.toString());
+        dynamic s;
         for (var item in map) {
-          await sembestCache
+          s = await sembestCache
               .setProductsOfflineData(ProductOffline.fromJson(item));
+          logger.wtf(s);
         }
         UINotification.hideLoading();
-      } catch (e) {
-        UINotification.hideLoading();
         Get.defaultDialog(
-          title: "Something went wrong..",
-          middleText: "Check the file..",
+          title: "Added",
+          middleText: "New Product Added",
           middleTextStyle: TextStyle(color: Colors.black),
         );
+      } catch (e) {
+        UINotification.hideLoading();
       }
     });
   }

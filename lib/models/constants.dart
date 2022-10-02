@@ -62,13 +62,15 @@ class Constants {
   static const Duration oneSecDuration = Duration(seconds: 1);
   static const Duration fourSec = Duration(seconds: 4);
   static const databaseFileName = 'pos_desktop.json';
-  static const productsStore = 'products_warehouse';
+  static const desktopAddSale = "desktop_add_sale";
+  //stores
+  static const productsStore = 'products_list';
   static const warehouseListStore = "warehouse_list";
   static const customerListStore = "customer_list";
-  static const customerGroupeStore = "customer_group";
-  static const warehouseProductsStore = "warehouse_products";
-  static const desktopAddSale = "desktop_add_sale";
-  static const productsOfflineStore = "products_offline";
+  static const customerGroupeStore = "customer_group_list";
+  static const warehouseProductsStore = "warehouse_products_list";
+  static const productsOfflineStore = "products_offline_list";
+  static const expensesStore = 'expenses_list';
 
   //pos-delivery
   static const deliveryDatabaseFileName = 'pos_delivery.db';

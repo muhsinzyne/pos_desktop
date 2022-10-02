@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:posdelivery/app/modules/add_expense/views/add_expense_view.dart';
 import 'package:posdelivery/app/modules/close_register/views/close_register_view.dart';
+import 'package:posdelivery/app/modules/connect_printer/views/connect_printer_view.dart';
 import 'package:posdelivery/app/modules/product_list/views/product_list_view.dart';
 import 'package:posdelivery/app/modules/register_details/views/register_details_view.dart';
 import 'package:posdelivery/app/modules/sales_point/views/sales_point_view.dart';
@@ -24,6 +25,7 @@ class HomeView extends GetView<HomeController> {
           RegisterDetailsView(),
           CloseRegisterView(),
           AddExpenseView(),
+          ConnectPrinterView(),
         ],
       ),
       body: Row(

@@ -7,6 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:posdelivery/models/response/customer/customer_group.dart';
 import 'package:posdelivery/models/response/customer/price_group.dart';
+import 'package:posdelivery/models/response/desktop/product_offline.dart';
+import 'package:posdelivery/models/response/desktop/product_offline.dart';
 import 'package:posdelivery/models/response/pos/product.dart';
 import 'package:searchfield/searchfield.dart';
 import '../controllers/sales_point_controller.dart';
@@ -139,10 +141,10 @@ class SalesPointView extends GetView<SalesPointController> {
                     child: Container(
                       //height: 300,
                       color: Colors.white,
-                      child: SearchField<Product>(
+                      child: SearchField<ProductOffline>(
                         controller: controller.searchController,
                         onSuggestionTap: (value) {
-                          controller.addProductOnClick(value.item!);
+                          controller.addProductOnClickOffline(value.item!);
                         },
                         itemHeight: 35,
                         searchInputDecoration: const InputDecoration(
@@ -153,10 +155,10 @@ class SalesPointView extends GetView<SalesPointController> {
                           isCollapsed: true,
                           contentPadding: EdgeInsets.all(11),
                         ),
-                        suggestions: controller.product
+                        suggestions: controller.productsOffline
                             .map(
-                              (e) => SearchFieldListItem<Product>(
-                                e.label.toString(),
+                              (e) => SearchFieldListItem<ProductOffline>(
+                                e.name.toString(),
                                 item: e,
                               ),
                             )
@@ -262,9 +264,10 @@ class SalesPointView extends GetView<SalesPointController> {
                 height: MediaQuery.of(context).size.height * 0.47,
                 child: ListView.builder(
                     // controller: controller.scrollController,
-                    itemCount: controller.selectedProducts.length,
+                    itemCount: controller.selectedOfflineProducts.length,
                     itemBuilder: (BuildContext context, int index) {
-                      var currentProduct = controller.selectedProducts[index];
+                      var currentProduct =
+                          controller.selectedOfflineProducts[index];
                       return Container(
                         decoration: BoxDecoration(
                           border: Border(
@@ -291,7 +294,7 @@ class SalesPointView extends GetView<SalesPointController> {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 3),
                                         child: Text(
-                                          currentProduct.cartItem!.label!,
+                                          currentProduct.cartItem!.name!,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               color: Colors.black87,
@@ -307,7 +310,7 @@ class SalesPointView extends GetView<SalesPointController> {
                                     flex: 3,
                                     child: Center(
                                       child: Text(
-                                        currentProduct.cartItem!.row!.price
+                                        currentProduct.cartItem!.price
                                             .toString(),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
@@ -341,8 +344,9 @@ class SalesPointView extends GetView<SalesPointController> {
                                               currentProduct.subQty.toString(),
                                           keyboardType: TextInputType.number,
                                           onChanged: (value) {
-                                            controller.checkAvailableQuantity(
-                                                index, value);
+                                            controller
+                                                .checkAvailableQuantityOffline(
+                                                    index, value);
                                           },
                                           inputFormatters: <TextInputFormatter>[
                                             FilteringTextInputFormatter
@@ -390,8 +394,8 @@ class SalesPointView extends GetView<SalesPointController> {
                                         color: Colors.black,
                                         iconSize: 18,
                                         onPressed: () {
-                                          controller
-                                              .removeProduct(currentProduct);
+                                          controller.removeProductOffline(
+                                              currentProduct);
                                         }),
                                   ),
                                 )
@@ -417,7 +421,7 @@ class SalesPointView extends GetView<SalesPointController> {
                     children: [
                       Text("Items"),
                       Obx(() => Text(
-                            "${controller.selectedProducts.length}",
+                            "${controller.selectedOfflineProducts.length}",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ))
                     ],
@@ -482,6 +486,10 @@ class SalesPointView extends GetView<SalesPointController> {
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),
+                  //  Obx(() => Text(
+                  //           controller.cartTotal.toStringAsFixed(2),
+                  //           style: TextStyle(fontWeight: FontWeight.bold),
+                  //         ))
                   Obx(() => Text(
                         controller.totalPayable.toStringAsFixed(2),
                         style: TextStyle(
@@ -939,7 +947,7 @@ class PaymentPopup extends GetView<SalesPointController> {
               ),
               child: ElevatedButton(
                 onPressed: () {
-                  controller.connectPrinter();
+                  controller.continuePaymentOffline();
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

@@ -75,7 +75,6 @@ flutter:
     - assets/icons/
     - assets/sounds/
     - assets/svg/
-    - assets/csv/
 
 
   fonts:

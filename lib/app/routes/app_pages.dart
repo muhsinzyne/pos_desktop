@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:posdelivery/app/modules/add-product-offline/bindings/add_product_offline_binding.dart';
 import 'package:posdelivery/app/modules/add-product-offline/views/add_product_offline_view.dart';
+import 'package:posdelivery/app/modules/connect_printer/bindings/connect_printer_binding.dart';
+import 'package:posdelivery/app/modules/connect_printer/views/connect_printer_view.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-expenses/bindings/delivery_add_expenses_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-expenses/views/delivery_add_expenses_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-orders/bindings/delivery_orders_binding.dart';
@@ -242,6 +244,11 @@ class AppPages {
     ),
 
     //pos-desktop
+    GetPage(
+      name: _Paths.connectPrinter,
+      page: () => ConnectPrinterView(),
+      binding: ConnectPrinterBinding(),
+    ),
     GetPage(
       name: _Paths.addProductOffline,
       page: () => AddProductOfflineView(),

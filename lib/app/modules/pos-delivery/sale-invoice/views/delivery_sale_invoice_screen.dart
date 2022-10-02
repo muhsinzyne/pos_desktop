@@ -56,12 +56,17 @@ class DeliverySaleInvoiceScreen
                                   child: Obx(() {
                                     return ElevatedButton(
                                       onPressed:
-                                          controller.selectedPrinter.value ==
+                                          controller.blueThermalPrinterProdvider
+                                                          .selectedPrinter.value ==
                                                       null ||
-                                                  controller.isConnected.value
+                                                  controller.blueThermalPrinterProdvider
+                                                          .isConnected.value
                                               ? null
                                               : () {
-                                                  controller.connectDevice();
+                                                  controller
+                                                      .blueThermalPrinterProdvider
+                                                      .connectDevice();
+                                                  // controller.connectDevice();
                                                 },
                                       child: Text("Connect",
                                           textAlign: TextAlign.center),
@@ -72,24 +77,37 @@ class DeliverySaleInvoiceScreen
                                 Expanded(
                                   child: Obx(() {
                                     return ElevatedButton(
-                                      onPressed:
-                                          controller.selectedPrinter.value ==
-                                                      null ||
-                                                  !controller.isConnected.value
-                                              ? null
-                                              : () {
-                                                  if (controller.selectedPrinter
-                                                          .value !=
-                                                      null)
-                                                    controller.printerManager
-                                                        .disconnect(
-                                                            type: controller
-                                                                .selectedPrinter
-                                                                .value!
-                                                                .typePrinter);
-                                                  controller.isConnected.value =
-                                                      false;
-                                                },
+                                      onPressed: controller
+                                                      .blueThermalPrinterProdvider
+                                                      .selectedPrinter
+                                                      .value ==
+                                                  null ||
+                                              !controller
+                                                  .blueThermalPrinterProdvider
+                                                  .isConnected
+                                                  .value
+                                          ? null
+                                          : () {
+                                              if (controller
+                                                      .blueThermalPrinterProdvider
+                                                      .selectedPrinter
+                                                      .value !=
+                                                  null) {
+                                                controller
+                                                    .blueThermalPrinterProdvider
+                                                    .printerManager
+                                                    .disconnect(
+                                                        type: controller
+                                                            .blueThermalPrinterProdvider
+                                                            .selectedPrinter
+                                                            .value!
+                                                            .typePrinter);
+                                              }
+                                              controller
+                                                  .blueThermalPrinterProdvider
+                                                  .isConnected
+                                                  .value = false;
+                                            },
                                       child: const Text("Disconnect",
                                           textAlign: TextAlign.center),
                                     );
@@ -99,7 +117,8 @@ class DeliverySaleInvoiceScreen
                             ),
                           ),
                           DropdownButtonFormField<PrinterType>(
-                            value: controller.defaultPrinterType,
+                            value: controller
+                                .blueThermalPrinterProdvider.defaultPrinterType,
                             decoration: const InputDecoration(
                               prefixIcon: Icon(
                                 Icons.print,
@@ -128,16 +147,21 @@ class DeliverySaleInvoiceScreen
                             ],
                             onChanged: (PrinterType? value) {
                               if (value != null) {
-                                controller.defaultPrinterType = value;
-                                controller.selectedPrinter.value = null;
-                                controller.isBle.value = false;
-                                controller.isConnected.value = false;
-                                controller.scan();
+                                controller.blueThermalPrinterProdvider
+                                    .defaultPrinterType = value;
+                                controller.blueThermalPrinterProdvider
+                                    .selectedPrinter.value = null;
+                                controller.blueThermalPrinterProdvider.isBle
+                                    .value = false;
+                                controller.blueThermalPrinterProdvider
+                                    .isConnected.value = false;
+                                controller.blueThermalPrinterProdvider.scan();
                               }
                             },
                           ),
                           Visibility(
-                            visible: controller.defaultPrinterType ==
+                            visible: controller.blueThermalPrinterProdvider
+                                        .defaultPrinterType ==
                                     PrinterType.bluetooth &&
                                 Platform.isAndroid,
                             child: SwitchListTile.adaptive(
@@ -148,17 +172,22 @@ class DeliverySaleInvoiceScreen
                                 textAlign: TextAlign.start,
                                 style: TextStyle(fontSize: 19.0),
                               ),
-                              value: controller.isBle.value,
+                              value: controller
+                                  .blueThermalPrinterProdvider.isBle.value,
                               onChanged: (bool? value) {
-                                controller.isBle.value = value ?? false;
-                                controller.isConnected.value = false;
-                                controller.selectedPrinter.value = null;
-                                controller.scan();
+                                controller.blueThermalPrinterProdvider.isBle
+                                    .value = value ?? false;
+                                controller.blueThermalPrinterProdvider
+                                    .isConnected.value = false;
+                                controller.blueThermalPrinterProdvider
+                                    .selectedPrinter.value = null;
+                                controller.blueThermalPrinterProdvider.scan();
                               },
                             ),
                           ),
                           Visibility(
-                            visible: controller.defaultPrinterType ==
+                            visible: controller.blueThermalPrinterProdvider
+                                        .defaultPrinterType ==
                                     PrinterType.bluetooth &&
                                 Platform.isAndroid,
                             child: SwitchListTile.adaptive(
@@ -169,20 +198,25 @@ class DeliverySaleInvoiceScreen
                                 textAlign: TextAlign.start,
                                 style: TextStyle(fontSize: 19.0),
                               ),
-                              value: controller.reconnect.value,
+                              value: controller
+                                  .blueThermalPrinterProdvider.reconnect.value,
                               onChanged: (bool? value) {
-                                controller.reconnect.value = value ?? false;
+                                controller.blueThermalPrinterProdvider.reconnect
+                                    .value = value ?? false;
                               },
                             ),
                           ),
                           Obx(() {
                             return Column(
-                                children: controller.devices
+                                children: controller
+                                    .blueThermalPrinterProdvider.devices
                                     .map(
                                       (device) => ListTile(
                                         title: Text('${device.deviceName}'),
                                         subtitle: Platform.isAndroid &&
-                                                controller.defaultPrinterType ==
+                                                controller
+                                                        .blueThermalPrinterProdvider
+                                                        .defaultPrinterType ==
                                                     PrinterType.usb
                                             ? null
                                             : Visibility(
@@ -191,24 +225,28 @@ class DeliverySaleInvoiceScreen
                                                     Text("${device.address}")),
                                         onTap: () {
                                           // do something
-                                          controller.selectDevice(device);
-                                          controller.update();
+                                          controller.blueThermalPrinterProdvider
+                                              .selectDevice(device);
+                                          controller.blueThermalPrinterProdvider
+                                              .update();
                                         },
-                                        leading: controller.selectedPrinter
+                                        leading: controller
+                                                        .blueThermalPrinterProdvider
+                                                        .selectedPrinter
                                                         .value !=
                                                     null &&
-                                                ((device.typePrinter ==
-                                                                PrinterType
-                                                                    .usb &&
+                                                ((device.typePrinter == PrinterType.usb &&
                                                             Platform.isWindows
                                                         ? device.deviceName ==
                                                             controller
+                                                                .blueThermalPrinterProdvider
                                                                 .selectedPrinter
                                                                 .value!
                                                                 .deviceName
                                                         : device.vendorId !=
                                                                 null &&
                                                             controller
+                                                                    .blueThermalPrinterProdvider
                                                                     .selectedPrinter
                                                                     .value!
                                                                     .vendorId ==
@@ -216,6 +254,7 @@ class DeliverySaleInvoiceScreen
                                                                     .vendorId) ||
                                                     (device.address != null &&
                                                         controller
+                                                                .blueThermalPrinterProdvider
                                                                 .selectedPrinter
                                                                 .value!
                                                                 .address ==
@@ -226,15 +265,20 @@ class DeliverySaleInvoiceScreen
                                               )
                                             : null,
                                         trailing: OutlinedButton(
-                                          onPressed: controller.selectedPrinter
+                                          onPressed: controller
+                                                          .blueThermalPrinterProdvider
+                                                          .selectedPrinter
                                                           .value ==
                                                       null ||
                                                   device.deviceName !=
-                                                      controller.selectedPrinter
-                                                          .value!.deviceName
+                                                      controller
+                                                          .blueThermalPrinterProdvider
+                                                          .selectedPrinter
+                                                          .value!
+                                                          .deviceName
                                               ? null
                                               : () async {
-                                                  controller.printReceiveTest();
+                                                  controller.actionOnPrint();
                                                 },
                                           child: const Padding(
                                             padding: EdgeInsets.symmetric(
@@ -248,13 +292,15 @@ class DeliverySaleInvoiceScreen
                                     .toList());
                           }),
                           Visibility(
-                            visible: controller.defaultPrinterType ==
+                            visible: controller.blueThermalPrinterProdvider
+                                        .defaultPrinterType ==
                                     PrinterType.network &&
                                 Platform.isWindows,
                             child: Padding(
                               padding: const EdgeInsets.only(top: 10.0),
                               child: TextFormField(
-                                controller: controller.ipController,
+                                controller: controller
+                                    .blueThermalPrinterProdvider.ipController,
                                 keyboardType:
                                     const TextInputType.numberWithOptions(
                                         signed: true),
@@ -262,18 +308,21 @@ class DeliverySaleInvoiceScreen
                                   label: Text("Ip Address"),
                                   prefixIcon: Icon(Icons.wifi, size: 24),
                                 ),
-                                onChanged: controller.setIpAddress,
+                                onChanged: controller
+                                    .blueThermalPrinterProdvider.setIpAddress,
                               ),
                             ),
                           ),
                           Visibility(
-                            visible: controller.defaultPrinterType ==
+                            visible: controller.blueThermalPrinterProdvider
+                                        .defaultPrinterType ==
                                     PrinterType.network &&
                                 Platform.isWindows,
                             child: Padding(
                               padding: const EdgeInsets.only(top: 10.0),
                               child: TextFormField(
-                                controller: controller.portController,
+                                controller: controller
+                                    .blueThermalPrinterProdvider.portController,
                                 keyboardType:
                                     const TextInputType.numberWithOptions(
                                         signed: true),
@@ -282,21 +331,27 @@ class DeliverySaleInvoiceScreen
                                   prefixIcon:
                                       Icon(Icons.numbers_outlined, size: 24),
                                 ),
-                                onChanged: controller.setPort,
+                                onChanged: controller
+                                    .blueThermalPrinterProdvider.setPort,
                               ),
                             ),
                           ),
                           Visibility(
-                            visible: controller.defaultPrinterType ==
+                            visible: controller.blueThermalPrinterProdvider
+                                        .defaultPrinterType ==
                                     PrinterType.network &&
                                 Platform.isWindows,
                             child: Padding(
                               padding: const EdgeInsets.only(top: 10.0),
                               child: OutlinedButton(
                                 onPressed: () async {
-                                  if (controller.ipController.text.isNotEmpty)
-                                    controller.setIpAddress(
-                                        controller.ipController.text);
+                                  if (controller.blueThermalPrinterProdvider
+                                      .ipController.text.isNotEmpty)
+                                    controller.blueThermalPrinterProdvider
+                                        .setIpAddress(controller
+                                            .blueThermalPrinterProdvider
+                                            .ipController
+                                            .text);
                                   // controller.printReceiveTest();
                                 },
                                 child: const Padding(
@@ -315,11 +370,15 @@ class DeliverySaleInvoiceScreen
                       children: [
                         InkWell(
                           onTap: () {
-                            if (controller.selectedPrinter.value == null ||
-                                !controller.isConnected.value) {
+                            if (controller.blueThermalPrinterProdvider
+                                        .selectedPrinter.value ==
+                                    null ||
+                                !controller.blueThermalPrinterProdvider
+                                    .isConnected.value) {
                             } else {
-                              if (controller.selectedPrinter.value != null)
-                                controller.actionOnPrint();
+                              if (controller.blueThermalPrinterProdvider
+                                      .selectedPrinter.value !=
+                                  null) controller.actionOnPrint();
                             }
                           },
 
