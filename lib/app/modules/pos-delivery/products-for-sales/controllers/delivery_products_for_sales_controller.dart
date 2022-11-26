@@ -37,8 +37,6 @@ class DeliveryProductsForSalesScreenController extends BaseGetXController
   ));
   RxList<Product> productListTemp = RxList([]);
 
-  List<Product> temp = [];
-
   RxList<Product> filteredProducts = RxList([]);
 
   // initialization for chrcking internet and cached data
@@ -50,6 +48,7 @@ class DeliveryProductsForSalesScreenController extends BaseGetXController
       filteredProducts.addAll(productListTemp);
       UINotification.hideLoading();
     } else {
+      logger.e('api');
       ProductListRequest productListRequest = ProductListRequest();
       productListRequest.limit = 100;
       productListRequest.page = 1;
@@ -59,7 +58,7 @@ class DeliveryProductsForSalesScreenController extends BaseGetXController
   }
 
   @override
-  void onInit() {
+  void onInit() async {
     deliveryDataProvider.deliveryProductForSaleCallBack = this;
     init();
     searchCtrl.addListener(() {
@@ -80,9 +79,10 @@ class DeliveryProductsForSalesScreenController extends BaseGetXController
   }
 
   @override
-  void onReady() {
-    UINotification.showLoading();
+  void onReady() async {
     super.onReady();
+
+    UINotification.showLoading();
   }
 
   @override

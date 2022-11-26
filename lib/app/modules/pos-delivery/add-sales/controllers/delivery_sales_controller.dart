@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -57,6 +58,7 @@ class DeliverySalesScreenController extends BaseGetXController {
   void deleteCartItem(int key, CartProduct item) async {
     cartItems.removeAt(key);
     await sembastCache.deleteCartProductData(item.key!);
+    init();
   }
 
   final logger = Logger(

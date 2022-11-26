@@ -11,12 +11,13 @@ import 'package:posdelivery/app/ui/theme/delivery_textStyle.dart';
 import 'package:posdelivery/models/constants.dart';
 
 class DeliveryAddExpensesScreen
-    extends GetView<DeliveryAddExpensesScreenController> {
+    extends GetView<DeliveryExpensesScreenController> {
   bool validate = false;
   DeliveryAddExpensesScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: CustomScrollView(
@@ -182,7 +183,7 @@ class DeliveryAddExpensesScreen
                         color: AppColors.deliveryPrimary,
                         child: Center(
                             child: Text(
-                          "test",
+                          "Add Expense",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 25,

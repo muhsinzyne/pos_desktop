@@ -1,10 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-store-manually/contracts.dart';
+import 'package:posdelivery/app/routes/app_pages.dart';
+import 'package:posdelivery/app/ui/theme/app_colors.dart';
 import 'package:posdelivery/controllers/base_controller.dart';
 import 'package:posdelivery/models/delivery/requests/store_add_request.dart';
 import 'package:posdelivery/models/response/error_message.dart';
@@ -24,11 +27,13 @@ class DeliveryAddStoreManuallyScreenController extends BaseGetXController
   final TextEditingController place = TextEditingController();
   final TextEditingController address = TextEditingController();
   final TextEditingController email = TextEditingController();
-  late String latitude = "23.232";
-  late String longitude = "67.232";
+  final TextEditingController lat = TextEditingController();
+  final TextEditingController long = TextEditingController();
+  late String latitude = "";
+  late String longitude = "";
 
-  late bool isOnline;
-  // bool isOnline = false;
+  // late bool isOnline;
+  bool isOnline = false;
   // late String country;
   // late String postalCode;
   // late String state;
@@ -74,23 +79,55 @@ class DeliveryAddStoreManuallyScreenController extends BaseGetXController
     storeAddRequest.vatNo = gst_vatNumber.text;
     storeAddRequest.phone = phoneNumber.text;
     storeAddRequest.address = address.text;
-    if (isOnline) {
+    if (!isOnline) {
       deliveryDataProvider.storeAddRequest(storeAddRequest);
     } else {
       await sembastCache.setAddstoreFormData(storeAddRequest);
-      Get.snackbar("internet",
-          "No internet data will be added when internet is available");
+      Get.defaultDialog(
+        title: "",
+        content: SizedBox(
+          width: 300,
+          child: Column(
+            children: [
+              SvgPicture.asset("assets/svg/tick.svg",
+                  semanticsLabel: 'Acme Logo'),
+              SizedBox(
+                height: 10,
+              ),
+              Text("Demo:New Store Added"),
+              SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Get.offNamedUntil(Routes.deliveryStoreDetails,
+                      ModalRoute.withName(Routes.deliveryStoreDetails));
+                },
+                child: Text('OK'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.deliveryPrimary80,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12), // <-- Radius
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
     }
   }
 
   void init() async {
-    isOnline = await hasNetwork();
+    // isOnline = await hasNetwork();
+    isOnline = true;
     if (isOnline) {
       formData = await sembastCache.getAddstoreFormData();
       logger.w(formData.length);
       if (formData.isNotEmpty) {
         var i;
         for (i = 0; i < formData.length; i++) {
+          logger.e(formData[i].toJson());
           deliveryDataProvider.storeAddRequest(formData[i]);
         }
         await sembastCache.deleteAddStoreFormData();
@@ -103,6 +140,8 @@ class DeliveryAddStoreManuallyScreenController extends BaseGetXController
     Position data = await determinePosition();
     latitude = data.latitude.toString();
     longitude = data.longitude.toString();
+    lat.text = latitude;
+    long.text = longitude;
     // Address address = await cordToAdress(lat: data.latitude, long: data.longitude);
     // place.text = address.city!;
     // country = address.countryName!;
@@ -140,12 +179,15 @@ class DeliveryAddStoreManuallyScreenController extends BaseGetXController
 
   @override
   void onClose() {
+    print("fd");
     storeName.dispose();
     companyName.dispose();
     gst_vatNumber.dispose();
     place.dispose();
     address.dispose();
     email.dispose();
+    lat.dispose();
+    long.dispose();
     super.onClose();
   }
 

@@ -1,7 +1,7 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:dio/dio.dart' as form;
 
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:posdelivery/app/modules/dashboard/contracts.dart';
@@ -13,12 +13,12 @@ import 'package:posdelivery/app/modules/pos-delivery/products-for-orders/contrac
 import 'package:posdelivery/app/modules/pos-delivery/products-for-sales/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/sale-invoice/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/sales-payment/contracts.dart';
+import 'package:posdelivery/app/modules/pos-delivery/select-store/contracts.dart';
 import 'package:posdelivery/app/modules/product_list/contracts.dart';
 import 'package:posdelivery/app/modules/sales_point/contracts.dart';
 import 'package:posdelivery/models/delivery/requests/expense_add_request.dart';
 import 'package:posdelivery/models/delivery/requests/order_add_request.dart';
 import 'package:posdelivery/models/delivery/requests/store_add_request.dart';
-import 'package:posdelivery/models/delivery/response/expense_add_response.dart';
 import 'package:posdelivery/models/delivery/response/store_add_response.dart';
 import 'package:posdelivery/models/requests/customer/customer_add_request.dart';
 import 'package:posdelivery/models/requests/pos/customer_list.dart';
@@ -26,7 +26,6 @@ import 'package:posdelivery/models/requests/pos/product_by_code.dart';
 import 'package:posdelivery/models/requests/pos/product_list.dart';
 import 'package:posdelivery/models/requests/pos/sale_request.dart';
 import 'package:posdelivery/models/requests/pos/sale_view_request.dart';
-import 'package:posdelivery/models/requests/pos/warehouse_products.dart';
 import 'package:posdelivery/models/response/auth/my_info_response.dart';
 import 'package:posdelivery/models/response/customer/customer_add_response.dart';
 import 'package:posdelivery/models/response/customer/customer_price_group_response.dart';
@@ -60,6 +59,7 @@ class DeliveryDataProvider extends BaseDataProvider {
       deliveryAddProductsOrderScreenCtrl;
   late IDeliveryAddProductsSaleScreenController
       deliveryAddProductsSaleScreenCtrl;
+  late IDeliverySelectStoreController deliverySelectStoreCtrl;
   final logger = Logger(
       printer: PrettyPrinter(
     methodCount: 0,
@@ -115,8 +115,39 @@ class DeliveryDataProvider extends BaseDataProvider {
     deliverySalePaymentCtrl = controller;
   }
 
+  set deliverySelectStoreCallBack(IDeliverySelectStoreController controller) {
+    deliverySelectStoreCtrl = controller;
+  }
+
   set printCtrlCallBack(IDeliverySaleInvoiceScreenController controller) {
     deliverySaleInvoiceCtrl = controller;
+  }
+
+  getStores() {
+    final obs = network
+        .get(
+          NetworkURL.warehouseListOffline,
+        )
+        .asStream();
+    obs.listen((data) {
+      try {
+        List<WarehouseListResponse> wRes =
+            warehouseListResponseFromJson(jsonEncode(data.data));
+
+        deliverySelectStoreCtrl.onWarehousetListDone(wRes);
+      } on Exception {
+        final ErrorMessage errMsg = ErrorMessage();
+        errMsg.message = 'warehouse_not_loaded'.tr;
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+          ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      if (err.response.statusCode == StatusCodes.status404NotFound) {
+        deliverySelectStoreCtrl.onWarehousetListError(errMsg);
+      } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
+        deliverySelectStoreCtrl.onWarehousetListError(errMsg);
+      }
+    });
   }
 
   //delivery
@@ -125,6 +156,7 @@ class DeliveryDataProvider extends BaseDataProvider {
         .get(NetworkURL.saleView, queryParameters: saleViewRequest.toJson())
         .asStream();
     obs.listen((data) {
+      log(data.toString());
       try {
         InvoiceResponse invoiceResponse = InvoiceResponse.fromJson(data.data);
         deliverySaleInvoiceCtrl.onSaleViewFetchDone(invoiceResponse);
@@ -589,3 +621,4 @@ class DeliveryDataProvider extends BaseDataProvider {
     });
   }
 }
+

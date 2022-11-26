@@ -17,6 +17,7 @@ class DeliveryAddStoreManuallyScreen
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: CustomScrollView(
@@ -162,6 +163,9 @@ class DeliveryAddStoreManuallyScreen
                           SizedBox(
                             height: 8,
                           ),
+                          SizedBox(
+                            height: 8,
+                          ),
                           Row(
                             children: [
                               Expanded(
@@ -196,6 +200,22 @@ class DeliveryAddStoreManuallyScreen
                             height: 8,
                           ),
                           TextFieldDelivery(
+                            controller: controller.lat,
+                            hint: "latitude",
+                            onlyRead: true,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          TextFieldDelivery(
+                            controller: controller.long,
+                            hint: "longitude",
+                            onlyRead: true,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          TextFieldDelivery(
                             maxLine: 4,
                             controller: controller.address,
                             hint: "Address",
@@ -213,7 +233,7 @@ class DeliveryAddStoreManuallyScreen
                         color: AppColors.deliveryPrimary,
                         child: Center(
                             child: Text(
-                          "test",
+                          "Add Store",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 25,

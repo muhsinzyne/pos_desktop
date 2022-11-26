@@ -20,6 +20,7 @@ class DeliveryCloseRegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: CustomScrollView(

@@ -33,6 +33,7 @@ class DeliveryProductsForSalesScreen
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: CustomScrollView(
@@ -102,38 +103,56 @@ class DeliveryProductsForSalesScreen
                           ),
                           Obx(() {
                             return Container(
-                              height: Constants.screenHeight,
+                              height: Constants.screenHeight * 0.5,
                               width: Constants.screenWidth,
                               child: controller.filteredProducts.isNotEmpty
-                                  ? Center(
-                                      child: ListView.builder(
-                                        itemCount:
-                                            controller.filteredProducts.length,
-                                        itemBuilder: (context, index) => Card(
-                                          color: AppColors.deliveryPrimaryLight,
-                                          elevation: 4,
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 10),
-                                          child: InkWell(
-                                            onTap: () {
-                                              Get.toNamed(
-                                                  Routes
-                                                      .deliveryAddProductsSales,
-                                                  arguments: {
-                                                    "code": controller
-                                                        .filteredProducts[index]
-                                                        .itemId
-                                                  });
-                                            },
-                                            child: ListTile(
-                                              title: Text(controller
-                                                  .filteredProducts[index].label
-                                                  .toString()),
-                                              // subtitle: Text( '${_foundUsers[index]["age"].toString()} years old'),
-                                            ),
-                                          ),
+                                  ? Container(
+                                      child:
+                                          ListView(shrinkWrap: true, children: [
+                                        Wrap(
+                                          runSpacing: 10,
+                                          spacing: 10,
+                                          children: [
+                                            for (int i = 0;
+                                                i <
+                                                    controller.filteredProducts
+                                                        .length;
+                                                i++) ...[
+                                              InkWell(
+                                                onTap: () {
+                                                  Get.toNamed(
+                                                      Routes
+                                                          .deliveryAddProductsSales,
+                                                      arguments: {
+                                                        "code": controller
+                                                            .filteredProducts[i]
+                                                            .itemId
+                                                      });
+                                                },
+                                                child: Container(
+                                                  width: Constants.screenWidth *
+                                                      0.25,
+                                                  child: AspectRatio(
+                                                    aspectRatio: 1,
+                                                    child: Container(
+                                                      padding:
+                                                          EdgeInsets.all(8),
+                                                      color: AppColors
+                                                          .deliveryPrimaryLight,
+                                                      child: Center(
+                                                        child: Text(controller
+                                                            .filteredProducts[i]
+                                                            .label
+                                                            .toString()),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ],
                                         ),
-                                      ),
+                                      ]),
                                     )
                                   : const Text(
                                       'No Prouducts',
@@ -141,6 +160,47 @@ class DeliveryProductsForSalesScreen
                                     ),
                             );
                           }),
+                          // Obx(() {
+                          //   return Container(
+                          //     height: Constants.screenHeight,
+                          //     width: Constants.screenWidth,
+                          //     child: controller.filteredProducts.isNotEmpty
+                          //         ? Center(
+                          //             child: ListView.builder(
+                          //               itemCount:
+                          //                   controller.filteredProducts.length,
+                          //               itemBuilder: (context, index) => Card(
+                          //                 color: AppColors.deliveryPrimaryLight,
+                          //                 elevation: 4,
+                          //                 margin: const EdgeInsets.symmetric(
+                          //                     vertical: 10),
+                          //                 child: InkWell(
+                          //                   onTap: () {
+                          //                     Get.toNamed(
+                          //                         Routes
+                          //                             .deliveryAddProductsSales,
+                          //                         arguments: {
+                          //                           "code": controller
+                          //                               .filteredProducts[index]
+                          //                               .itemId
+                          //                         });
+                          //                   },
+                          //                   child: ListTile(
+                          //                     title: Text(controller
+                          //                         .filteredProducts[index].label
+                          //                         .toString()),
+                          //                     // subtitle: Text( '${_foundUsers[index]["age"].toString()} years old'),
+                          //                   ),
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //           )
+                          //         : const Text(
+                          //             'No Prouducts',
+                          //             style: TextStyle(fontSize: 24),
+                          //           ),
+                          //   );
+                          // }),
                         ],
                       ),
                     ),

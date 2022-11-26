@@ -6,8 +6,8 @@ abstract class Routes {
   //pos-delivery
   static const deliverySplash = _Paths.deliverySplash;
   static const deliveryHome = _Paths.deliveryHome;
+  static const deliverySelectStore = _Paths.deliverySelectStore;
   static const deliveryAddStore = _Paths.deliveryAddStore;
-  static const deliveryAddStoreManullay = _Paths.deliveryAddStoreManually;
   static const deliveryStoreDetails = _Paths.deliveryStoreDetails;
   static const deliverySalesPayment = _Paths.deliverySalesPayment;
   static const deliverySales = _Paths.deliverySales;
@@ -29,6 +29,7 @@ abstract class Routes {
   static const deliveryProductsForOrders = _Paths.deliveryProductsForOrders;
   static const deliveryOrders = _Paths.deliveryOrders;
   static const deliveryAddExpenses = _Paths.deliveryAddExpenses;
+  static const deliveryExpenses = _Paths.deliveryExpenses;
   static const deliveryAddProductsOrder = _Paths.deliveryAddProductsOrder;
 
   //pos-desktop
@@ -68,8 +69,8 @@ abstract class _Paths {
   //pos-delivery routes
   static const deliverySplash = '/delivery-splash';
   static const deliveryHome = '/delivery-home';
-  static const deliveryAddStoreManually = '/delivery-addStoreManually';
   static const deliveryAddStore = '/delivery-addStore';
+  static const deliverySelectStore = '/delivery-selectStore';
   static const deliveryStoreDetails = '/delivery-storDetails';
   static const deliverySalesPayment = '/delivery-salesPayment';
   static const deliverySales = '/delivery-sales';
@@ -91,6 +92,7 @@ abstract class _Paths {
   static const deliveryProductsForOrders = '/delivery-productsForOrders';
   static const deliveryOrders = '/delivery-orders';
   static const deliveryAddExpenses = '/delivery-addExpenses';
+  static const deliveryExpenses = '/delivery-expenses';
   static const deliveryAddProductsOrder = '/delivery-addProductsOrder';
 
   static const connectPrinter = '/connect-printer';

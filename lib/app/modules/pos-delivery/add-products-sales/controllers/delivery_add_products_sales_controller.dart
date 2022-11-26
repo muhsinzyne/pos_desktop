@@ -1,11 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-products-order/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-products-sales/contracts.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-sales/views/delivery_sales_screen.dart';
+import 'package:posdelivery/app/routes/app_pages.dart';
 import 'package:posdelivery/app/ui/components/ui_notification.dart';
+import 'package:posdelivery/app/ui/theme/app_colors.dart';
 import 'package:posdelivery/controllers/base_controller.dart';
 import 'package:posdelivery/models/constants.dart';
 import 'package:posdelivery/models/delivery/requests/cart_product.dart';
@@ -119,16 +123,31 @@ class DeliveryAddProductsSalesScreenController extends BaseGetXController
           await sembastCache.updateCartProductData(cartProduct);
           Get.defaultDialog(
             title: "Added to cart ",
-            middleText: "Succesfully added to cart as existing order",
+            middleText: "Succesfully added to cart",
             middleTextStyle: TextStyle(color: Colors.black),
           );
+          await Future.delayed(Duration(seconds: 1));
+
+          Get.offNamedUntil(Routes.deliverySales,
+              ModalRoute.withName(Routes.deliveryProductsForSales));
         } else {
+          cartProduct.cartItem = temp;
+          cartProduct.itemId = temp.itemId;
+          cartProduct.subTotal = double.parse(subTotal.value);
+          cartProduct.grandTotal = double.parse(totalAmount.value);
+          cartProduct.tax = double.parse(taxAmount.value);
+          cartProduct.quantity = int.tryParse(totalQty.toString());
+          cartProduct.subQty = int.parse(selectedUnit?.operationValue ?? "1");
+          await sembastCache.setCartProductsData(cartProduct);
+
           Get.defaultDialog(
-            title: "Order does not exist",
-            middleText:
-                "this product is not exist in cart pls ADD pNEW order first",
+            title: "Added to cart ",
+            middleText: "Succesfully added to cart",
             middleTextStyle: TextStyle(color: Colors.black),
           );
+          await Future.delayed(Duration(seconds: 1));
+          Get.offNamedUntil(
+              Routes.deliverySales, ModalRoute.withName(Routes.deliverySales));
         }
       }
     } else {

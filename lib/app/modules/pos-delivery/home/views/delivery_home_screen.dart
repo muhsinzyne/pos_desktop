@@ -130,7 +130,7 @@ class DeliveryHomeScreen extends GetView<DeliveryHomeScreenController> {
                     // ),
                     InkWell(
                       onTap: () {
-                        Get.toNamed(Routes.deliveryStoreDetails);
+                        Get.toNamed(Routes.deliverySelectStore);
                       },
                       child: QuickLink(
                         title: "Stores",
@@ -146,9 +146,14 @@ class DeliveryHomeScreen extends GetView<DeliveryHomeScreenController> {
                         iconData: Icons.payments_outlined,
                       ),
                     ),
-                    QuickLink(
-                      title: "Stock Register",
-                      iconData: FontAwesomeIcons.clipboard,
+                    InkWell(
+                      onTap: () {
+                        Get.toNamed(Routes.deliveryExpenses);
+                      },
+                      child: QuickLink(
+                        title: "Stock Register",
+                        iconData: FontAwesomeIcons.clipboard,
+                      ),
                     ),
                     QuickLink(
                       title: "Settings",

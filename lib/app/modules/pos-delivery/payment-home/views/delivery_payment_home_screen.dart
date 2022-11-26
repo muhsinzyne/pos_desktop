@@ -13,118 +13,127 @@ class DeliveryPaymentHomeScreen extends StatelessWidget {
   const DeliveryPaymentHomeScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: CustomScrollView(
-          scrollDirection: Axis.vertical,
-          slivers: [
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 25, vertical: 40),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Payments",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 35,
-                          ),
-                          Container(
-                            width: double.infinity,
-                            child: AspectRatio(
-                              aspectRatio: 2.9 / 1,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 25, vertical: 20),
-                                decoration: BoxDecoration(
-                                    color: AppColors.deliveryPrimary,
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "873488.78",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      "DUE AMOUNT",
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w400),
-                                    )
-                                  ],
+    return WillPopScope(
+      onWillPop: () async {
+        Get.offNamed(Routes.deliveryStoreDetails);
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(),
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: CustomScrollView(
+            scrollDirection: Axis.vertical,
+            slivers: [
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 25, vertical: 40),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Payments",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 35,
+                            ),
+                            Container(
+                              width: double.infinity,
+                              child: AspectRatio(
+                                aspectRatio: 2.9 / 1,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 25, vertical: 20),
+                                  decoration: BoxDecoration(
+                                      color: AppColors.deliveryPrimary,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "873488.78",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        "DUE AMOUNT",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w400),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 40,
-                          ),
-                          Container(
-                            child: Text(
-                              "Quick Links",
+                            SizedBox(
+                              height: 40,
                             ),
-                          ),
-                          SizedBox(
-                            height: 25,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Get.toNamed(Routes.deliveryPaymentDue);
-                            },
-                            child: QuickLink(
-                              title: "Pay",
-                              iconData: FontAwesomeIcons.moneyCheck,
+                            Container(
+                              child: Text(
+                                "Quick Links",
+                              ),
                             ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Get.toNamed(Routes.deliveryPendingPayment);
-                            },
-                            child: QuickLink(
-                                title: "Pending Payments",
-                                iconData: Icons.attach_money_outlined),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Get.toNamed(Routes.deliveryPaymentHistory);
-                            },
-                            child: QuickLink(
-                                title: "Payment History",
-                                iconData: Icons.history),
-                          ),
-                          QuickLink(
-                            title: "Settings",
-                            iconData: Icons.settings_outlined,
-                          ),
-                        ],
+                            SizedBox(
+                              height: 25,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Get.toNamed(Routes.deliveryPaymentDue);
+                              },
+                              child: QuickLink(
+                                title: "Pay",
+                                iconData: FontAwesomeIcons.moneyCheck,
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Get.toNamed(Routes.deliveryPendingPayment);
+                              },
+                              child: QuickLink(
+                                  title: "Pending Payments",
+                                  iconData: Icons.attach_money_outlined),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Get.toNamed(Routes.deliveryPaymentHistory);
+                              },
+                              child: QuickLink(
+                                  title: "Payment History",
+                                  iconData: Icons.history),
+                            ),
+                            QuickLink(
+                              title: "Settings",
+                              iconData: Icons.settings_outlined,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ]),
-            ),
-          ],
+                    ]),
+              ),
+            ],
+          ),
         ),
       ),
     );

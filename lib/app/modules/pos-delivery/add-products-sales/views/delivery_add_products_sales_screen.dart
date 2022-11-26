@@ -18,6 +18,7 @@ class DeliveryAddProductsSalesScreen
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: CustomScrollView(
@@ -121,7 +122,7 @@ class DeliveryAddProductsSalesScreen
                           ),
                           Container(
                             width: double.maxFinite,
-                            height: Constants.screenHeight * 0.4,
+                            height: Constants.screenHeight * 0.32,
                             child: Container(
                               padding: EdgeInsets.all(15),
                               decoration: BoxDecoration(
@@ -248,28 +249,6 @@ class DeliveryAddProductsSalesScreen
                           flex: 1,
                           child: GestureDetector(
                             onTap: () {
-                              controller.isAddNew = true;
-                              controller.addNew();
-                            },
-                            child: Container(
-                              height: 85,
-                              // width: Constants.screenWidth / 2,
-                              color: AppColors.deliverySecondary,
-                              child: Center(
-                                  child: Text(
-                                "Add New",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500),
-                              )),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: GestureDetector(
-                            onTap: () {
                               controller.isAddNew = false;
                               controller.addAsExist();
                             },
@@ -279,7 +258,7 @@ class DeliveryAddProductsSalesScreen
                               color: AppColors.deliveryPrimary,
                               child: Center(
                                 child: Text(
-                                  "Add",
+                                  "Add to Cart",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 20,

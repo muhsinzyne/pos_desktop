@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:posdelivery/app/modules/pos-delivery/sale-invoice/contracts.dart';
@@ -61,12 +63,14 @@ class DeliverySaleInvoiceScreenController extends BaseGetXController
     deliveryDataProvider.deliverySaleInvoiceCtrl = this;
     params = Get.arguments;
     if (params?.refId != null) {
+      print("object1");
       _fetchInvoice();
     }
     super.onInit();
   }
 
   _fetchInvoice() {
+    print("object2");
     SaleViewRequest saleViewRequest = SaleViewRequest();
     saleViewRequest.saleId = params!.refId;
     // saleViewRequest.saleId = "220";
@@ -84,14 +88,15 @@ class DeliverySaleInvoiceScreenController extends BaseGetXController
     isLoading.value = false;
     UINotification.hideLoading();
     invoiceResponse.value = dataResponse;
-    logger.e("done");
+    logger.e("hell");
+    log(dataResponse.toJson().toString());
   }
 
   @override
   actionOnPrint() async {
     UINotification.showLoading();
     blueThermalPrinterProdvider.loadImage(invoiceResponse.value.logoPath);
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
     blueThermalPrinterProdvider.printReceiveTest(invoiceResponse.value);
     UINotification.hideLoading();
   }

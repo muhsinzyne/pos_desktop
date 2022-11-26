@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -14,10 +13,7 @@ import 'package:posdelivery/models/navigation/print_view_nav.dart';
 import 'package:posdelivery/models/requests/pos/sale_request.dart';
 import 'package:posdelivery/models/response/pos/add_sale_response.dart';
 import 'package:posdelivery/models/response/error_message.dart';
-import 'package:posdelivery/models/response/pos/product.dart';
 import 'package:posdelivery/providers/data/delivery_data_provider.dart';
-import 'package:posdelivery/providers/data/pos_data_provider.dart';
-import 'package:posdelivery/providers/local/pdf_invoice_provider.dart';
 import 'package:posdelivery/services/app_service.dart';
 import 'package:posdelivery/services/cache/cache_sembast_delivery_service.dart';
 
@@ -65,7 +61,7 @@ class DeliverySalesPaymentScreenController extends BaseGetXController
         .fold<double>(0, (sum, item) => sum + item.grandTotal!)
         .toStringAsFixed(2)
         .toString();
-
+    paymentAmount.text = totalPayableAmount.text;
     totalTax = cartProducts
         .fold<double>(0, (sum, item) => sum + item.tax!)
         .toStringAsFixed(2);
@@ -77,7 +73,7 @@ class DeliverySalesPaymentScreenController extends BaseGetXController
     if (isOnline) {
       List<SaleRequest> formData = await sembastCache.getAllAddSaleFormData();
       if (formData.isNotEmpty) {
-        var i;
+        int i;
         for (i = 0; i < formData.length; i++) {
           deliveryDataProvider.saleOrderRequestOffline(formData[i]);
         }
@@ -271,7 +267,12 @@ class DeliverySalesPaymentScreenController extends BaseGetXController
 
   void calculate() {
     double due = double.parse(totalPayableAmount.text);
-    double pay = double.parse(paymentAmount.text);
+    double pay = 0;
+    if (paymentAmount.text != "") {
+      pay = double.parse(paymentAmount.text);
+    } else {
+      pay = double.parse(paymentAmount.text);
+    }
     // int pay = 276;
     if (due > pay) {
       balanceAmount.text = (due - pay).toStringAsFixed(2);
