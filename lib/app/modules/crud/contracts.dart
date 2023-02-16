@@ -5,8 +5,7 @@ import 'package:posdelivery/models/response/error_message.dart';
 import '../../../models/response/customer/customer_price_group_response.dart';
 
 abstract class ICustomerAddController {
-  customerGroupFetchDone(
-      CustomerPriceGroupsResponse customerPriceGroupsResponse);
+  customerGroupFetchDone(CustomerPriceGroupsResponse customerPriceGroupsResponse);
   onCustomerGroupFetchError(ErrorMessage err);
   actionOnSaveRequest();
   onCustomerAddDone(CustomerAddResponse customerAddResponse);

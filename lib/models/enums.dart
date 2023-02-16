@@ -1,4 +1,4 @@
-enum Flavor { development, staging, production, delivery }
+enum Flavor { development, staging, production }
 
 enum PlaySound { error, success }
 

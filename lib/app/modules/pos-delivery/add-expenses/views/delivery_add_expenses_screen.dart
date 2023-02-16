@@ -1,17 +1,17 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:get/get.dart';
-import '../controllers/delivery_add_expenses_controller.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-expenses/controllers/delivery_add_expenses_controller.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/text_field.dart';
 import 'package:posdelivery/app/ui/theme/app_colors.dart';
 import 'package:posdelivery/app/ui/theme/delivery_textStyle.dart';
 import 'package:posdelivery/models/constants.dart';
 
 class DeliveryAddExpensesScreen
-    extends GetView<DeliveryExpensesScreenController> {
+    extends GetView<DeliveryAddExpensesScreenController> {
   bool validate = false;
   DeliveryAddExpensesScreen({Key? key}) : super(key: key);
   @override

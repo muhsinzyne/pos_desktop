@@ -852,7 +852,7 @@ class SalesPointController extends BaseGetXController
     invoiceOfflineResponse.rows.addAll(cartedOfflineProducts);
     blueThermalPrinterProdvider.loadImage(invoiceOfflineResponse.logoPath);
     await Future.delayed(Duration(seconds: 2));
-    blueThermalPrinterProdvider.printReceiveTestOffline(invoiceOfflineResponse);
+    // blueThermalPrinterProdvider.printReceiveTestOffline(invoiceOfflineResponse);
   }
 
   void actionOnPayment() {

@@ -146,16 +146,11 @@ class BlueThermalPrinterProdvider extends BaseGetXController {
     });
   }
 
-  Future printReceiveTestOffline(InvoiceOfflineResponse invoice) async {
+  Future printReceiveTestOffline() async {
     final profile = await CapabilityProfile.load();
     final generator = Generator(PaperSize.mm58, profile);
     List<int> bytes = [];
 
-    final Uint8List imgBytes = logoBytes!;
-    final img.Image? image = img.decodeImage(imgBytes);
-    bytes += generator.image(
-      image!,
-    );
     bytes += generator.text(
       'biller',
       styles: PosStyles(
@@ -193,39 +188,9 @@ class BlueThermalPrinterProdvider extends BaseGetXController {
       linesAfter: 1,
     );
     bytes += generator.text(
-      'Date: ${invoice.date} ',
+      'Date: 08/12/2023 ',
       styles: const PosStyles(
         align: PosAlign.left,
-      ),
-    );
-    bytes += generator.text(
-      'sl no: ${invoice.saleNo} ',
-      styles: const PosStyles(
-        align: PosAlign.left,
-      ),
-    );
-    bytes += generator.text(
-      'Sale No/Ref: ${invoice.saleRef} ',
-      styles: const PosStyles(
-        align: PosAlign.left,
-      ),
-    );
-    bytes += generator.text(
-      'Sales Associate: MUHAMMED MUHSIN',
-      styles: const PosStyles(
-        align: PosAlign.left,
-      ),
-    );
-    bytes += generator.text('Customer:',
-        styles: const PosStyles(
-          align: PosAlign.left,
-        ),
-        linesAfter: 1);
-    bytes += generator.text(
-      'ITEMS',
-      styles: PosStyles(
-        align: PosAlign.center,
-        bold: true,
       ),
     );
     bytes += generator.row([
@@ -266,122 +231,49 @@ class BlueThermalPrinterProdvider extends BaseGetXController {
     double unitQuantity;
     double unitPrice;
     double subTotal;
-    for (var i = 0; i < invoice.rows.length; i++) {
-      bytes += generator.row([
-        PosColumn(
-          text: '#${i + 1}: ${invoice.rows[i].name}',
-          width: 12,
-          styles: const PosStyles(
-            align: PosAlign.left,
-          ),
+    bytes += generator.row([
+      PosColumn(
+        text: '#${1}: Baloon pack of 60',
+        width: 12,
+        styles: const PosStyles(
+          align: PosAlign.left,
         ),
-      ]);
-      unitQuantity = double.parse(invoice.rows[i].quantity.toString());
-      // unitQuantity = double.parse(invoice.rows[i].quantity ?? "0");
-      unitPrice = double.parse(invoice.rows[i].price.toString());
-      subTotal = unitQuantity * unitPrice;
-      // subTotal = double.parse(invoice.rows[i].subtotal ?? "0");
-      bytes += generator.row([
-        PosColumn(
-          text: '',
-          width: 3,
-          styles: const PosStyles(
-            align: PosAlign.left,
-          ),
+      ),
+    ]);
+    // unitQuantity = double.parse(invoice.rows[i].quantity ?? "0");
+    // subTotal = double.parse(invoice.rows[i].subtotal ?? "0");
+    bytes += generator.row([
+      PosColumn(
+        text: '2',
+        width: 3,
+        styles: const PosStyles(
+          align: PosAlign.left,
         ),
-        PosColumn(
-          text: unitQuantity.toStringAsFixed(2),
-          width: 2,
-          styles: const PosStyles(
-            align: PosAlign.left,
-          ),
+      ),
+      PosColumn(
+        text: "`12`",
+        width: 2,
+        styles: const PosStyles(
+          align: PosAlign.left,
         ),
-        PosColumn(
-          text: unitPrice.toStringAsFixed(2),
-          width: 4,
-          styles: const PosStyles(
-            align: PosAlign.left,
-          ),
+      ),
+      PosColumn(
+        text: "23",
+        width: 4,
+        styles: const PosStyles(
+          align: PosAlign.left,
         ),
-        PosColumn(
-          text: subTotal.toStringAsFixed(2),
-          width: 3,
-          styles: const PosStyles(
-            align: PosAlign.left,
-          ),
+      ),
+      PosColumn(
+        text: "12",
+        width: 3,
+        styles: const PosStyles(
+          align: PosAlign.left,
         ),
-      ]);
-    }
+      ),
+    ]);
     bytes += generator.hr(ch: '-');
-    bytes += generator.row([
-      PosColumn(
-        text: 'Total Item: ${invoice.rows.length}',
-        width: 6,
-        styles: const PosStyles(
-          align: PosAlign.left,
-        ),
-      ),
-      PosColumn(
-        text: 'Total Qty: ',
-        width: 6,
-        styles: const PosStyles(
-          align: PosAlign.left,
-        ),
-      ),
-    ]);
-    double grandTotal = invoice.grandTotal!;
-    bytes += generator.row([
-      PosColumn(
-        text: 'Sub total',
-        width: 6,
-        styles: const PosStyles(
-          align: PosAlign.left,
-        ),
-      ),
-      PosColumn(
-        text: grandTotal.toStringAsFixed(2),
-        width: 6,
-        styles: const PosStyles(
-          align: PosAlign.right,
-        ),
-      ),
-    ]);
-    bytes += generator.row([
-      PosColumn(
-        text: 'Discount',
-        width: 6,
-        styles: const PosStyles(
-          align: PosAlign.left,
-        ),
-      ),
-      PosColumn(
-        text: '0',
-        width: 6,
-        styles: const PosStyles(
-          align: PosAlign.right,
-        ),
-      ),
-    ]);
-    double totalTax = 0;
-    // double totalTax = double.parse(invoice.inv?.totalTax ?? "0");
-    bytes += generator.row([
-      PosColumn(
-        text: 'Vat(15%)',
-        width: 6,
-        styles: const PosStyles(
-          align: PosAlign.left,
-        ),
-      ),
-      PosColumn(
-        text: "0",
-        // text: totalTax.toStringAsFixed(2),
-        width: 6,
-        styles: const PosStyles(
-          align: PosAlign.right,
-        ),
-      ),
-    ]);
-    double netTotal = grandTotal + totalTax;
+    // double netTotal = grandTotal + totalTax;
     bytes += generator.row([
       PosColumn(
         text: 'Net Total',
@@ -394,7 +286,7 @@ class BlueThermalPrinterProdvider extends BaseGetXController {
         ),
       ),
       PosColumn(
-        text: netTotal.toStringAsFixed(2),
+        text: "900",
         width: 6,
         styles: const PosStyles(
           align: PosAlign.right,
@@ -402,7 +294,6 @@ class BlueThermalPrinterProdvider extends BaseGetXController {
         ),
       ),
     ]);
-    bytes += generator.qrcode(invoice.qrCodeString, size: QRSize.Size7);
     printEscPos(bytes, generator);
   }
 

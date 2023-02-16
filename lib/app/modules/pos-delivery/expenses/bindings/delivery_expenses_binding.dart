@@ -4,8 +4,8 @@ import 'package:posdelivery/app/modules/pos-delivery/add-expenses/controllers/de
 class DeliveryExpensesScreenBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<DeliveryExpensesScreenController>(
-      () => DeliveryExpensesScreenController(),
+    Get.lazyPut<DeliveryAddExpensesScreenController>(
+      () => DeliveryAddExpensesScreenController(),
     );
   }
 }

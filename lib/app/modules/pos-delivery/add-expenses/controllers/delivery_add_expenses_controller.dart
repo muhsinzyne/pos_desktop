@@ -21,7 +21,7 @@ import 'package:posdelivery/services/cache/cache_service.dart';
 import 'package:posdelivery/services/location_service.dart';
 import 'dart:async';
 
-class DeliveryExpensesScreenController extends BaseGetXController
+class DeliveryAddExpensesScreenController extends BaseGetXController
     implements IDeliveryExpenseAddController {
   final TextEditingController reference = TextEditingController();
   String? category;

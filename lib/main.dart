@@ -9,8 +9,6 @@ import 'package:posdelivery/app/ui/theme/styles.dart';
 import 'package:posdelivery/generated/locales.g.dart';
 import 'package:posdelivery/models/app_languages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:posdelivery/services/netowork_status_service.dart';
-
 
 import 'app/routes/app_pages.dart';
 import 'pre_app.dart';
@@ -19,9 +17,12 @@ void main() async {
   runApp(const PreApp());
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferences.getInstance();
-  FlavorConfig(flavor: Flavor.development, flavorValues: AppFlavors.devFlavor);
+  FlavorConfig(
+    flavor: Flavor.development,
+    flavorValues: AppFlavors.devFlavor,
+  );
   AppServiceBinding().dependencies();
-  await Future.delayed(const Duration(
+  await Future.delayed(Duration(
     seconds: 1,
   ));
   runApp(const MyApp());
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           //platform: TargetPlatform.android,
           fontFamily: fontFamily,
-          colorScheme: const ColorScheme.light().copyWith(
+          colorScheme: ColorScheme.light().copyWith(
             primary: AppColors.primary,
             secondary: AppColors.secondary,
           ),
@@ -61,7 +62,7 @@ class MyApp extends StatelessWidget {
         fallbackLocale: AppLanguages.en_US,
         translationsKeys: AppTranslation.translations,
         title: "app_title".tr,
-        initialRoute: AppPages.initial,
+        initialRoute: AppPages.deliveryInitial,
         getPages: AppPages.routes,
       ),
     );

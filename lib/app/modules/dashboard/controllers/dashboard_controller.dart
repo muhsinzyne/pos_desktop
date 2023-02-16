@@ -164,19 +164,19 @@ class DashboardScreenController extends BaseGetXController
       Map<String, String> qp = {
         "warehouse_id": warehouse.id!,
         "page": "$currentPage",
-        "limit": "10"
+        "limit": "100"
       };
 
       pro = await getProduct(qp);
-      // while (pro.data.length != 0) {
-      //   currentPage++;
-      //   qp = {
-      //     "warehouse_id": warehouse.id!,
-      //     "page": "$currentPage",
-      //     "limit": "100"
-      //   };
-      //   pro = await getProduct(qp);
-      // }
+      while (pro.data.length != 0) {
+        currentPage++;
+        qp = {
+          "warehouse_id": warehouse.id!,
+          "page": "$currentPage",
+          "limit": "100"
+        };
+        pro = await getProduct(qp);
+      }
 
       for (var i = 0; i < temp.length; i++) {
         await sembestCatch.setProductData(Constants.productsStore, temp[i]);
@@ -266,8 +266,6 @@ class DashboardScreenController extends BaseGetXController
   @override
   onWProductOffListDone(List<WarehouseProductsResponse> wPListRes) async {
     warehouseProductsListTemp.addAll(wPListRes);
-    print("wPListRes.length");
-    print(wPListRes.length);
     // if (wPListRes.isNotEmpty) {
     // warehouseProductRequest.page = warehouseProductRequest.page! + 1;
     // desktopDataProvider.getWarehouseProducts(warehouseProductRequest);

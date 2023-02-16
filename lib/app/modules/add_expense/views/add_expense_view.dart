@@ -64,11 +64,6 @@ class AddExpenseView extends GetView<AddExpenseController> {
                                     height: 35,
                                     child: TextFormField(
                                       controller: controller.date,
-                                      onTap: () {
-                                        FocusScope.of(context)
-                                            .requestFocus(new FocusNode());
-                                        controller.presentDatePicker(context);
-                                      },
                                       decoration: const InputDecoration(
                                           border: OutlineInputBorder(
                                               borderRadius: BorderRadius.all(
@@ -91,16 +86,15 @@ class AddExpenseView extends GetView<AddExpenseController> {
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
-                                  DropdownButtonFormField<CategoryOption>(
+                                  DropdownButtonFormField(
                                     onChanged: (value) {
-                                      // print(value);
-                                      controller.selectedCategory = value!.key;
+                                      print(value);
+                                      // controller.category = value;
                                     },
-                                    items: controller.categories
-                                        .map((selectedType) {
-                                      return DropdownMenuItem<CategoryOption>(
+                                    items: controller.cat.map((selectedType) {
+                                      return DropdownMenuItem(
                                         child: Text(
-                                          selectedType.fullName,
+                                          selectedType,
                                         ),
                                         value: selectedType,
                                       );
@@ -123,14 +117,15 @@ class AddExpenseView extends GetView<AddExpenseController> {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
-                        DropdownButtonFormField<Stores>(
+                        DropdownButtonFormField(
                           onChanged: (value) {
-                            controller.selectedStore = value!.key;
+                            print(value);
+                            // controller.category = value;
                           },
-                          items: controller.stores.map((selectedType) {
-                            return DropdownMenuItem<Stores>(
+                          items: controller.str.map((selectedType) {
+                            return DropdownMenuItem(
                               child: Text(
-                                selectedType.fullName,
+                                selectedType,
                               ),
                               value: selectedType,
                             );
@@ -186,7 +181,7 @@ class AddExpenseView extends GetView<AddExpenseController> {
                               Expanded(
                                 flex: 3,
                                 child: TextFormField(
-                                  // controller: controller.attachement,
+                                  controller: controller.attachement,
                                   decoration: const InputDecoration(
                                       border: OutlineInputBorder(
                                           borderRadius:
@@ -227,10 +222,7 @@ class AddExpenseView extends GetView<AddExpenseController> {
                           height: 10,
                         ),
                         ElevatedButton(
-                            onPressed: () {
-                              controller.vaidate();
-                            },
-                            child: const Text("Add Expense")),
+                            onPressed: () {}, child: const Text("Add Expense")),
                       ],
                     ),
                   ),

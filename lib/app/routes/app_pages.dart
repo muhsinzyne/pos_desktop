@@ -25,6 +25,12 @@ import 'package:posdelivery/app/modules/pos-delivery/expenses/bindings/delivery_
 import 'package:posdelivery/app/modules/pos-delivery/expenses/views/delivery_expenses_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/home/bindings/delivery_home_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/home/views/delivery_home_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/add-store/bindings/new_add_store_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/add-store/views/new_add_store_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/dashboard/bindings/new_dashboard_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/dashboard/views/new_dashboard_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/store/bindings/new_store_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/store/views/new_store_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/open-register/bindings/delivery_open_register_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/open-register/views/delivery_open_register_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/order-invoice/bindings/delivery_order_invoice_binding.dart';
@@ -124,6 +130,23 @@ class AppPages {
   static const deliveryInitial = Routes.deliverySplash;
 
   static final routes = [
+    //new design
+    GetPage(
+      name: _Paths.newStore,
+      page: () => NewStoreScreen(),
+      binding: NewStoreScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newAddStore,
+      page: () => NewAddStoreScreen(),
+      binding: NewAddStoreScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newDashboard,
+      page: () => NewDashboardScreen(),
+      binding: NewDashboardScreenBinding(),
+    ),
+
     //pos-delivrey routes
     GetPage(
       name: _Paths.deliverySplash,

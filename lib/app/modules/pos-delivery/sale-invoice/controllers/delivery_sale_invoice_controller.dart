@@ -25,7 +25,7 @@ class DeliverySaleInvoiceScreenController extends BaseGetXController
 
   @override
   void onReady() async {
-    UINotification.showLoading();
+    // UINotification.showLoading();
     await blueThermalPrinterProdvider.initPlatformState();
 
     super.onReady();
@@ -61,11 +61,11 @@ class DeliverySaleInvoiceScreenController extends BaseGetXController
   @override
   void onInit() {
     deliveryDataProvider.deliverySaleInvoiceCtrl = this;
-    params = Get.arguments;
-    if (params?.refId != null) {
-      print("object1");
-      _fetchInvoice();
-    }
+    // params = Get.arguments;
+    // if (params?.refId != null) {
+    //   print("object1");
+    //   _fetchInvoice();
+    // }
     super.onInit();
   }
 
@@ -74,7 +74,7 @@ class DeliverySaleInvoiceScreenController extends BaseGetXController
     SaleViewRequest saleViewRequest = SaleViewRequest();
     saleViewRequest.saleId = params!.refId;
     // saleViewRequest.saleId = "220";
-    deliveryDataProvider.getSaleInvoice(saleViewRequest);
+    // deliveryDataProvider.getSaleInvoice(saleViewRequest);
   }
 
   @override

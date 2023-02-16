@@ -3,6 +3,11 @@ part of 'app_pages.dart';
 
 abstract class Routes {
   Routes._();
+  //new design
+  static const newAddStore = _Paths.newAddStore;
+  static const newDashboard = _Paths.newDashboard;
+  static const newStore = _Paths.newStore;
+
   //pos-delivery
   static const deliverySplash = _Paths.deliverySplash;
   static const deliveryHome = _Paths.deliveryHome;
@@ -66,6 +71,11 @@ abstract class Routes {
 }
 
 abstract class _Paths {
+  //new design
+  static const newAddStore = '/new-addStore';
+  static const newDashboard = '/new-dashboard';
+  static const newStore = '/new-store';
+
   //pos-delivery routes
   static const deliverySplash = '/delivery-splash';
   static const deliveryHome = '/delivery-home';

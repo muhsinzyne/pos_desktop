@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import '../../sales_point/controllers/sales_point_controller.dart';
 import '../controllers/product_list_controller.dart';
 
 class ProductListView extends GetView<ProductListController> {
@@ -10,8 +9,6 @@ class ProductListView extends GetView<ProductListController> {
 
   @override
   Widget build(BuildContext context) {
-    SalesPointController sController = Get.find<SalesPointController>();
-
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Container(
@@ -84,19 +81,15 @@ class ProductListView extends GetView<ProductListController> {
                           padding: const EdgeInsets.all(8.0),
                           color: Colors.white,
                           child: Obx(() => GridView.builder(
-                                controller: controller.scrollControllerProducts,
                                 shrinkWrap: true,
                                 gridDelegate:
                                     const SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 7,
                                         mainAxisSpacing: 5,
                                         crossAxisSpacing: 5),
-                                itemCount: controller.productList.length,
+                                itemCount: controller.products.length,
                                 itemBuilder: (context, index) => InkWell(
-                                  onTap: () {
-                                    sController.addProductOnClick(
-                                        controller.productList[index]);
-                                  },
+                                  onTap: () {},
                                   child: Container(
                                     padding: EdgeInsets.all(5),
                                     decoration:
@@ -113,7 +106,7 @@ class ProductListView extends GetView<ProductListController> {
                                           child: Text(index.toString()),
                                         ),
                                         Text(
-                                          controller.productList[index].label
+                                          controller.products[index].productId
                                               .toString(),
                                           textAlign: TextAlign.center,
                                           maxLines: 2,
