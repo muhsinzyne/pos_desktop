@@ -29,6 +29,8 @@ import 'package:posdelivery/app/modules/pos-delivery/new-design/add-store/bindin
 import 'package:posdelivery/app/modules/pos-delivery/new-design/add-store/views/new_add_store_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/dashboard/bindings/new_dashboard_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/dashboard/views/new_dashboard_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/sales/bindings/new_sales_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/sales/views/new_sales_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/store/bindings/new_store_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/store/views/new_store_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/open-register/bindings/delivery_open_register_binding.dart';
@@ -135,6 +137,11 @@ class AppPages {
       name: _Paths.newStore,
       page: () => NewStoreScreen(),
       binding: NewStoreScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newSales,
+      page: () => NewSalesScreen(),
+      binding: NewSalesScreenBinding(),
     ),
     GetPage(
       name: _Paths.newAddStore,

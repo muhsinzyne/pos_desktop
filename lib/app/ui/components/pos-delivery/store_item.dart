@@ -15,70 +15,76 @@ class StoreItem extends StatelessWidget {
         elevation: 2,
         borderRadius: BorderRadius.circular(10),
         child: Container(
+          width: double.maxFinite,
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(10)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(
-                child: Row(
-                  children: [
-                    Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                          color: AppColors.newBlue,
-                          borderRadius: BorderRadius.circular(100)),
+              Expanded(
+                flex: 1,
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.newBlue,
+                      shape: BoxShape.circle,
                     ),
-                    const SizedBox(
-                      width: 15,
-                    ),
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Store 1",
-                            style: CustomTextStyle.common.copyWith(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 2),
-                            child: Text(
-                              "4.2 km Away ",
-                              style: CustomTextStyle.common.copyWith(
-                                fontSize: 12,
-                                color: Color(0xff8D9EA4),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            color: Colors.transparent,
-                            child: Flexible(
-                              child: Text(
-                                "Julmudah, AlJubail 35671, Saudia Arabia  ",
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                                style: CustomTextStyle.common.copyWith(
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                    // height: 40,
+                    // width: 40,
+                  ),
                 ),
               ),
-              IconButton(
-                icon: Icon(
-                  Icons.arrow_forward_ios,
-                  size: 28,
-                  color: Color(0xff454E52),
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                flex: 4,
+                child: Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Store 1",
+                        style: CustomTextStyle.common.copyWith(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 2),
+                        child: Text(
+                          "4.2 km Away ",
+                          style: CustomTextStyle.common.copyWith(
+                            fontSize: 12,
+                            color: Color(0xff8D9EA4),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        // width: (double.maxFinite) + 115,
+                        child: Text(
+                          "Julmudah, AlJubail 35671,, AlJubail 35671 ",
+                          maxLines: 3,
+                          overflow: TextOverflow.visible,
+                          style: CustomTextStyle.common.copyWith(
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                onPressed: null,
+              ),
+              const Expanded(
+                flex: 1,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 28,
+                    color: Color(0xff454E52),
+                  ),
+                  onPressed: null,
+                ),
               ),
             ],
           ),
