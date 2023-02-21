@@ -33,8 +33,12 @@ import 'package:posdelivery/app/modules/pos-delivery/new-design/complete-sale/bi
 import 'package:posdelivery/app/modules/pos-delivery/new-design/complete-sale/views/new_complete_sale_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/dashboard/bindings/new_dashboard_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/dashboard/views/new_dashboard_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/quotations/bindings/new_quotations_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/quotations/views/new_quotations_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/sales/bindings/new_sales_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/sales/views/new_sales_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/sales-list/bindings/new_sales_list_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/sales-list/views/new_sales_list_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/store/bindings/new_store_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/store/views/new_store_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/open-register/bindings/delivery_open_register_binding.dart';
@@ -137,6 +141,16 @@ class AppPages {
 
   static final routes = [
     //new design
+    GetPage(
+      name: _Paths.newQuotations,
+      page: () => NewQuotationsScreen(),
+      binding: NewQuotationsScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newSalesList,
+      page: () => NewSalesListScreen(),
+      binding: NewSalesListScreenBinding(),
+    ),
     GetPage(
       name: _Paths.newCompleteSale,
       page: () => NewCompleteSaleScreen(),

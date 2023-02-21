@@ -10,6 +10,8 @@ abstract class Routes {
   static const newSales = _Paths.newSales;
   static const newBasket = _Paths.newBasket;
   static const newCompleteSale = _Paths.newCompleteSale;
+  static const newSalesList = _Paths.newSalesList;
+  static const newQuotations = _Paths.newQuotations;
 
   //pos-delivery
   static const deliverySplash = _Paths.deliverySplash;
@@ -81,6 +83,8 @@ abstract class _Paths {
   static const newSales = '/new-sales';
   static const newBasket = '/new-basket';
   static const newCompleteSale = '/new-completeSale';
+  static const newSalesList = '/new-salesList';
+  static const newQuotations = '/new-quotations';
 
   //pos-delivery routes
   static const deliverySplash = '/delivery-splash';
