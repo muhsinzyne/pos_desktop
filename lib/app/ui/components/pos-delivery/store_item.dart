@@ -40,7 +40,7 @@ class StoreItem extends StatelessWidget {
                 width: 10,
               ),
               Expanded(
-                flex: 4,
+                flex: 5,
                 child: Container(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

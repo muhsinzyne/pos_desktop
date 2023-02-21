@@ -27,6 +27,10 @@ import 'package:posdelivery/app/modules/pos-delivery/home/bindings/delivery_home
 import 'package:posdelivery/app/modules/pos-delivery/home/views/delivery_home_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/add-store/bindings/new_add_store_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/add-store/views/new_add_store_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/basket/bindings/new_basket_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/basket/views/new_basket_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/complete-sale/bindings/new_complete_sale_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/complete-sale/views/new_complete_sale_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/dashboard/bindings/new_dashboard_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/dashboard/views/new_dashboard_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/sales/bindings/new_sales_binding.dart';
@@ -133,6 +137,16 @@ class AppPages {
 
   static final routes = [
     //new design
+    GetPage(
+      name: _Paths.newCompleteSale,
+      page: () => NewCompleteSaleScreen(),
+      binding: NewCompleteSaleScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newBasket,
+      page: () => NewBasketScreen(),
+      binding: NewBasketScreenBinding(),
+    ),
     GetPage(
       name: _Paths.newStore,
       page: () => NewStoreScreen(),

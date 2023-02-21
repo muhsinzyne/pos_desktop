@@ -77,32 +77,32 @@ class NewSalesScreen extends GetView<NewSalesScreenController> {
           slivers: [
             SliverFillRemaining(
               hasScrollBody: false,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                child: Text("SALES",
-                                    style: CustomTextStyle.mainTitle.copyWith(
-                                        color: const Color(0xff454E52))),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const SizedBox(
-                            height: 40,
-                          ),
-                          Container(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Text("SALES",
+                                  style: CustomTextStyle.mainTitle.copyWith(
+                                      color: const Color(0xff454E52))),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      Expanded(
+                        flex: 15,
+                        child: Material(
+                          elevation: 5,
+                          child: Container(
                             width: double.maxFinite,
                             decoration: const BoxDecoration(
                               color: Colors.white,
@@ -111,8 +111,8 @@ class NewSalesScreen extends GetView<NewSalesScreenController> {
                                 topLeft: Radius.circular(8.0),
                               ),
                             ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 40),
+                            padding: const EdgeInsets.only(
+                                right: 10, left: 10, top: 50),
                             child: Column(
                               // crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -149,7 +149,7 @@ class NewSalesScreen extends GetView<NewSalesScreenController> {
                                               Icon(
                                                 Icons.search,
                                                 color: Color(0xff8D9EA4),
-                                                size: 22,
+                                                size: 25,
                                               ),
                                             ],
                                           ),
@@ -158,7 +158,10 @@ class NewSalesScreen extends GetView<NewSalesScreenController> {
                                       Expanded(
                                           flex: 1,
                                           child: SvgPicture.asset(
-                                              "assets/svg/barcode.svg"))
+                                            "assets/svg/barcode.svg",
+                                            height: 22,
+                                            width: 22,
+                                          ))
                                     ],
                                   ),
                                 ),
@@ -257,10 +260,10 @@ class NewSalesScreen extends GetView<NewSalesScreenController> {
                               ],
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ]),
+                    ]),
+              ),
             ),
           ],
         ),

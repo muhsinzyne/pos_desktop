@@ -14,7 +14,7 @@ class SaleItem extends StatelessWidget {
       width: Constants.screenWidth * 0.38,
       height: 300,
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
+        border: Border.all(color: Color(0xffEBEBEB)),
         borderRadius: BorderRadius.circular(4),
         color: AppColors.newBg,
       ),
@@ -30,7 +30,7 @@ class SaleItem extends StatelessWidget {
                     right: 10,
                   ),
                   child: Material(
-                    elevation: 6,
+                    elevation: 3,
                     borderRadius: BorderRadius.circular(10),
                     child: Container(
                       decoration: BoxDecoration(
@@ -51,6 +51,9 @@ class SaleItem extends StatelessWidget {
                       flex: 1,
                       child: Text(
                         "Dawny Valley Dew 100 ml Valley",
+                        style: TextStyle(
+                          fontSize: 12,
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -62,6 +65,9 @@ class SaleItem extends StatelessWidget {
                       child: Text(
                         "22 SAR",
                         textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                     const SizedBox(
