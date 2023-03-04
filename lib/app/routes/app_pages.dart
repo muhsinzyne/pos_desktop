@@ -31,8 +31,20 @@ import 'package:posdelivery/app/modules/pos-delivery/new-design/basket/bindings/
 import 'package:posdelivery/app/modules/pos-delivery/new-design/basket/views/new_basket_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/complete-sale/bindings/new_complete_sale_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/complete-sale/views/new_complete_sale_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/completed-payments/bindings/new_completed_payments_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/completed-payments/views/new_completed_payments_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/dashboard/bindings/new_dashboard_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/dashboard/views/new_dashboard_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/financial/bindings/new_financial_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/financial/views/new_financial_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/lock/bindings/new_lock_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/lock/views/new_lock_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/payment-history/bindings/new_pending_payments_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/payment-history/views/new_payment_history_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/pending-payments/bindings/new_pending_payments_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/pending-payments/views/new_pending_payments_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/qr-scanning/bindings/new_add_store_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/qr-scanning/views/new_qr_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/quotations/bindings/new_quotations_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/quotations/views/new_quotations_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/sales/bindings/new_sales_binding.dart';
@@ -141,6 +153,36 @@ class AppPages {
 
   static final routes = [
     //new design
+    GetPage(
+      name: _Paths.newLock,
+      page: () => NewLockScreen(),
+      binding: NewLockScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newQr,
+      page: () => NewQRScreen(),
+      binding: NewQRScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newPaymentHistory,
+      page: () => NewPaymentHistoryScreen(),
+      binding: NewPaymentHistoryScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newFinancial,
+      page: () => NewFinancialScreen(),
+      binding: NewFinancialScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newCompletedPayments,
+      page: () => NewCompletedPaymentsScreen(),
+      binding: NewCompletedPaymentsScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newPendingPayments,
+      page: () => NewPendingPaymentsScreen(),
+      binding: NewPendingPaymentsScreenBinding(),
+    ),
     GetPage(
       name: _Paths.newQuotations,
       page: () => NewQuotationsScreen(),

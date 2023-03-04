@@ -33,6 +33,7 @@ class NewBasketScreen extends GetView<NewSalesScreenController> {
               child: SvgPicture.asset(
                 "assets/svg/menu.svg",
                 height: 30,
+                color: AppColors.newIconColor,
                 width: 30,
               ),
             ),
@@ -42,6 +43,7 @@ class NewBasketScreen extends GetView<NewSalesScreenController> {
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
               "assets/svg/back.svg",
+              color: AppColors.newIconColor,
               height: 30,
               width: 30,
             ),

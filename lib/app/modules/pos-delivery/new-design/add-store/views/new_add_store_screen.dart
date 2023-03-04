@@ -28,6 +28,7 @@ class NewAddStoreScreen extends GetView<NewAddStoreScreenController> {
               padding: const EdgeInsets.only(top: 5),
               child: SvgPicture.asset(
                 "assets/svg/menu.svg",
+                color: AppColors.newIconColor,
                 height: 30,
                 width: 30,
               ),
@@ -38,6 +39,7 @@ class NewAddStoreScreen extends GetView<NewAddStoreScreenController> {
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
               "assets/svg/back.svg",
+              color: AppColors.newIconColor,
               height: 30,
               width: 30,
             ),

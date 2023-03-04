@@ -33,6 +33,7 @@ class NewCompleteSaleScreen extends GetView<NewCompleteSaleScreenController> {
               padding: const EdgeInsets.only(top: 5),
               child: SvgPicture.asset(
                 "assets/svg/menu.svg",
+                color: AppColors.newIconColor,
                 height: 30,
                 width: 30,
               ),
@@ -45,6 +46,7 @@ class NewCompleteSaleScreen extends GetView<NewCompleteSaleScreenController> {
               "assets/svg/back.svg",
               height: 30,
               width: 30,
+              color: AppColors.newIconColor,
             ),
             label: 'Back',
           ),

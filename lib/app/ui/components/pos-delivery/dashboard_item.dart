@@ -26,25 +26,27 @@ class DashboardItemBox extends StatelessWidget {
           children: [
             Container(
               // color: Colors.blueAccent,
-              width: Constants.screenWidth / 2.8,
+              // width: Constants.screenWidth / 2.8,
               child: SvgPicture.asset(
                 icon,
+                height: 25,
+                width: 25,
               ),
             ),
             SizedBox(
               height: 10,
             ),
             Container(
-                width: Constants.screenWidth / 2.8,
+                // width: Constants.screenWidth / 2.8,
                 child: Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Color(0xff454E52),
-                  ),
-                  maxLines: 1,
-                )),
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                color: Color(0xff454E52),
+              ),
+              maxLines: 1,
+            )),
           ],
         ),
       ),

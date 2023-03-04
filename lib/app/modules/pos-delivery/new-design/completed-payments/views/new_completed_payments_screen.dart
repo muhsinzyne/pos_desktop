@@ -3,9 +3,13 @@ import 'package:get/get.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/completed-payments/controllers/new_completed_payments_controller.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/pending-payments/controllers/new_pending_payments_controller.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/quotations/controllers/new_quotations_controller.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/store/controllers/new_store_controller.dart';
+import 'package:posdelivery/app/routes/app_pages.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/app_bar.dart';
+import 'package:posdelivery/app/ui/components/pos-delivery/pending_payment_item.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/store_category_item.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/store_item.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/text_field.dart';
@@ -13,9 +17,10 @@ import 'package:posdelivery/app/ui/theme/app_colors.dart';
 import 'package:posdelivery/app/ui/theme/delivery_textStyle.dart';
 import 'package:posdelivery/models/constants.dart';
 
-class NewQuotationsScreen extends GetView<NewQuotationsScreenController> {
+class NewCompletedPaymentsScreen
+    extends GetView<NewCompletedPaymentsScreenController> {
   bool validate = false;
-  NewQuotationsScreen({Key? key}) : super(key: key);
+  NewCompletedPaymentsScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,8 +35,8 @@ class NewQuotationsScreen extends GetView<NewQuotationsScreenController> {
               child: SvgPicture.asset(
                 "assets/svg/menu.svg",
                 height: 30,
-                width: 30,
                 color: AppColors.newIconColor,
+                width: 30,
               ),
             ),
             label: "",
@@ -40,9 +45,9 @@ class NewQuotationsScreen extends GetView<NewQuotationsScreenController> {
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
               "assets/svg/back.svg",
+              color: AppColors.newIconColor,
               height: 30,
               width: 30,
-              color: AppColors.newIconColor,
             ),
             label: 'Back',
           ),
@@ -79,30 +84,27 @@ class NewQuotationsScreen extends GetView<NewQuotationsScreenController> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Expanded(
                       flex: 1,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-                            child: Text("Quotations".toUpperCase(),
+                            child: Text("Completed Payments".toUpperCase(),
                                 style: CustomTextStyle.mainTitle
                                     .copyWith(color: const Color(0xff454E52))),
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(
-                      height: 30,
+                    const SizedBox(
+                      height: 60,
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 10, right: 10),
-                        child: SvgPicture.asset(
-                          "assets/svg/love+.svg",
-                        ),
-                      ),
+                    const SizedBox(
+                      height: 35,
                     ),
                     Expanded(
                       flex: 15,
@@ -118,10 +120,32 @@ class NewQuotationsScreen extends GetView<NewQuotationsScreenController> {
                             ),
                           ),
                           padding: const EdgeInsets.only(
-                              right: 10, left: 10, top: 50),
+                              right: 15, left: 15, top: 10),
                           child: Column(
                             // crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [],
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: const [
+                                    SizedBox(
+                                      height: 35,
+                                    ),
+                                    PendingPaymentItem(
+                                      statusColor: Colors.green,
+                                      statusText: "Completed",
+                                    ),
+                                    PendingPaymentItem(
+                                      statusColor: Colors.green,
+                                      statusText: "Completed",
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),

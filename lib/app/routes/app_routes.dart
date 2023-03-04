@@ -12,6 +12,12 @@ abstract class Routes {
   static const newCompleteSale = _Paths.newCompleteSale;
   static const newSalesList = _Paths.newSalesList;
   static const newQuotations = _Paths.newQuotations;
+  static const newPendingPayments = _Paths.newPendingPayments;
+  static const newCompletedPayments = _Paths.newCompletedPayments;
+  static const newFinancial = _Paths.newFinancial;
+  static const newPaymentHistory = _Paths.newPaymentHistory;
+  static const newQr = _Paths.newQr;
+  static const newLock = _Paths.newLock;
 
   //pos-delivery
   static const deliverySplash = _Paths.deliverySplash;
@@ -85,6 +91,12 @@ abstract class _Paths {
   static const newCompleteSale = '/new-completeSale';
   static const newSalesList = '/new-salesList';
   static const newQuotations = '/new-quotations';
+  static const newPendingPayments = '/new-pendingPayments';
+  static const newCompletedPayments = '/new-completedPayments';
+  static const newFinancial = '/new-financial';
+  static const newPaymentHistory = '/new-paymentHistory';
+  static const newQr = '/new-qr';
+  static const newLock = '/new-lock';
 
   //pos-delivery routes
   static const deliverySplash = '/delivery-splash';

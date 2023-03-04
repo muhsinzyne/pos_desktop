@@ -33,6 +33,7 @@ class NewSalesScreen extends GetView<NewSalesScreenController> {
                 "assets/svg/menu.svg",
                 height: 30,
                 width: 30,
+                color: AppColors.newIconColor,
               ),
             ),
             label: "",
@@ -43,6 +44,7 @@ class NewSalesScreen extends GetView<NewSalesScreenController> {
               "assets/svg/back.svg",
               height: 30,
               width: 30,
+              color: AppColors.newIconColor,
             ),
             label: 'Back',
           ),
@@ -223,7 +225,7 @@ class NewSalesScreen extends GetView<NewSalesScreenController> {
                                           height: 40,
                                           // width: 85,
                                           decoration: BoxDecoration(
-                                              color: const Color(0xffFF375E),
+                                              color: AppColors.newRed,
                                               borderRadius:
                                                   BorderRadius.circular(10)),
                                           padding: const EdgeInsets.symmetric(

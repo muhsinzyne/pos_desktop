@@ -3,9 +3,12 @@ import 'package:get/get.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/pending-payments/controllers/new_pending_payments_controller.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/quotations/controllers/new_quotations_controller.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/store/controllers/new_store_controller.dart';
+import 'package:posdelivery/app/routes/app_pages.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/app_bar.dart';
+import 'package:posdelivery/app/ui/components/pos-delivery/pending_payment_item.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/store_category_item.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/store_item.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/text_field.dart';
@@ -13,9 +16,10 @@ import 'package:posdelivery/app/ui/theme/app_colors.dart';
 import 'package:posdelivery/app/ui/theme/delivery_textStyle.dart';
 import 'package:posdelivery/models/constants.dart';
 
-class NewQuotationsScreen extends GetView<NewQuotationsScreenController> {
+class NewPendingPaymentsScreen
+    extends GetView<NewPendingPaymentsScreenController> {
   bool validate = false;
-  NewQuotationsScreen({Key? key}) : super(key: key);
+  NewPendingPaymentsScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,8 +34,8 @@ class NewQuotationsScreen extends GetView<NewQuotationsScreenController> {
               child: SvgPicture.asset(
                 "assets/svg/menu.svg",
                 height: 30,
-                width: 30,
                 color: AppColors.newIconColor,
+                width: 30,
               ),
             ),
             label: "",
@@ -40,9 +44,9 @@ class NewQuotationsScreen extends GetView<NewQuotationsScreenController> {
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
               "assets/svg/back.svg",
+              color: AppColors.newIconColor,
               height: 30,
               width: 30,
-              color: AppColors.newIconColor,
             ),
             label: 'Back',
           ),
@@ -79,30 +83,45 @@ class NewQuotationsScreen extends GetView<NewQuotationsScreenController> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Expanded(
                       flex: 1,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-                            child: Text("Quotations".toUpperCase(),
+                            child: Text("Pending Payments".toUpperCase(),
                                 style: CustomTextStyle.mainTitle
                                     .copyWith(color: const Color(0xff454E52))),
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     Align(
                       alignment: Alignment.centerRight,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 10, right: 10),
-                        child: SvgPicture.asset(
-                          "assets/svg/love+.svg",
-                        ),
+                      child: Container(
+                        height: 30,
+                        width: 65,
+                        decoration: BoxDecoration(
+                            color: AppColors.deliveryPrimary,
+                            borderRadius: BorderRadius.circular(10)),
+                        padding: const EdgeInsets.symmetric(),
+                        child: const Center(
+                            child: Text(
+                          "Pay",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        )),
                       ),
+                    ),
+                    const SizedBox(
+                      height: 35,
                     ),
                     Expanded(
                       flex: 15,
@@ -118,10 +137,32 @@ class NewQuotationsScreen extends GetView<NewQuotationsScreenController> {
                             ),
                           ),
                           padding: const EdgeInsets.only(
-                              right: 10, left: 10, top: 50),
+                              right: 15, left: 15, top: 10),
                           child: Column(
                             // crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [],
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: const [
+                                    SizedBox(
+                                      height: 35,
+                                    ),
+                                    PendingPaymentItem(
+                                      statusColor: AppColors.newPrimary,
+                                      statusText: "Pay",
+                                    ),
+                                    PendingPaymentItem(
+                                      statusColor: AppColors.newPrimary,
+                                      statusText: "Pay",
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
