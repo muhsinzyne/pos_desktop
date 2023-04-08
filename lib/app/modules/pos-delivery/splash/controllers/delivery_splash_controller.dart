@@ -11,7 +11,7 @@ class DeliverySplashScreenController extends BaseGetXController
     // authDataProvider.homeCallBack = this;c
     // super.validateLicence();
     Future.delayed(Duration(seconds: 1), () {
-      Get.toNamed(Routes.newQuotations);
+      Get.toNamed(Routes.newDashboard);
     });
     super.onInit();
   }

@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/sales/controllers/new_sales_controller.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/store/controllers/new_store_controller.dart';
+import 'package:posdelivery/app/routes/app_pages.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/app_bar.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/sale_item.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/store_category_item.dart';
@@ -40,32 +41,37 @@ class NewSalesScreen extends GetView<NewSalesScreenController> {
           ),
           const BottomNavigationBarItem(icon: SizedBox(), label: ""),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/svg/back.svg",
-              height: 30,
-              width: 30,
-              color: AppColors.newIconColor,
+            icon: InkWell(
+              onTap: () => Get.back(),
+              child: SvgPicture.asset(
+                "assets/svg/back.svg",
+                height: 30,
+                width: 30,
+              ),
             ),
-            label: 'Back',
+            label: '',
           ),
         ],
       ),
-      floatingActionButton: SizedBox(
-        height: 60,
-        width: 60,
-        child: FittedBox(
-          child: FloatingActionButton(
-            child: Icon(
-              Icons.shopping_cart_outlined,
-              size: 30,
-              color: AppColors.newPrimary,
+      floatingActionButton: InkWell(
+        onTap: () => Get.toNamed(Routes.newBasket),
+        child: SizedBox(
+          height: 60,
+          width: 60,
+          child: FittedBox(
+            child: FloatingActionButton(
+              child: Icon(
+                Icons.shopping_cart_outlined,
+                size: 30,
+                color: AppColors.newPrimary,
+              ),
+              //  SvgPicture.asset(
+              //   "assets/svg/cart.svg",
+              //   fit: BoxFit.fitHeight,
+              // ),
+              backgroundColor: AppColors.newSecondary,
+              onPressed: null,
             ),
-            //  SvgPicture.asset(
-            //   "assets/svg/cart.svg",
-            //   fit: BoxFit.fitHeight,
-            // ),
-            backgroundColor: AppColors.newSecondary,
-            onPressed: null,
           ),
         ),
       ),
@@ -98,7 +104,7 @@ class NewSalesScreen extends GetView<NewSalesScreenController> {
                         ),
                       ),
                       const SizedBox(
-                        height: 40,
+                        height: 30,
                       ),
                       Expanded(
                         flex: 15,

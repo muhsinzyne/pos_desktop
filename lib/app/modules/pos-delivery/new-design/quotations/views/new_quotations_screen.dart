@@ -38,13 +38,15 @@ class NewQuotationsScreen extends GetView<NewQuotationsScreenController> {
           ),
           const BottomNavigationBarItem(icon: SizedBox(), label: ""),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/svg/back.svg",
-              height: 30,
-              width: 30,
-              color: AppColors.newIconColor,
+            icon: InkWell(
+              onTap: () => Get.back(),
+              child: SvgPicture.asset(
+                "assets/svg/back.svg",
+                height: 30,
+                width: 30,
+              ),
             ),
-            label: 'Back',
+            label: '',
           ),
         ],
       ),
@@ -93,7 +95,7 @@ class NewQuotationsScreen extends GetView<NewQuotationsScreenController> {
                       ),
                     ),
                     SizedBox(
-                      height: 30,
+                      height: 10,
                     ),
                     Align(
                       alignment: Alignment.centerRight,
@@ -101,6 +103,8 @@ class NewQuotationsScreen extends GetView<NewQuotationsScreenController> {
                         padding: const EdgeInsets.only(bottom: 10, right: 10),
                         child: SvgPicture.asset(
                           "assets/svg/love+.svg",
+                          height: 30,
+                          width: 30,
                         ),
                       ),
                     ),

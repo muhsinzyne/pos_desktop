@@ -121,7 +121,8 @@ class DeliveryAddStoreScreen
                                           } else {
                                             final String code =
                                                 barcode.rawValue!;
-                                            debugPrint('Barcode found! $code');
+                                            controller.logger.e(barcode.format);
+                                            controller.logger.e(code);
                                             controller.scanQR(code);
                                           }
                                         })

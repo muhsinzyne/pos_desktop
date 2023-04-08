@@ -1,25 +1,18 @@
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:posdelivery/app/modules/pos-delivery/new-design/pending-payments/controllers/new_pending_payments_controller.dart';
-import 'package:posdelivery/app/modules/pos-delivery/new-design/quotations/controllers/new_quotations_controller.dart';
-import 'package:posdelivery/app/modules/pos-delivery/new-design/store/controllers/new_store_controller.dart';
-import 'package:posdelivery/app/routes/app_pages.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/sales-list/controllers/new_sales_list_controller.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/app_bar.dart';
-import 'package:posdelivery/app/ui/components/pos-delivery/pending_payment_item.dart';
-import 'package:posdelivery/app/ui/components/pos-delivery/store_category_item.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/store_item.dart';
+import 'package:posdelivery/app/ui/components/pos-delivery/store_list_item.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/text_field.dart';
 import 'package:posdelivery/app/ui/theme/app_colors.dart';
 import 'package:posdelivery/app/ui/theme/delivery_textStyle.dart';
 import 'package:posdelivery/models/constants.dart';
 
-class NewPendingPaymentsScreen
-    extends GetView<NewPendingPaymentsScreenController> {
+class NewSalesListScreen extends GetView<NewSalesListScreenController> {
   bool validate = false;
-  NewPendingPaymentsScreen({Key? key}) : super(key: key);
+  NewSalesListScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,8 +26,8 @@ class NewPendingPaymentsScreen
               padding: const EdgeInsets.only(top: 5),
               child: SvgPicture.asset(
                 "assets/svg/menu.svg",
-                height: 30,
                 color: AppColors.newIconColor,
+                height: 30,
                 width: 30,
               ),
             ),
@@ -42,15 +35,13 @@ class NewPendingPaymentsScreen
           ),
           const BottomNavigationBarItem(icon: SizedBox(), label: ""),
           BottomNavigationBarItem(
-            icon: InkWell(
-              onTap: () => Get.back(),
-              child: SvgPicture.asset(
-                "assets/svg/back.svg",
-                height: 30,
-                width: 30,
-              ),
+            icon: SvgPicture.asset(
+              "assets/svg/back.svg",
+              color: AppColors.newIconColor,
+              height: 30,
+              width: 30,
             ),
-            label: '',
+            label: 'Back',
           ),
         ],
       ),
@@ -59,12 +50,10 @@ class NewPendingPaymentsScreen
         width: 60,
         child: FittedBox(
           child: FloatingActionButton(
-            child: Container(),
-            //  SvgPicture.asset(
-
-            //   "assets/svg/qr.svg",
-            //   fit: BoxFit.fitHeight,
-            // ),
+            child: SvgPicture.asset(
+              "assets/svg/qr.svg",
+              fit: BoxFit.fitHeight,
+            ),
             backgroundColor: AppColors.newSecondary,
             onPressed: null,
           ),
@@ -85,16 +74,13 @@ class NewPendingPaymentsScreen
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const SizedBox(
-                      height: 10,
-                    ),
                     Expanded(
                       flex: 1,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-                            child: Text("Pending Payments".toUpperCase(),
+                            child: Text("SALES LIST",
                                 style: CustomTextStyle.mainTitle
                                     .copyWith(color: const Color(0xff454E52))),
                           ),
@@ -102,35 +88,13 @@ class NewPendingPaymentsScreen
                       ),
                     ),
                     const SizedBox(
-                      height: 30,
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Container(
-                        height: 30,
-                        width: 65,
-                        decoration: BoxDecoration(
-                            color: AppColors.deliveryPrimary,
-                            borderRadius: BorderRadius.circular(10)),
-                        padding: const EdgeInsets.symmetric(),
-                        child: const Center(
-                            child: Text(
-                          "Pay",
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        )),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 35,
+                      height: 40,
                     ),
                     Expanded(
                       flex: 15,
                       child: Material(
                         elevation: 5,
                         child: Container(
-                          width: double.maxFinite,
                           decoration: const BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.only(
@@ -139,30 +103,59 @@ class NewPendingPaymentsScreen
                             ),
                           ),
                           padding: const EdgeInsets.only(
-                              right: 15, left: 15, top: 10),
+                              right: 10, left: 10, top: 50),
                           child: Column(
                             // crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 20,
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                child: Container(
+                                  width: double.maxFinite,
+                                  height: 50,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 30),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: AppColors.newBg,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: const [
+                                      Text(
+                                        "Search",
+                                        style: TextStyle(
+                                            color: Color(0xff8D9EA4),
+                                            fontSize: 16),
+                                      ),
+                                      Icon(
+                                        Icons.search,
+                                        color: Color(0xff8D9EA4),
+                                        size: 25,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: const [
-                                    SizedBox(
-                                      height: 35,
-                                    ),
-                                    PendingPaymentItem(
-                                      statusColor: AppColors.newPrimary,
-                                      statusText: "Pay",
-                                    ),
-                                    PendingPaymentItem(
-                                      statusColor: AppColors.newPrimary,
-                                      statusText: "Pay",
-                                    ),
-                                  ],
-                                ),
+                              ),
+                              const SizedBox(
+                                height: 40,
+                              ),
+                              Column(
+                                children: [
+                                  SalesListItem(
+                                    statusColor: Colors.green,
+                                  ),
+                                  SalesListItem(
+                                    statusColor: Colors.red,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
                               ),
                             ],
                           ),

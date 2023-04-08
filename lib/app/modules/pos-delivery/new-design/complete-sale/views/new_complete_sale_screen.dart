@@ -42,13 +42,15 @@ class NewCompleteSaleScreen extends GetView<NewCompleteSaleScreenController> {
           ),
           const BottomNavigationBarItem(icon: SizedBox(), label: ""),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/svg/back.svg",
-              height: 30,
-              width: 30,
-              color: AppColors.newIconColor,
+            icon: InkWell(
+              onTap: () => Get.back(),
+              child: SvgPicture.asset(
+                "assets/svg/back.svg",
+                height: 30,
+                width: 30,
+              ),
             ),
-            label: 'Back',
+            label: '',
           ),
         ],
       ),

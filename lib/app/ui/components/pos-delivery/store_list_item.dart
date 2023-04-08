@@ -3,11 +3,12 @@ import 'package:posdelivery/app/ui/theme/app_colors.dart';
 import 'package:posdelivery/app/ui/theme/delivery_textStyle.dart';
 
 import 'package:expandable/expandable.dart';
+import 'package:sizer/sizer.dart';
 
 class SalesListItem extends StatefulWidget {
   final Color statusColor;
 
-  const SalesListItem({
+  SalesListItem({
     required this.statusColor,
     Key? key,
   }) : super(key: key);
@@ -53,7 +54,7 @@ class _SalesListItemState extends State<SalesListItem> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Expanded(
@@ -102,11 +103,11 @@ class _SalesListItemState extends State<SalesListItem> {
                                     color: widget.statusColor,
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 3,
                                 ),
                                 Container(
-                                  // width: (double.maxFinite) + 115,
+                                  // width: (double.maxFinite) + 8.5.sp5,
                                   child: Text(
                                     "06/09/2022 | 16:55:00",
                                     maxLines: 3,
@@ -132,12 +133,12 @@ class _SalesListItemState extends State<SalesListItem> {
                               });
                             },
                             child: isExpanded
-                                ? Icon(
+                                ? const Icon(
                                     Icons.keyboard_arrow_right,
                                     size: 38,
                                     color: Color(0xff454E52),
                                   )
-                                : Icon(
+                                : const Icon(
                                     Icons.keyboard_arrow_up,
                                     size: 38,
                                     color: Color(0xff454E52),
@@ -165,7 +166,7 @@ class _SalesListItemState extends State<SalesListItem> {
 }
 
 class SaleListItemInvoice extends StatelessWidget {
-  const SaleListItemInvoice({
+  SaleListItemInvoice({
     Key? key,
   }) : super(key: key);
 
@@ -188,163 +189,181 @@ class SaleListItemInvoice extends StatelessWidget {
           const SizedBox(
             height: 5,
           ),
-          const Text(
+          Text(
             "Reference: SALE00000058",
             style: TextStyle(
-                color: Colors.black, fontSize: 11, fontWeight: FontWeight.w500),
+                color: Colors.black,
+                fontSize: 8.5.sp,
+                fontWeight: FontWeight.w500),
           ),
-          const Text(
+          Text(
             "sl no: SALE 58",
             style: TextStyle(
-                color: Colors.black, fontSize: 11, fontWeight: FontWeight.w500),
+                color: Colors.black,
+                fontSize: 8.5.sp,
+                fontWeight: FontWeight.w500),
           ),
-          const Text(
+          Text(
             "Date: 06/09/2022 16:55",
             style: TextStyle(
-                color: Colors.black, fontSize: 11, fontWeight: FontWeight.w500),
+                color: Colors.black,
+                fontSize: 8.5.sp,
+                fontWeight: FontWeight.w500),
           ),
-          const Text(
+          Text(
             "Sale Status: Completed",
             style: TextStyle(
-                color: Colors.black, fontSize: 11, fontWeight: FontWeight.w500),
+                color: Colors.black,
+                fontSize: 8.5.sp,
+                fontWeight: FontWeight.w500),
           ),
-          const Text(
+          Text(
             "Payment Status : Pending",
             style: TextStyle(
-                color: Colors.black, fontSize: 11, fontWeight: FontWeight.w500),
+                color: Colors.black,
+                fontSize: 8.5.sp,
+                fontWeight: FontWeight.w500),
           ),
-          const Text(
+          Text(
             "Due Date: 0000-00-00",
             style: TextStyle(
-                color: Colors.black, fontSize: 11, fontWeight: FontWeight.w500),
+                color: Colors.black,
+                fontSize: 8.5.sp,
+                fontWeight: FontWeight.w500),
           ),
           SizedBox(
-            width: double.maxFinite,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Text(
                   "No",
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 11,
+                      fontSize: 8.5.sp,
                       fontWeight: FontWeight.w500),
                 ),
                 Text(
                   "Description(Code)",
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 11,
+                      fontSize: 8.5.sp,
                       fontWeight: FontWeight.w500),
                 ),
                 Text(
                   "Quantity",
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 11,
+                      fontSize: 8.5.sp,
                       fontWeight: FontWeight.w500),
                 ),
                 Text(
                   "Unit Price",
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 11,
+                      fontSize: 8.5.sp,
                       fontWeight: FontWeight.w500),
                 ),
                 Text(
                   "Tax",
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 11,
+                      fontSize: 8.5.sp,
                       fontWeight: FontWeight.w500),
                 ),
                 Text(
                   "Subtotal",
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 11,
+                      fontSize: 8.5.sp,
                       fontWeight: FontWeight.w500),
                 ),
               ],
             ),
           ),
-          SizedBox(
-            width: double.maxFinite,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
-                  "1",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  "83241537 - green cup",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  "1.00 pc",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  "SR 25.00",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  "SR 3.26",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  "SR 25.00",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "1",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 8.5.sp,
+                    fontWeight: FontWeight.w500),
+              ),
+              Text(
+                "83241537 - green cup",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 8.5.sp,
+                    fontWeight: FontWeight.w500),
+              ),
+              Text(
+                "1.00 pc",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 8.5.sp,
+                    fontWeight: FontWeight.w500),
+              ),
+              Text(
+                "SR 25.00",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 8.5.sp,
+                    fontWeight: FontWeight.w500),
+              ),
+              Text(
+                "SR 3.26",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 8.5.sp,
+                    fontWeight: FontWeight.w500),
+              ),
+              Text(
+                "SR 25.00",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 8.5.sp,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
           ),
           const SizedBox(
             height: 8,
           ),
-          const Text(
+          Text(
             "Total(SR)",
             style: TextStyle(
-                color: Colors.black, fontSize: 11, fontWeight: FontWeight.w500),
+                color: Colors.black,
+                fontSize: 8.5.sp,
+                fontWeight: FontWeight.w500),
           ),
-          const Text(
+          Text(
             "Total Amount(SR)",
             style: TextStyle(
-                color: Colors.black, fontSize: 11, fontWeight: FontWeight.w500),
+                color: Colors.black,
+                fontSize: 8.5.sp,
+                fontWeight: FontWeight.w500),
           ),
-          const Text(
+          Text(
             "Paid(SR)",
             style: TextStyle(
-                color: Colors.black, fontSize: 11, fontWeight: FontWeight.w500),
+                color: Colors.black,
+                fontSize: 8.5.sp,
+                fontWeight: FontWeight.w500),
           ),
-          const Text(
+          Text(
             "Balance(SR)",
             style: TextStyle(
-                color: Colors.black, fontSize: 11, fontWeight: FontWeight.w500),
+                color: Colors.black,
+                fontSize: 8.5.sp,
+                fontWeight: FontWeight.w500),
           ),
-          const Text(
+          Text(
             "Tax Summary",
             style: TextStyle(
-                color: Colors.black, fontSize: 11, fontWeight: FontWeight.w500),
+                color: Colors.black,
+                fontSize: 8.5.sp,
+                fontWeight: FontWeight.w500),
           ),
           const SizedBox(
             height: 25,

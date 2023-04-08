@@ -32,13 +32,13 @@ class DeliverySelectStoreScreenController extends BaseGetXController
 
   void init() async {
     dynamic temp = await sembastCache.getAllwarehouses();
-    if (temp.length != 0) {
-      warehouseList.addAll(temp);
-      UINotification.hideLoading();
-    } else {
-      logger.e('api');
-      deliveryDataProvider.getStores();
-    }
+    // if (temp.length != 0) {
+    //   warehouseList.addAll(temp);
+    //   UINotification.hideLoading();
+    // } else {
+    //   logger.e('api');
+    //   deliveryDataProvider.getStores();
+    // }
   }
 
   void toggleCamera() {

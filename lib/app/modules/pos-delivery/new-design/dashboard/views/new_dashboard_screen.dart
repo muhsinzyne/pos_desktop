@@ -109,8 +109,7 @@ class NewDashboardScreen extends GetView<NewDashboardScreenController> {
                                             children: [
                                               InkWell(
                                                 onTap: () {
-                                                  Get.toNamed(
-                                                      Routes.newAddStore);
+                                                  Get.toNamed(Routes.newStore);
                                                 },
                                                 child: Material(
                                                   elevation: 5,
@@ -122,17 +121,21 @@ class NewDashboardScreen extends GetView<NewDashboardScreenController> {
                                                           "assets/svg/store.svg"),
                                                 ),
                                               ),
-                                              // SizedBox(
+                                              // SizedBox(o
                                               //   width: 2,
                                               // ),
-                                              Material(
-                                                elevation: 5,
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: DashboardItemBox(
-                                                    title: "Financial",
-                                                    icon:
-                                                        "assets/svg/bank.svg"),
+                                              InkWell(
+                                                onTap: () => Get.toNamed(
+                                                    Routes.newFinancial),
+                                                child: Material(
+                                                  elevation: 5,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: DashboardItemBox(
+                                                      title: "Financial",
+                                                      icon:
+                                                          "assets/svg/bank.svg"),
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -155,14 +158,18 @@ class NewDashboardScreen extends GetView<NewDashboardScreenController> {
                                               // SizedBox(
                                               //   width: 2,
                                               // ),
-                                              Material(
-                                                elevation: 5,
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: DashboardItemBox(
-                                                    title: "Sales List",
-                                                    icon:
-                                                        "assets/svg/sales-list.svg"),
+                                              InkWell(
+                                                onTap: () => Get.toNamed(
+                                                    Routes.newSalesList),
+                                                child: Material(
+                                                  elevation: 5,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: DashboardItemBox(
+                                                      title: "Sales List",
+                                                      icon:
+                                                          "assets/svg/sales-list.svg"),
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -173,14 +180,18 @@ class NewDashboardScreen extends GetView<NewDashboardScreenController> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Material(
-                                                elevation: 5,
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: DashboardItemBox(
-                                                    title: "Quotations",
-                                                    icon:
-                                                        "assets/svg/quatations.svg"),
+                                              InkWell(
+                                                onTap: () => Get.toNamed(
+                                                    Routes.newQuotations),
+                                                child: Material(
+                                                  elevation: 5,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: DashboardItemBox(
+                                                      title: "Quotations",
+                                                      icon:
+                                                          "assets/svg/quatations.svg"),
+                                                ),
                                               ),
                                               // SizedBox(
                                               //   width: 2,

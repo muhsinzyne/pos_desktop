@@ -2,6 +2,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/sales-list/controllers/new_sales_list_controller.dart';
+import 'package:posdelivery/app/routes/app_pages.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/app_bar.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/store_item.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/store_list_item.dart';
@@ -35,27 +36,32 @@ class NewSalesListScreen extends GetView<NewSalesListScreenController> {
           ),
           const BottomNavigationBarItem(icon: SizedBox(), label: ""),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/svg/back.svg",
-              color: AppColors.newIconColor,
-              height: 30,
-              width: 30,
+            icon: InkWell(
+              onTap: () => Get.back(),
+              child: SvgPicture.asset(
+                "assets/svg/back.svg",
+                height: 30,
+                width: 30,
+              ),
             ),
-            label: 'Back',
+            label: '',
           ),
         ],
       ),
-      floatingActionButton: SizedBox(
-        height: 60,
-        width: 60,
-        child: FittedBox(
-          child: FloatingActionButton(
-            child: SvgPicture.asset(
-              "assets/svg/qr.svg",
-              fit: BoxFit.fitHeight,
+      floatingActionButton: InkWell(
+        onTap: () => Get.toNamed(Routes.newQr),
+        child: SizedBox(
+          height: 60,
+          width: 60,
+          child: FittedBox(
+            child: FloatingActionButton(
+              child: SvgPicture.asset(
+                "assets/svg/qr.svg",
+                fit: BoxFit.fitHeight,
+              ),
+              backgroundColor: AppColors.newSecondary,
+              onPressed: null,
             ),
-            backgroundColor: AppColors.newSecondary,
-            onPressed: null,
           ),
         ),
       ),
@@ -139,7 +145,7 @@ class NewSalesListScreen extends GetView<NewSalesListScreenController> {
                             height: 40,
                           ),
                           Column(
-                            children: const [
+                            children: [
                               SalesListItem(
                                 statusColor: Colors.green,
                               ),

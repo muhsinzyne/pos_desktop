@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/sales/controllers/new_sales_controller.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/store/controllers/new_store_controller.dart';
+import 'package:posdelivery/app/routes/app_pages.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/app_bar.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/basket_item.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/sale_item.dart';
@@ -41,13 +42,15 @@ class NewBasketScreen extends GetView<NewSalesScreenController> {
           ),
           const BottomNavigationBarItem(icon: SizedBox(), label: ""),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/svg/back.svg",
-              color: AppColors.newIconColor,
-              height: 30,
-              width: 30,
+            icon: InkWell(
+              onTap: () => Get.back(),
+              child: SvgPicture.asset(
+                "assets/svg/back.svg",
+                height: 30,
+                width: 30,
+              ),
             ),
-            label: 'Back',
+            label: '',
           ),
         ],
       ),
@@ -228,22 +231,27 @@ class NewBasketScreen extends GetView<NewSalesScreenController> {
                                             const SizedBox(
                                               width: 10,
                                             ),
-                                            Container(
-                                              // alignment: Alignment.centerLeft,
-                                              // height: 30,
-                                              // width: 85,
-                                              decoration: BoxDecoration(
-                                                  color: AppColors.newPrimary,
-                                                  borderRadius:
-                                                      BorderRadius.circular(7)),
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 10),
-                                              child: const Text(
-                                                "Complete Sale",
-                                                style: TextStyle(
-                                                  color: Colors.white,
+                                            InkWell(
+                                              onTap: () => Get.toNamed(
+                                                  Routes.newCompleteSale),
+                                              child: Container(
+                                                // alignment: Alignment.centerLeft,
+                                                // height: 30,
+                                                // width: 85,
+                                                decoration: BoxDecoration(
+                                                    color: AppColors.newPrimary,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            7)),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10,
+                                                        vertical: 10),
+                                                child: const Text(
+                                                  "Complete Sale",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  ),
                                                 ),
                                               ),
                                             ),

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/store/controllers/new_store_controller.dart';
+import 'package:posdelivery/app/routes/app_pages.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/app_bar.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/store_category_item.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/store_item.dart';
@@ -22,7 +23,7 @@ class NewStoreScreen extends GetView<NewStoreScreenController> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: AppColors.newSecondary,
-        items: <BottomNavigationBarItem>[
+        items: [
           BottomNavigationBarItem(
             icon: Padding(
               padding: const EdgeInsets.only(top: 5),
@@ -36,26 +37,32 @@ class NewStoreScreen extends GetView<NewStoreScreenController> {
           ),
           const BottomNavigationBarItem(icon: SizedBox(), label: ""),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/svg/back.svg",
-              height: 30,
-              width: 30,
+            icon: InkWell(
+              onTap: () => Get.back(),
+              child: SvgPicture.asset(
+                "assets/svg/back.svg",
+                height: 30,
+                width: 30,
+              ),
             ),
-            label: 'Back',
+            label: '',
           ),
         ],
       ),
-      floatingActionButton: SizedBox(
-        height: 60,
-        width: 60,
-        child: FittedBox(
-          child: FloatingActionButton(
-            child: SvgPicture.asset(
-              "assets/svg/qr.svg",
-              fit: BoxFit.fitHeight,
+      floatingActionButton: InkWell(
+        onTap: () => Get.toNamed(Routes.newQr),
+        child: SizedBox(
+          height: 60,
+          width: 60,
+          child: FittedBox(
+            child: FloatingActionButton(
+              child: SvgPicture.asset(
+                "assets/svg/qr.svg",
+                fit: BoxFit.fitHeight,
+              ),
+              backgroundColor: AppColors.newSecondary,
+              onPressed: null,
             ),
-            backgroundColor: AppColors.newSecondary,
-            onPressed: null,
           ),
         ),
       ),
@@ -88,14 +95,19 @@ class NewStoreScreen extends GetView<NewStoreScreenController> {
                       ),
                     ),
                     SizedBox(
-                      height: 30,
+                      height: 10,
                     ),
                     Align(
                       alignment: Alignment.centerRight,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 10, right: 10),
-                        child: SvgPicture.asset(
-                          "assets/svg/store-add.svg",
+                      child: InkWell(
+                        onTap: () => Get.toNamed(Routes.newAddStore),
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 10, right: 10),
+                          child: SvgPicture.asset(
+                            "assets/svg/store-add.svg",
+                            height: 30,
+                            width: 30,
+                          ),
                         ),
                       ),
                     ),
@@ -191,9 +203,15 @@ class NewStoreScreen extends GetView<NewStoreScreenController> {
                                 height: 20,
                               ),
                               Column(
-                                children: const [
-                                  StoreItem(),
-                                  StoreItem(),
+                                children: [
+                                  InkWell(
+                                    child: const StoreItem(),
+                                    onTap: () => Get.toNamed(Routes.newSales),
+                                  ),
+                                  InkWell(
+                                    child: const StoreItem(),
+                                    onTap: () => Get.toNamed(Routes.newSales),
+                                  ),
                                 ],
                               ),
                             ],

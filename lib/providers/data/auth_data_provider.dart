@@ -104,17 +104,16 @@ class AuthDataProvider extends BaseDataProvider {
 
   /// login call
   login(LoginRequest loginRequest) {
-    logger.e("lo");
     logger.w(NetworkURL.login);
     final obs =
         network.post(NetworkURL.login, data: loginRequest.toJson()).asStream();
     obs.listen(
       (data) {
-        logger.e("error");
         try {
-          logger.e("error");
+          logger.w("any");
           LoginResponse loginResponse = LoginResponse.fromJSON(data.data);
           if (loginResponse.data?.token != null) {
+            logger.w("works");
             loginCtrl.onLoginDone(loginResponse);
           } else {
             logger.e("error");

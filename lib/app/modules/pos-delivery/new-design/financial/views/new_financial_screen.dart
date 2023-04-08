@@ -41,13 +41,15 @@ class NewFinancialScreen extends GetView<NewFinancialScreenController> {
           ),
           const BottomNavigationBarItem(icon: SizedBox(), label: ""),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/svg/back.svg",
-              height: 30,
-              color: AppColors.newIconColor,
-              width: 30,
+            icon: InkWell(
+              onTap: () => Get.back(),
+              child: SvgPicture.asset(
+                "assets/svg/back.svg",
+                height: 30,
+                width: 30,
+              ),
             ),
-            label: 'Back',
+            label: '',
           ),
         ],
       ),
@@ -152,8 +154,8 @@ class NewFinancialScreen extends GetView<NewFinancialScreenController> {
                                             children: [
                                               InkWell(
                                                 onTap: () {
-                                                  Get.toNamed(
-                                                      Routes.newAddStore);
+                                                  Get.toNamed(Routes
+                                                      .newCompletedPayments);
                                                 },
                                                 child: Material(
                                                   elevation: 5,
@@ -169,14 +171,18 @@ class NewFinancialScreen extends GetView<NewFinancialScreenController> {
                                               // SizedBox(
                                               //   width: 2,
                                               // ),
-                                              Material(
-                                                elevation: 5,
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: DashboardItemBox(
-                                                    title: "Pending Payment",
-                                                    icon:
-                                                        "assets/svg/bank-no.svg"),
+                                              InkWell(
+                                                onTap: () => Get.toNamed(
+                                                    Routes.newPendingPayments),
+                                                child: Material(
+                                                  elevation: 5,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: DashboardItemBox(
+                                                      title: "Pending Payment",
+                                                      icon:
+                                                          "assets/svg/bank-no.svg"),
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -187,26 +193,33 @@ class NewFinancialScreen extends GetView<NewFinancialScreenController> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Material(
-                                                elevation: 5,
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: DashboardItemBox(
-                                                    title: "Add Payment",
-                                                    icon:
-                                                        "assets/svg/bank-plus.svg"),
+                                              InkWell(
+                                                onTap: null,
+                                                child: Material(
+                                                  elevation: 5,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: DashboardItemBox(
+                                                      title: "Add Payment",
+                                                      icon:
+                                                          "assets/svg/bank-plus.svg"),
+                                                ),
                                               ),
                                               // SizedBox(
                                               //   width: 2,
                                               // ),
-                                              Material(
-                                                elevation: 5,
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: DashboardItemBox(
-                                                    title: "Payment History",
-                                                    icon:
-                                                        "assets/svg/bank-histonry.svg"),
+                                              InkWell(
+                                                onTap: () => Get.toNamed(
+                                                    Routes.newPaymentHistory),
+                                                child: Material(
+                                                  elevation: 5,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: DashboardItemBox(
+                                                      title: "Payment History",
+                                                      icon:
+                                                          "assets/svg/bank-histonry.svg"),
+                                                ),
                                               ),
                                             ],
                                           ),

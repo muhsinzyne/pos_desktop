@@ -60,7 +60,8 @@ dependencies:
   flutter_switch: ^0.3.2
   flutter_advanced_switch: ^3.0.1
   font_awesome_flutter: ^10.1.0
-
+  sizer: ^2.0.15
+  flutter_screen_lock: ^9.0.1
 
 
 
