@@ -8,11 +8,8 @@ class DeliverySplashScreenController extends BaseGetXController
     implements ISplashScreenController {
   @override
   void onInit() {
-    // authDataProvider.homeCallBack = this;c
-    // super.validateLicence();
-    Future.delayed(Duration(seconds: 1), () {
-      Get.toNamed(Routes.newDashboard);
-    });
+    authDataProvider.homeCallBack = this;
+    super.validateLicence();
     super.onInit();
   }
 }

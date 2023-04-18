@@ -9,6 +9,7 @@ import 'package:posdelivery/app/modules/pos-delivery/add-expenses/contracts.dart
 import 'package:posdelivery/app/modules/pos-delivery/add-products-order/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-products-sales/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-store-manually/contracts.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/sales/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/products-for-orders/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/products-for-sales/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/sale-invoice/contracts.dart';
@@ -48,6 +49,9 @@ class DeliveryDataProvider extends BaseDataProvider {
   // late IStoreAddController cAddCtrl;
   late IDashboardScreenController dashboardCtrl;
 
+  //new design
+  late INewSalesScreenController newSalesCtrl;
+
   //delivery
   late IDeliverySalePaymentController deliverySalePaymentCtrl;
   late IDeliveryProductForSaleScreenController deliveryProductForSaleCtrl;
@@ -69,6 +73,11 @@ class DeliveryDataProvider extends BaseDataProvider {
     printEmojis: true,
     printTime: true,
   ));
+
+  //new design
+  set newSalesCallBack(INewSalesScreenController controller) {
+    newSalesCtrl = controller;
+  }
 
   set salePointCallBack(ISalesPointController controller) {
     sPCtrl = controller;
@@ -253,7 +262,8 @@ class DeliveryDataProvider extends BaseDataProvider {
     obs.listen((data) {
       try {
         List<Product> product = productFromJson(jsonEncode(data.data));
-        deliveryProductForSaleCtrl.onProductListDone(product);
+        newSalesCtrl.onProductListDone(product);
+        // deliveryProductForSaleCtrl.onProductListDone(product);
       } on Exception {
         logger.wtf("error 1");
         final ErrorMessage errMsg = ErrorMessage();
@@ -264,13 +274,16 @@ class DeliveryDataProvider extends BaseDataProvider {
           ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
       logger.wtf("error 2");
       if (err.response.statusCode == StatusCodes.status404NotFound) {
-        deliveryProductForOrderCtrl.onProductListError(errMsg);
+        newSalesCtrl.onProductListError(errMsg);
+        // deliveryProductForOrderCtrl.onProductListError(errMsg);
       } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
         logger.e("error 3");
-        deliveryProductForSaleCtrl.onProductListError(errMsg);
+        newSalesCtrl.onProductListError(errMsg);
+        // deliveryProductForOrderCtrl.onProductListError(errMsg);
       } else {
         logger.e("error 4");
-        deliveryProductForSaleCtrl.onProductListError(errMsg);
+        newSalesCtrl.onProductListError(errMsg);
+        // deliveryProductForOrderCtrl.onProductListError(errMsg);
       }
     });
   }
@@ -621,4 +634,3 @@ class DeliveryDataProvider extends BaseDataProvider {
     });
   }
 }
-

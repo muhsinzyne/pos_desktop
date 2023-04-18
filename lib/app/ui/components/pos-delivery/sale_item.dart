@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:posdelivery/app/modules/product_list/bindings/product_list_binding.dart';
 import 'package:posdelivery/app/ui/theme/app_colors.dart';
 import 'package:posdelivery/models/constants.dart';
+import 'package:posdelivery/models/response/pos/product.dart';
 
 class SaleItem extends StatelessWidget {
+  final Product product;
+  final int index;
+  final Function(Product) addToBasket;
   const SaleItem({
     Key? key,
+    required this.addToBasket,
+    required this.product,
+    required this.index,
   }) : super(key: key);
 
   @override
@@ -14,7 +22,7 @@ class SaleItem extends StatelessWidget {
       width: Constants.screenWidth * 0.38,
       height: 300,
       decoration: BoxDecoration(
-        border: Border.all(color: Color(0xffEBEBEB)),
+        border: Border.all(color: const Color(0xffEBEBEB)),
         borderRadius: BorderRadius.circular(4),
         color: AppColors.newBg,
       ),
@@ -47,11 +55,11 @@ class SaleItem extends StatelessWidget {
                     const SizedBox(
                       height: 8,
                     ),
-                    const Expanded(
+                    Expanded(
                       flex: 1,
                       child: Text(
-                        "Dawny Valley Dew 100 ml Valley",
-                        style: TextStyle(
+                        product.label!,
+                        style: const TextStyle(
                           fontSize: 12,
                         ),
                         textAlign: TextAlign.center,
@@ -60,12 +68,12 @@ class SaleItem extends StatelessWidget {
                     const SizedBox(
                       height: 8,
                     ),
-                    const Expanded(
+                    Expanded(
                       flex: 1,
                       child: Text(
-                        "22 SAR",
+                        product.row!.price.toString(),
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 12,
                         ),
                       ),
@@ -77,18 +85,23 @@ class SaleItem extends StatelessWidget {
                       flex: 2,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Container(
-                          // width: 85,
-                          decoration: BoxDecoration(
-                              color: AppColors.newIconColor,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: const Center(
-                              child: Text(
-                            "Add to Basket",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          )),
+                        child: InkWell(
+                          onTap: () {
+                            addToBasket(product);
+                          },
+                          child: Container(
+                            // width: 85,
+                            decoration: BoxDecoration(
+                                color: AppColors.newIconColor,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: const Center(
+                                child: Text(
+                              "Add to Basket",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            )),
+                          ),
                         ),
                       ),
                     ),
@@ -98,24 +111,27 @@ class SaleItem extends StatelessWidget {
                   ],
                 )),
           ]),
-          Align(
-            alignment: Alignment.topRight,
-            child: Container(
-              height: 20,
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-              decoration: BoxDecoration(
-                color: Colors.black,
-              ),
-              child: Text(
-                "20%",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
+          double.parse(product.row?.discount ?? "0") > 0
+              ? Align(
+                  alignment: Alignment.topRight,
+                  child: Container(
+                    height: 20,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                    decoration: const BoxDecoration(
+                      color: Colors.black,
+                    ),
+                    child: Text(
+                      product.row?.discount! ?? "",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                )
+              : Container(),
         ],
       ),
     );

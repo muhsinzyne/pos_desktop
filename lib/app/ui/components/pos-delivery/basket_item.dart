@@ -2,10 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:posdelivery/app/ui/theme/app_colors.dart';
 import 'package:posdelivery/models/constants.dart';
+import 'package:logger/logger.dart';
 
 class BasketItem extends StatelessWidget {
+  final String label;
+  final String price;
+  final int qty;
+  final int index;
+  final Function(int) increment;
+  final Function(int) dicrement;
+  final Function(int) remove;
   const BasketItem({
     Key? key,
+    required this.label,
+    required this.increment,
+    required this.dicrement,
+    required this.price,
+    required this.remove,
+    required this.index,
+    required this.qty,
   }) : super(key: key);
 
   @override
@@ -50,8 +65,8 @@ class BasketItem extends StatelessWidget {
                     children: [
                       Flexible(
                         // flex: 2,
-                        child: const Text(
-                          "Dawny Valley Dew 100 ml",
+                        child: Text(
+                          label,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           style: TextStyle(
@@ -67,8 +82,8 @@ class BasketItem extends StatelessWidget {
                 ),
                 Flexible(
                     // flex: 2,
-                    child: const Text(
-                  "20 SAR",
+                    child: Text(
+                  price,
                   style: TextStyle(
                     fontSize: 12,
                   ),
@@ -88,33 +103,56 @@ class BasketItem extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                           horizontal: 11,
                         ),
-                        child: const Center(
-                            child: Text(
-                          "-   1   +",
-                          style: TextStyle(
-                            color: AppColors.newIconColor,
-                          ),
+                        child: Center(
+                            child: Row(
+                          children: [
+                            InkWell(
+                                onTap: () {
+                                  dicrement(index);
+                                },
+                                child:
+                                    Text("-", style: TextStyle(fontSize: 19))),
+                            Text(
+                              "   ${qty}   ",
+                              style: TextStyle(
+                                color: AppColors.newIconColor,
+                              ),
+                            ),
+                            InkWell(
+                                onTap: () {
+                                  increment(index);
+                                },
+                                child: Text(
+                                  "+",
+                                  style: TextStyle(fontSize: 19),
+                                )),
+                          ],
                         )),
                       ),
                       const SizedBox(
                         width: 10,
                       ),
-                      Container(
-                        // width: 85,
-                        decoration: BoxDecoration(
-                            color: const Color(0xff9B1F1F),
-                            borderRadius: BorderRadius.circular(5)),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                        ),
-                        child: const Center(
-                            child: Text(
-                          "Delete",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
+                      InkWell(
+                        onTap: () {
+                          remove(index);
+                        },
+                        child: Container(
+                          // width: 85,
+                          decoration: BoxDecoration(
+                              color: const Color(0xff9B1F1F),
+                              borderRadius: BorderRadius.circular(5)),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
                           ),
-                        )),
+                          child: const Center(
+                              child: Text(
+                            "Delete",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                            ),
+                          )),
+                        ),
                       ),
                     ],
                   ),
