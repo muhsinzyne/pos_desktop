@@ -185,12 +185,14 @@ class NewBasketScreen extends GetView<NewBasketScreenController> {
                                         borderRadius: BorderRadius.circular(7)),
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 15, vertical: 2),
-                                    child: const Text(
-                                      "Hussain Ahmed",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                                    ),
+                                    child: Obx(() {
+                                      return Text(
+                                        controller.biller.value,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      );
+                                    }),
                                   ),
                                 ],
                               ),
@@ -235,8 +237,7 @@ class NewBasketScreen extends GetView<NewBasketScreenController> {
                                         width: 10,
                                       ),
                                       InkWell(
-                                        onTap: () =>
-                                            Get.toNamed(Routes.newCompleteSale),
+                                        onTap: controller.completeSale,
                                         child: Container(
                                           // alignment: Alignment.centerLeft,
                                           // height: 30,

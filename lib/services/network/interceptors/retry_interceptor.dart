@@ -98,8 +98,16 @@ extension RequestOptionsX on RequestOptions {
   int get _attempt => extra[_kAttemptKey] ?? 0;
 
   set _attempt(int value) => extra[_kAttemptKey] = value;
-
-  bool get disableRetry => (extra[_kDisableRetryKey] as bool);
+// Unhandled Exception: type 'Null' is not a subtype of type 'bool' .. temp fix
+  bool get disableRetry {
+    try {
+      return (extra[_kDisableRetryKey] as bool);
+    } catch (e) {
+      return false;
+    }
+  }
+  //original
+  // bool get disableRetry => (extra[_kDisableRetryKey] as bool);
 
   set disableRetry(bool value) => extra[_kDisableRetryKey] = value;
 }

@@ -157,51 +157,51 @@ class NewAddStoreScreen extends GetView<NewAddStoreScreenController> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Container(
-                                      width: double.maxFinite,
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 15.0),
-                                      decoration: BoxDecoration(
-                                          color: Color(0xffE5E5E5)
-                                              .withOpacity(0.3),
-                                          borderRadius:
-                                              BorderRadius.circular(15.0),
-                                          border: Border.all(
-                                              color:
-                                                  AppColors.deliverySecondary,
-                                              width: 0,
-                                              style: BorderStyle.solid)),
-                                      child:
-                                          DropdownButtonFormField<PriceOption>(
-                                        decoration: InputDecoration(
-                                            hintText: "Price Group",
-                                            enabledBorder: InputBorder.none,
-                                            border: InputBorder.none),
-                                        onChanged: (value) {
-                                          controller.priceGroup =
-                                              value!.key.toString();
-                                        },
-                                        items: controller.priceCategory
-                                            .map((selectedType) {
-                                          return DropdownMenuItem<PriceOption>(
-                                            child: Text(
-                                              selectedType.fullName,
-                                            ),
-                                            value: selectedType,
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                // SizedBox(
+                                //   height: 8,
+                                // ),
+                                // Column(
+                                //   children: [
+                                //     SizedBox(
+                                //       height: 5,
+                                //     ),
+                                //     Container(
+                                //       width: double.maxFinite,
+                                //       padding: EdgeInsets.symmetric(
+                                //           horizontal: 15.0),
+                                //       decoration: BoxDecoration(
+                                //           color: Color(0xffE5E5E5)
+                                //               .withOpacity(0.3),
+                                //           borderRadius:
+                                //               BorderRadius.circular(15.0),
+                                //           border: Border.all(
+                                //               color:
+                                //                   AppColors.deliverySecondary,
+                                //               width: 0,
+                                //               style: BorderStyle.solid)),
+                                //       child:
+                                //           DropdownButtonFormField<PriceOption>(
+                                //         decoration: InputDecoration(
+                                //             hintText: "Price Group",
+                                //             enabledBorder: InputBorder.none,
+                                //             border: InputBorder.none),
+                                //         onChanged: (value) {
+                                //           controller.priceGroup =
+                                //               value!.key.toString();
+                                //         },
+                                //         items: controller.priceCategory
+                                //             .map((selectedType) {
+                                //           return DropdownMenuItem<PriceOption>(
+                                //             child: Text(
+                                //               selectedType.fullName,
+                                //             ),
+                                //             value: selectedType,
+                                //           );
+                                //         }).toList(),
+                                //       ),
+                                //     ),
+                                //   ],
+                                // ),
                                 SizedBox(
                                   height: 8,
                                 ),
@@ -233,37 +233,41 @@ class NewAddStoreScreen extends GetView<NewAddStoreScreenController> {
                                 SizedBox(
                                   height: 8,
                                 ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 8,
-                                      child: TextFieldDelivery(
-                                        controller: controller.place,
-                                        hint: "Place",
-                                      ),
-                                    ),
-                                    SizedBox(width: 10),
-                                    Expanded(
-                                      flex: 2,
-                                      child: InkWell(
-                                        onTap: controller.getLocation,
-                                        child: SvgPicture.asset(
-                                            "assets/svg/location.svg"),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
                                 TextFieldDelivery(
-                                  maxLine: 2,
-                                  controller: controller.address,
-                                  hint: "Address",
+                                  controller: controller.email,
+                                  hint: "Email",
                                 ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                // Row(
+                                //   children: [
+                                //     Expanded(
+                                //       flex: 8,
+                                //       child: TextFieldDelivery(
+                                //         controller: controller.place,
+                                //         hint: "Place",
+                                //       ),
+                                //     ),
+                                //     SizedBox(width: 10),
+                                //     Expanded(
+                                //       flex: 2,
+                                //       child: InkWell(
+                                //         onTap: controller.getLocation,
+                                //         child: SvgPicture.asset(
+                                //             "assets/svg/location.svg"),
+                                //       ),
+                                //     ),
+                                //   ],
+                                // ),
+                                // SizedBox(
+                                //   height: 8,
+                                // ),
+                                // TextFieldDelivery(
+                                //   maxLine: 2,
+                                //   controller: controller.address,
+                                //   hint: "Address",
+                                // ),
                                 SizedBox(
                                   height: 16,
                                 ),

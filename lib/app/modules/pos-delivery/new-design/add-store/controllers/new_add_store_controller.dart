@@ -6,10 +6,13 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-store-manually/contracts.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/add-store/contracts.dart';
 import 'package:posdelivery/app/routes/app_pages.dart';
 import 'package:posdelivery/app/ui/theme/app_colors.dart';
 import 'package:posdelivery/controllers/base_controller.dart';
 import 'package:posdelivery/models/delivery/requests/store_add_request.dart';
+import 'package:posdelivery/models/requests/customer/customer_add_request.dart';
+import 'package:posdelivery/models/response/customer/customer_add_response.dart';
 import 'package:posdelivery/models/response/error_message.dart';
 import 'package:posdelivery/models/delivery/response/store_add_response.dart';
 import 'package:posdelivery/providers/data/delivery_data_provider.dart';
@@ -19,7 +22,7 @@ import 'package:posdelivery/services/location_service.dart';
 import 'dart:async';
 
 class NewAddStoreScreenController extends BaseGetXController
-    implements IDeliveryStoreAddController {
+    implements INewStoreAddScreenController {
   final TextEditingController storeName = TextEditingController();
   final TextEditingController companyName = TextEditingController();
   final TextEditingController gst_vatNumber = TextEditingController();
@@ -32,45 +35,19 @@ class NewAddStoreScreenController extends BaseGetXController
   late String latitude = "";
   late String longitude = "";
 
-  // late bool isOnline;
-  bool isOnline = false;
-  // late String country;
-  // late String postalCode;
-  // late String state;
   DeliveryDataProvider deliveryDataProvider = Get.find<DeliveryDataProvider>();
-  StoreAddRequest storeAddRequest = StoreAddRequest();
-  CacheSembastDeliveryService sembastCache =
-      Get.find<CacheSembastDeliveryService>();
-
-  List<StoreAddRequest> formData = [];
+  CustomerAddRequest storeAddRequest = CustomerAddRequest();
 
   List<CustomerOption> customerCategory = CustomerOption.allCustomer;
   List<PriceOption> priceCategory = PriceOption.allPrices;
 
   String? customerGroup;
   String? priceGroup;
-  Future<bool> hasNetwork() async {
-    try {
-      final result = await InternetAddress.lookup('google.com');
-      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
-    } on SocketException catch (_) {
-      return false;
-    }
-  }
 
-  final logger = Logger(
-      printer: PrettyPrinter(
-    methodCount: 0,
-    errorMethodCount: 5,
-    lineLength: 50,
-    colors: true,
-    printEmojis: true,
-    printTime: true,
-  ));
-  void cacheOrInsert() async {
+  void addData() async {
     storeAddRequest.email = email.text;
-    storeAddRequest.latitude = latitude;
-    storeAddRequest.longitude = longitude;
+    // storeAddRequest.latitude = latitude;
+    // storeAddRequest.longitude = longitude;
     storeAddRequest.city = place.text;
     storeAddRequest.customerGroup = customerGroup;
     storeAddRequest.priceGroup = priceGroup;
@@ -79,103 +56,36 @@ class NewAddStoreScreenController extends BaseGetXController
     storeAddRequest.vatNo = gst_vatNumber.text;
     storeAddRequest.phone = phoneNumber.text;
     storeAddRequest.address = address.text;
-    if (!isOnline) {
-      deliveryDataProvider.storeAddRequest(storeAddRequest);
-    } else {
-      await sembastCache.setAddstoreFormData(storeAddRequest);
-      Get.defaultDialog(
-        title: "",
-        content: SizedBox(
-          width: 300,
-          child: Column(
-            children: [
-              SvgPicture.asset("assets/svg/tick.svg",
-                  semanticsLabel: 'Acme Logo'),
-              SizedBox(
-                height: 10,
-              ),
-              Text("Demo:New Store Added"),
-              SizedBox(
-                height: 10,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Get.offNamedUntil(Routes.deliveryStoreDetails,
-                      ModalRoute.withName(Routes.deliveryStoreDetails));
-                },
-                child: Text('OK'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.deliveryPrimary80,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12), // <-- Radius
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-  }
-
-  void init() async {
-    // isOnline = await hasNetwork();
-    isOnline = true;
-    if (isOnline) {
-      formData = await sembastCache.getAddstoreFormData();
-      logger.w(formData.length);
-      if (formData.isNotEmpty) {
-        var i;
-        for (i = 0; i < formData.length; i++) {
-          logger.e(formData[i].toJson());
-          deliveryDataProvider.storeAddRequest(formData[i]);
-        }
-        await sembastCache.deleteAddStoreFormData();
-        Get.snackbar("Cached", "Cached $i requests is Saved Succesfully");
-      }
-    }
-  }
-
-  void getLocation() async {
-    Position data = await determinePosition();
-    latitude = data.latitude.toString();
-    longitude = data.longitude.toString();
-    lat.text = latitude;
-    long.text = longitude;
-    // Address address = await cordToAdress(lat: data.latitude, long: data.longitude);
-    // place.text = address.city!;
-    // country = address.countryName!;
-    // postalCode = address.postal!;
-    // state = address.region!;
+    deliveryDataProvider.customerAddRequest(storeAddRequest);
   }
 
   void vaidate() async {
-    if (customerGroup!.isNotEmpty &&
-        priceGroup!.isNotEmpty &&
-        storeName.text.isNotEmpty &&
-        companyName.text.isNotEmpty &&
-        gst_vatNumber.text.isNotEmpty &&
-        phoneNumber.text.isNotEmpty &&
-        place.text.isNotEmpty &&
-        address.text.isNotEmpty &&
-        latitude.isNotEmpty &&
-        longitude.isNotEmpty) {
-      cacheOrInsert();
+    if (customerGroup != null &&
+            // priceGroup!.isNotEmpty &&
+            storeName.text.isNotEmpty &&
+            companyName.text.isNotEmpty &&
+            gst_vatNumber.text.isNotEmpty &&
+            phoneNumber.text.isNotEmpty &&
+            email.text.isNotEmpty
+        // place.text.isNotEmpty &&
+        // address.text.isNotEmpty
+
+        // latitude.isNotEmpty &&
+        // longitude.isNotEmpty
+        ) {
+      addData();
     } else {
       Get.snackbar("title", "enter all fields");
     }
   }
 
+  //lifecycles method
   @override
-  void onInit() {
-    init();
+  void onInit() async {
+    deliveryDataProvider.newStoreAddCallBack = this;
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
   @override
   void onClose() {
@@ -191,15 +101,44 @@ class NewAddStoreScreenController extends BaseGetXController
     super.onClose();
   }
 
+  //contracts
+
   @override
-  onStoreAddDone(StoreAddResponse customerAddResponse) {
-    Get.snackbar("Saved", "Saved Succesfully");
+  onCustomerAddDone(CustomerAddResponse cListRes) {
+    Get.defaultDialog(
+      title: "",
+      content: SizedBox(
+        width: 300,
+        child: Column(
+          children: [
+            SvgPicture.asset("assets/svg/tick.svg",
+                semanticsLabel: 'Acme Logo'),
+            SizedBox(
+              height: 10,
+            ),
+            Text("${cListRes.data!.name}:New Store Added"),
+            SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+              onPressed: Get.back,
+              child: Text('OK'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.deliveryPrimary80,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12), // <-- Radius
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
-  onStoreAddError(ErrorMessage err) {
-    // TODO: implement onStoreAddError
-    throw UnimplementedError();
+  onCustomerAddError(ErrorMessage err) {
+    Get.snackbar("failed", err.message ?? "Something went wrong");
   }
 }
 
@@ -210,7 +149,8 @@ class CustomerOption {
   CustomerOption(this.key, this.fullName);
 
   static List<CustomerOption> get allCustomer => [
-        CustomerOption('1', 'Route Cusomter'),
+        CustomerOption('1', 'Default'),
+        CustomerOption('2', 'Route Cusomter'),
       ];
 }
 

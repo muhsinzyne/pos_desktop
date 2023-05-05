@@ -43,6 +43,8 @@ import 'package:posdelivery/app/modules/pos-delivery/new-design/payment-history/
 import 'package:posdelivery/app/modules/pos-delivery/new-design/payment-history/views/new_payment_history_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/pending-payments/bindings/new_pending_payments_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/pending-payments/views/new_pending_payments_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/print-invoice/bindings/new_print_invoice_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/print-invoice/views/new_print_invoice_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/qr-scanning/bindings/new_add_store_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/qr-scanning/views/new_qr_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/quotations/bindings/new_quotations_binding.dart';
@@ -222,6 +224,11 @@ class AppPages {
       name: _Paths.newDashboard,
       page: () => NewDashboardScreen(),
       binding: NewDashboardScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newPrintInvoice,
+      page: () => NewPrintInvoiceScreen(),
+      binding: NewPrintInvoiceScreenBinding(),
     ),
 
     //pos-delivrey routes

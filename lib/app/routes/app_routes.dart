@@ -18,6 +18,7 @@ abstract class Routes {
   static const newPaymentHistory = _Paths.newPaymentHistory;
   static const newQr = _Paths.newQr;
   static const newLock = _Paths.newLock;
+  static const newPrintInvoice = _Paths.newPrintInvoice;
 
   //pos-delivery
   static const deliverySplash = _Paths.deliverySplash;
@@ -97,6 +98,7 @@ abstract class _Paths {
   static const newPaymentHistory = '/new-paymentHistory';
   static const newQr = '/new-qr';
   static const newLock = '/new-lock';
+  static const newPrintInvoice = '/new-printInvoice';
 
   //pos-delivery routes
   static const deliverySplash = '/delivery-splash';

@@ -9,7 +9,11 @@ import 'package:posdelivery/app/modules/pos-delivery/add-expenses/contracts.dart
 import 'package:posdelivery/app/modules/pos-delivery/add-products-order/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-products-sales/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-store-manually/contracts.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/add-store/contracts.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/basket/contracts.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/complete-sale/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/sales/contracts.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/store/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/products-for-orders/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/products-for-sales/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/sale-invoice/contracts.dart';
@@ -51,6 +55,10 @@ class DeliveryDataProvider extends BaseDataProvider {
 
   //new design
   late INewSalesScreenController newSalesCtrl;
+  late INewSalePaymentController newSalePaymentCtrl;
+  late INewCompleteSaleScreenController newCompleteSaleCtrl;
+  late INewStoreScreenController newStoreCtrl;
+  late INewStoreAddScreenController newStoreAddCtrl;
 
   //delivery
   late IDeliverySalePaymentController deliverySalePaymentCtrl;
@@ -78,6 +86,23 @@ class DeliveryDataProvider extends BaseDataProvider {
   set newSalesCallBack(INewSalesScreenController controller) {
     newSalesCtrl = controller;
   }
+
+  set newSalePaymentCallBack(INewSalePaymentController controller) {
+    newSalePaymentCtrl = controller;
+  }
+
+  set newCompleteSaleCallBack(INewCompleteSaleScreenController controller) {
+    newCompleteSaleCtrl = controller;
+  }
+
+  set newStoreCallBack(INewStoreScreenController controller) {
+    newStoreCtrl = controller;
+  }
+
+  set newStoreAddCallBack(INewStoreAddScreenController controller) {
+    newStoreAddCtrl = controller;
+  }
+  //
 
   set salePointCallBack(ISalesPointController controller) {
     sPCtrl = controller;
@@ -132,6 +157,56 @@ class DeliveryDataProvider extends BaseDataProvider {
     deliverySaleInvoiceCtrl = controller;
   }
 
+  customerAddRequest(CustomerAddRequest customerAddRequest) {
+    final obs = network
+        .post(NetworkURL.customerAdd, data: customerAddRequest.toJson())
+        .asStream();
+    obs.listen((data) {
+      try {
+        CustomerAddResponse addResponse =
+            CustomerAddResponse.fromJson(data.data);
+        newStoreAddCtrl.onCustomerAddDone(addResponse);
+      } on Exception {
+        final ErrorMessage errMsg = ErrorMessage();
+        errMsg.message = 'invalid_response'.tr;
+        newStoreAddCtrl.onCustomerAddError(errMsg);
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+          ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      if (err.response?.statusCode == StatusCodes.status400BadRequest) {
+        newStoreAddCtrl.onCustomerAddError(errMsg);
+      }
+    });
+  }
+
+  getCustomerList(CustomerListRequest customerListRequest) {
+    final obs = network
+        .get(NetworkURL.customerList,
+            queryParameters: customerListRequest.toJson())
+        .asStream();
+    obs.listen((data) {
+      try {
+        final List<CustomerListOffResponse> cListRes =
+            customerListOffResponseFromJson(jsonEncode(data.data));
+        newStoreCtrl.onCustomerListDone(cListRes);
+      } on Exception {
+        final ErrorMessage errMsg = ErrorMessage();
+        errMsg.message = 'warehouse_not_loaded'.tr;
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+          ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      if (err.response.statusCode == StatusCodes.status404NotFound) {
+        newStoreCtrl.onCustomerListError(errMsg);
+        // print("404");
+      } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
+        newStoreCtrl.onCustomerListError(errMsg);
+        // print("400");
+      }
+    });
+  }
+
   getStores() {
     final obs = network
         .get(
@@ -168,17 +243,19 @@ class DeliveryDataProvider extends BaseDataProvider {
       log(data.toString());
       try {
         InvoiceResponse invoiceResponse = InvoiceResponse.fromJson(data.data);
-        deliverySaleInvoiceCtrl.onSaleViewFetchDone(invoiceResponse);
+        newCompleteSaleCtrl.onSaleViewFetchDone(invoiceResponse);
+        // deliverySaleInvoiceCtrl.onSaleViewFetchDone(invoiceResponse);
       } on Exception {
         final ErrorMessage errMsg = ErrorMessage();
         errMsg.message = 'invalid_response'.tr;
-        deliverySaleInvoiceCtrl.onSaleViewError(errMsg);
+        newCompleteSaleCtrl.onSaleViewError(errMsg);
+        // deliverySaleInvoiceCtrl.onSaleViewError(errMsg);
       }
     }, onError: (err) {
       final ErrorMessage errMsg =
           ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
       if (err.response?.statusCode == StatusCodes.status400BadRequest) {
-        //saleListCtrl.onSalesListResponseBadRequest(errMsg);
+        newCompleteSaleCtrl.onSaleViewError(errMsg);
       }
     });
   }
@@ -212,19 +289,22 @@ class DeliveryDataProvider extends BaseDataProvider {
     obs.listen((data) {
       try {
         AddSaleResponse addSaleResponse = AddSaleResponse.fromJSON(data.data);
-        deliverySalePaymentCtrl.onSaleDone(addSaleResponse);
+        newSalePaymentCtrl.onSaleDone(addSaleResponse);
+        // deliverySalePaymentCtrl.onSaleDone(addSaleResponse);
       } on Exception {
         final ErrorMessage errMsg = ErrorMessage();
         logger.e("error");
         errMsg.message = 'invalid_response'.tr;
-        deliverySalePaymentCtrl.onSaleError(errMsg);
+        newSalePaymentCtrl.onSaleError(errMsg);
+        // deliverySalePaymentCtrl.onSaleError(errMsg);
       }
     }, onError: (err) {
       logger.e("error 2");
       final ErrorMessage errMsg =
           ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
       if (err.response?.statusCode == StatusCodes.status400BadRequest) {
-        deliverySalePaymentCtrl.onSaleError(errMsg);
+        newSalePaymentCtrl.onSaleError(errMsg);
+        // deliverySalePaymentCtrl.onSaleError(errMsg);
       }
     });
   }
@@ -607,29 +687,6 @@ class DeliveryDataProvider extends BaseDataProvider {
         dashboardCtrl.myInfoFetchError(errMsg);
       } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
         dashboardCtrl.myInfoFetchError(errMsg);
-      }
-    });
-  }
-
-  customerAddRequest(CustomerAddRequest customerAddRequest) {
-    final obs = network
-        .post(NetworkURL.customerAdd, data: customerAddRequest.toJson())
-        .asStream();
-    obs.listen((data) {
-      try {
-        CustomerAddResponse addResponse =
-            CustomerAddResponse.fromJson(data.data);
-        sPCtrl.onCustomerAddDone(addResponse);
-      } on Exception {
-        final ErrorMessage errMsg = ErrorMessage();
-        errMsg.message = 'invalid_response'.tr;
-        sPCtrl.onCustomerAddError(errMsg);
-      }
-    }, onError: (err) {
-      final ErrorMessage errMsg =
-          ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
-      if (err.response?.statusCode == StatusCodes.status400BadRequest) {
-        sPCtrl.onCustomerAddError(errMsg);
       }
     });
   }

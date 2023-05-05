@@ -3,8 +3,11 @@ import 'package:posdelivery/app/ui/theme/app_colors.dart';
 import 'package:posdelivery/app/ui/theme/delivery_textStyle.dart';
 
 class StoreItem extends StatelessWidget {
+  final String name;
+  // final String name;
   const StoreItem({
     Key? key,
+    required this.name,
   }) : super(key: key);
 
   @override
@@ -46,7 +49,7 @@ class StoreItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Store 1",
+                        name,
                         style: CustomTextStyle.common.copyWith(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),

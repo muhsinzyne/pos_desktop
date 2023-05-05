@@ -71,159 +71,147 @@ class NewStoreScreen extends GetView<NewStoreScreenController> {
       ),
       backgroundColor: AppColors.newBg,
       body: SafeArea(
-        child: CustomScrollView(
-          scrollDirection: Axis.vertical,
-          slivers: [
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                flex: 1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      flex: 1,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            child: Text("STORE",
-                                style: CustomTextStyle.mainTitle
-                                    .copyWith(color: const Color(0xff454E52))),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: InkWell(
-                        onTap: () => Get.toNamed(Routes.newAddStore),
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 10, right: 10),
-                          child: SvgPicture.asset(
-                            "assets/svg/store-add.svg",
-                            height: 30,
-                            width: 30,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 15,
-                      child: Material(
-                        elevation: 5,
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(8.0),
-                              topLeft: Radius.circular(8.0),
-                            ),
-                          ),
-                          padding: const EdgeInsets.only(
-                              right: 10, left: 10, top: 50),
-                          child: Column(
-                            // crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 15),
-                                child: Container(
-                                  width: double.maxFinite,
-                                  height: 50,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 30),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: AppColors.newBg,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: const [
-                                      Text(
-                                        "Search",
-                                        style: TextStyle(
-                                            color: Color(0xff8D9EA4),
-                                            fontSize: 16),
-                                      ),
-                                      Icon(
-                                        Icons.search,
-                                        color: Color(0xff8D9EA4),
-                                        size: 25,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              SizedBox(
-                                width: double.maxFinite,
-                                height: 40,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15),
-                                  child: ListView(
-                                    scrollDirection: Axis.horizontal,
-                                    children: const [
-                                      Padding(
-                                        padding: EdgeInsets.all(3.0),
-                                        child: StoreCategoryItem(
-                                          text: "Restaurant",
-                                          icon: Icons.restaurant,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.all(3.0),
-                                        child: StoreCategoryItem(
-                                          text: "Retail",
-                                          icon: Icons.storefront,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.all(3.0),
-                                        child: StoreCategoryItem(
-                                          text: "Coffee shop",
-                                          icon: Icons.coffee,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Column(
-                                children: [
-                                  InkWell(
-                                    child: const StoreItem(),
-                                    onTap: () => Get.toNamed(Routes.newSales),
-                                  ),
-                                  InkWell(
-                                    child: const StoreItem(),
-                                    onTap: () => Get.toNamed(Routes.newSales),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                    Container(
+                      child: Text("STORE",
+                          style: CustomTextStyle.mainTitle
+                              .copyWith(color: const Color(0xff454E52))),
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+              SizedBox(
+                height: 10,
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () => Get.toNamed(Routes.newAddStore),
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 10, right: 10),
+                    child: SvgPicture.asset(
+                      "assets/svg/store-add.svg",
+                      height: 30,
+                      width: 30,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 15,
+                child: Material(
+                  elevation: 5,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(8.0),
+                        topLeft: Radius.circular(8.0),
+                      ),
+                    ),
+                    padding:
+                        const EdgeInsets.only(right: 10, left: 10, top: 50),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        // crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            child: Container(
+                              width: double.maxFinite,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: AppColors.newBg,
+                              ),
+                              child: TextFieldDelivery(
+                                controller: controller.searchCtrl,
+                                hint: "Search",
+                                icon: Icons.search_outlined,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          SizedBox(
+                            width: double.maxFinite,
+                            height: 40,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
+                              child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: const [
+                                  Padding(
+                                    padding: EdgeInsets.all(3.0),
+                                    child: StoreCategoryItem(
+                                      text: "Restaurant",
+                                      icon: Icons.restaurant,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(3.0),
+                                    child: StoreCategoryItem(
+                                      text: "Retail",
+                                      icon: Icons.storefront,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(3.0),
+                                    child: StoreCategoryItem(
+                                      text: "Coffee shop",
+                                      icon: Icons.coffee,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Obx(() {
+                            return Column(
+                              children: [
+                                for (int i = 0;
+                                    i < controller.filteredcustomerList.length;
+                                    i++) ...[
+                                  InkWell(
+                                    child: StoreItem(
+                                      name: controller
+                                          .filteredcustomerList[i].name!,
+                                    ),
+                                    onTap: () {
+                                      controller.selectedStore =
+                                          controller.filteredcustomerList[i];
+                                      Get.toNamed(Routes.newSales);
+                                    },
+                                  ),
+                                ],
+                              ],
+                            );
+                          }),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

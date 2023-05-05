@@ -44,7 +44,7 @@ class PdfInvoiceProvider {
       ],
     ));
 
-    return saveDocument(name: 'my_invoice.pdf', pdf: pdf);
+    return saveDocument(name: 'invoice_${invoice.inv?.id}.pdf', pdf: pdf);
   }
 
   static pw.Widget buildTitle(InvoiceResponse invoice, pw.ImageProvider logo) =>
@@ -150,8 +150,25 @@ class PdfInvoiceProvider {
                       fontWeight: pw.FontWeight.bold,
                       fontSize: 15,
                     )),
-                pw.Text(
-                    "${invoice.defaultCurrency?.name} ${invoice.inv?.grandTotal}",
+                pw.Text("${invoice.defaultCurrency?.name} ${invoice.total}",
+                    style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold,
+                      fontSize: 15,
+                    ))
+              ],
+            ),
+            pw.Divider(
+              color: PdfColors.grey300,
+            ),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                pw.Text("Tax",
+                    style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold,
+                      fontSize: 15,
+                    )),
+                pw.Text("${invoice.defaultCurrency?.name} ${invoice.totalTax}",
                     style: pw.TextStyle(
                       fontWeight: pw.FontWeight.bold,
                       fontSize: 15,
@@ -170,7 +187,7 @@ class PdfInvoiceProvider {
                       fontSize: 15,
                     )),
                 pw.Text(
-                    "${invoice.defaultCurrency?.name} ${invoice.inv?.grandTotal}",
+                    "${invoice.defaultCurrency?.name} ${invoice.grandTotal}",
                     style: pw.TextStyle(
                       fontWeight: pw.FontWeight.bold,
                       fontSize: 15,
@@ -210,20 +227,20 @@ class PdfInvoiceProvider {
             pw.SizedBox(
               height: 40,
             ),
-            pw.Align(
-              alignment: pw.Alignment.topLeft,
-              child: pw.Text("Tax Summary",
-                  style: pw.TextStyle(
-                    fontWeight: pw.FontWeight.bold,
-                    fontSize: 22,
-                  )),
-            ),
-            pw.SizedBox(
-              height: 10,
-            ),
-            buildInvoice(invoice),
+            // pw.Align(
+            //   alignment: pw.Alignment.topLeft,
+            //   child: pw.Text("Tax Summary",
+            //       style: pw.TextStyle(
+            //         fontWeight: pw.FontWeight.bold,
+            //         fontSize: 22,
+            //       )),
+            // ),
+            // pw.SizedBox(
+            //   height: 10,
+            // ),
+            // buildInvoice(invoice),
             pw.Divider(),
-            buildTotal(invoice),
+            // buildTotal(invoice),
             buildFooter(invoice)
           ]);
   static pw.Widget buildItems(InvoiceResponse invoice) => pw.Column(

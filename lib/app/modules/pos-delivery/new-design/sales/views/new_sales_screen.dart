@@ -158,7 +158,7 @@ class NewSalesScreen extends GetView<NewSalesScreenController> {
                                         width: double.maxFinite,
                                         child: TextFieldDelivery(
                                           controller: controller.searchCtrl,
-                                          hint: "Seatch",
+                                          hint: "Search",
                                           icon: Icons.search_outlined,
                                         )),
                                   ),

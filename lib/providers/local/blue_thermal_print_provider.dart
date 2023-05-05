@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_esc_pos_utils/flutter_esc_pos_utils.dart';
 import 'package:flutter_pos_printer_platform/flutter_pos_printer_platform.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:posdelivery/app/ui/components/ui_notification.dart';
 import 'package:posdelivery/controllers/base_controller.dart';
@@ -158,142 +159,142 @@ class BlueThermalPrinterProdvider extends BaseGetXController {
         bold: true,
       ),
     );
-    bytes += generator.text(
-      'customer',
-      styles: const PosStyles(
-        align: PosAlign.center,
-      ),
-    );
-    bytes += generator.text(
-      'Tel:  ',
-      styles: const PosStyles(
-        align: PosAlign.center,
-      ),
-    );
-    bytes += generator.text(
-      'VatNo:  ',
-      styles: const PosStyles(
-        align: PosAlign.center,
-      ),
-      linesAfter: 1,
-    );
-    bytes += generator.text(
-      'Simple Tax Invoice',
-      styles: PosStyles(
-        align: PosAlign.center,
-        height: PosTextSize.size3,
-        bold: true,
-        width: PosTextSize.size3,
-      ),
-      linesAfter: 1,
-    );
-    bytes += generator.text(
-      'Date: 08/12/2023 ',
-      styles: const PosStyles(
-        align: PosAlign.left,
-      ),
-    );
-    bytes += generator.row([
-      PosColumn(
-        text: 'Item',
-        width: 3,
-        styles: const PosStyles(
-          align: PosAlign.left,
-          underline: true,
-        ),
-      ),
-      PosColumn(
-        text: 'Qty',
-        width: 2,
-        styles: const PosStyles(
-          align: PosAlign.left,
-          underline: true,
-        ),
-      ),
-      PosColumn(
-        text: 'Unit Price',
-        width: 4,
-        styles: const PosStyles(
-          align: PosAlign.left,
-          underline: true,
-        ),
-      ),
-      PosColumn(
-        text: 'Price',
-        width: 3,
-        styles: const PosStyles(
-          align: PosAlign.left,
-          underline: true,
-        ),
-      ),
-    ]);
-    bytes += generator.hr(ch: '-');
-    double unitQuantity;
-    double unitPrice;
-    double subTotal;
-    bytes += generator.row([
-      PosColumn(
-        text: '#${1}: Baloon pack of 60',
-        width: 12,
-        styles: const PosStyles(
-          align: PosAlign.left,
-        ),
-      ),
-    ]);
-    // unitQuantity = double.parse(invoice.rows[i].quantity ?? "0");
-    // subTotal = double.parse(invoice.rows[i].subtotal ?? "0");
-    bytes += generator.row([
-      PosColumn(
-        text: '2',
-        width: 3,
-        styles: const PosStyles(
-          align: PosAlign.left,
-        ),
-      ),
-      PosColumn(
-        text: "`12`",
-        width: 2,
-        styles: const PosStyles(
-          align: PosAlign.left,
-        ),
-      ),
-      PosColumn(
-        text: "23",
-        width: 4,
-        styles: const PosStyles(
-          align: PosAlign.left,
-        ),
-      ),
-      PosColumn(
-        text: "12",
-        width: 3,
-        styles: const PosStyles(
-          align: PosAlign.left,
-        ),
-      ),
-    ]);
-    bytes += generator.hr(ch: '-');
-    // double netTotal = grandTotal + totalTax;
-    bytes += generator.row([
-      PosColumn(
-        text: 'Net Total',
-        width: 6,
-        styles: const PosStyles(
-          align: PosAlign.left,
-          height: PosTextSize.size1,
-          width: PosTextSize.size1,
-          bold: true,
-        ),
-      ),
-      PosColumn(
-        text: "900",
-        width: 6,
-        styles: const PosStyles(
-          align: PosAlign.right,
-          bold: true,
-        ),
-      ),
-    ]);
+    // bytes += generator.text(
+    //   'customer',
+    //   styles: const PosStyles(
+    //     align: PosAlign.center,
+    //   ),
+    // );
+    // bytes += generator.text(
+    //   'Tel:  ',
+    //   styles: const PosStyles(
+    //     align: PosAlign.center,
+    //   ),
+    // );
+    // bytes += generator.text(
+    //   'VatNo:  ',
+    //   styles: const PosStyles(
+    //     align: PosAlign.center,
+    //   ),
+    //   linesAfter: 1,
+    // );
+    // bytes += generator.text(
+    //   'Simple Tax Invoice',
+    //   styles: PosStyles(
+    //     align: PosAlign.center,
+    //     height: PosTextSize.size3,
+    //     bold: true,
+    //     width: PosTextSize.size3,
+    //   ),
+    //   linesAfter: 1,
+    // );
+    // bytes += generator.text(
+    //   'Date: 08/12/2023 ',
+    //   styles: const PosStyles(
+    //     align: PosAlign.left,
+    //   ),
+    // );
+    // bytes += generator.row([
+    //   PosColumn(
+    //     text: 'Item',
+    //     width: 3,
+    //     styles: const PosStyles(
+    //       align: PosAlign.left,
+    //       underline: true,
+    //     ),
+    //   ),
+    //   PosColumn(
+    //     text: 'Qty',
+    //     width: 2,
+    //     styles: const PosStyles(
+    //       align: PosAlign.left,
+    //       underline: true,
+    //     ),
+    //   ),
+    //   PosColumn(
+    //     text: 'Unit Price',
+    //     width: 4,
+    //     styles: const PosStyles(
+    //       align: PosAlign.left,
+    //       underline: true,
+    //     ),
+    //   ),
+    //   PosColumn(
+    //     text: 'Price',
+    //     width: 3,
+    //     styles: const PosStyles(
+    //       align: PosAlign.left,
+    //       underline: true,
+    //     ),
+    //   ),
+    // ]);
+    // bytes += generator.hr(ch: '-');
+    // double unitQuantity;
+    // double unitPrice;
+    // double subTotal;
+    // bytes += generator.row([
+    //   PosColumn(
+    //     text: '#${1}: Baloon pack of 60',
+    //     width: 12,
+    //     styles: const PosStyles(
+    //       align: PosAlign.left,
+    //     ),
+    //   ),
+    // ]);
+    // // unitQuantity = double.parse(invoice.rows[i].quantity ?? "0");
+    // // subTotal = double.parse(invoice.rows[i].subtotal ?? "0");
+    // bytes += generator.row([
+    //   PosColumn(
+    //     text: '2',
+    //     width: 3,
+    //     styles: const PosStyles(
+    //       align: PosAlign.left,
+    //     ),
+    //   ),
+    //   PosColumn(
+    //     text: "`12`",
+    //     width: 2,
+    //     styles: const PosStyles(
+    //       align: PosAlign.left,
+    //     ),
+    //   ),
+    //   PosColumn(
+    //     text: "23",
+    //     width: 4,
+    //     styles: const PosStyles(
+    //       align: PosAlign.left,
+    //     ),
+    //   ),
+    //   PosColumn(
+    //     text: "12",
+    //     width: 3,
+    //     styles: const PosStyles(
+    //       align: PosAlign.left,
+    //     ),
+    //   ),
+    // ]);
+    // bytes += generator.hr(ch: '-');
+    // // double netTotal = grandTotal + totalTax;
+    // bytes += generator.row([
+    //   PosColumn(
+    //     text: 'Net Total',
+    //     width: 6,
+    //     styles: const PosStyles(
+    //       align: PosAlign.left,
+    //       height: PosTextSize.size1,
+    //       width: PosTextSize.size1,
+    //       bold: true,
+    //     ),
+    //   ),
+    //   PosColumn(
+    //     text: "900",
+    //     width: 6,
+    //     styles: const PosStyles(
+    //       align: PosAlign.right,
+    //       bold: true,
+    //     ),
+    //   ),
+    // ]);
     printEscPos(bytes, generator);
   }
 
@@ -478,7 +479,6 @@ class BlueThermalPrinterProdvider extends BaseGetXController {
         ),
       ),
     ]);
-    double grandTotal = double.parse(invoice.inv?.grandTotal ?? "0");
     bytes += generator.row([
       PosColumn(
         text: 'Sub total',
@@ -488,7 +488,7 @@ class BlueThermalPrinterProdvider extends BaseGetXController {
         ),
       ),
       PosColumn(
-        text: grandTotal.toStringAsFixed(2),
+        text: invoice.total.toStringAsFixed(2),
         width: 6,
         styles: const PosStyles(
           align: PosAlign.right,
@@ -504,14 +504,13 @@ class BlueThermalPrinterProdvider extends BaseGetXController {
         ),
       ),
       PosColumn(
-        text: '0',
+        text: invoice.inv?.totalDiscount ?? "0",
         width: 6,
         styles: const PosStyles(
           align: PosAlign.right,
         ),
       ),
     ]);
-    double totalTax = double.parse(invoice.inv?.totalTax ?? "0");
     bytes += generator.row([
       PosColumn(
         text: 'Vat(15%)',
@@ -521,15 +520,13 @@ class BlueThermalPrinterProdvider extends BaseGetXController {
         ),
       ),
       PosColumn(
-        text: "0",
-        // text: totalTax.toStringAsFixed(2),
+        text: invoice.totalTax.toString(),
         width: 6,
         styles: const PosStyles(
           align: PosAlign.right,
         ),
       ),
     ]);
-    double netTotal = grandTotal + totalTax;
     bytes += generator.row([
       PosColumn(
         text: 'Net Total',
@@ -542,7 +539,7 @@ class BlueThermalPrinterProdvider extends BaseGetXController {
         ),
       ),
       PosColumn(
-        text: netTotal.toStringAsFixed(2),
+        text: invoice.grandTotal.toStringAsFixed(2),
         width: 6,
         styles: const PosStyles(
           align: PosAlign.right,
