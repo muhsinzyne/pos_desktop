@@ -14,10 +14,13 @@ import 'package:posdelivery/app/ui/components/pos-delivery/text_field.dart';
 import 'package:posdelivery/app/ui/theme/app_colors.dart';
 import 'package:posdelivery/app/ui/theme/delivery_textStyle.dart';
 import 'package:posdelivery/models/constants.dart';
+import 'package:posdelivery/app/ui/components/pos-delivery/text_field.dart';
 
 class NewDashboardScreen extends GetView<NewDashboardScreenController> {
   bool validate = false;
+
   NewDashboardScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -193,9 +196,192 @@ class NewDashboardScreen extends GetView<NewDashboardScreenController> {
                                                           "assets/svg/quatations.svg"),
                                                 ),
                                               ),
-                                              // SizedBox(
-                                              //   width: 2,
-                                              // ),
+                                              SizedBox(
+                                                width: 2,
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  Get.defaultDialog(
+                                                    contentPadding:
+                                                        EdgeInsets.all(10),
+                                                    title: "Close Register",
+                                                    confirm: ElevatedButton(
+                                                      onPressed: controller
+                                                          .openRegister,
+                                                      child: Text('Submit'),
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        backgroundColor: AppColors
+                                                            .deliveryPrimary80,
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  12), // <-- Radius
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    content: Padding(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 10,
+                                                          vertical: 20),
+                                                      child: Column(children: [
+                                                        Column(
+                                                          children: [
+                                                            Row(
+                                                              mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                                                                children: [
+                                                              Text(
+                                                                  "Cash in Hand"),
+                                                              Text("SR 000.00")
+                                                            ]),
+                                                            Divider(),
+                                                            SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Column(
+                                                          children: [
+                                                            Row(
+                                                                mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                                                                children: [
+                                                                  Text(
+                                                                      "Cash Payments"),
+                                                                  Text("SR 000.00")
+                                                                ]),
+                                                            Divider(),
+                                                            SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                          ],
+                                                        ),
+
+                                                        Column(
+                                                          children: [
+                                                            Row(
+                                                                mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                                                                children: [
+                                                                  Text(
+                                                                      "Total Sales"),
+                                                                  Text("SR 000.00")
+                                                                ]),
+                                                            Divider(),
+                                                            SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Column(
+                                                          children: [
+                                                            Row(
+                                                                mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                                                                children: [
+                                                                  Text(
+                                                                      "Refunds"),
+                                                                  Text("SR 000.00")
+                                                                ]),
+                                                            Divider(),
+                                                            SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Column(
+                                                          children: [
+                                                            Row(
+                                                                mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                                                                children: [
+                                                                  Text(
+                                                                      "Returns"),
+                                                                  Text("SR 000.00")
+                                                                ]),
+                                                            Divider(),
+                                                            SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Column(
+                                                          children: [
+                                                            Row(
+                                                                mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                                                                children: [
+                                                                  Text(
+                                                                      "Expenses"),
+                                                                  Text("SR 000.00")
+                                                                ]),
+                                                            Divider(),
+                                                            SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Column(
+                                                          children: [
+                                                            Row(
+                                                                mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                                                                children: [
+                                                                  Text(
+                                                                      "Total Expenses",style:TextStyle(fontWeight:FontWeight.w600)),
+                                                                  Text("SR 000.00",style:TextStyle(fontWeight:FontWeight.w600))
+                                                                ]),
+                                                            Divider(),
+                                                            SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ]),
+                                                    ),
+                                                  );
+                                                },
+                                                child: Material(
+                                                  elevation: 5,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: DashboardItemBox(
+                                                      title: "Close Register",
+                                                      icon:
+                                                          "assets/svg/quatations.svg"),
+                                                ),
+                                              )
+                                              // InkWell(
+                                              //   onTap: () {
+                                              //     Get.defaultDialog(
+                                              //       contentPadding: EdgeInsets.all(10),
+                                              //       title: "Open Register",
+                                              //       confirm:  ElevatedButton(
+                                              //         onPressed:controller.openRegister,
+                                              //         child: Text('Submit'),
+                                              //         style: ElevatedButton.styleFrom(
+                                              //           backgroundColor: AppColors.deliveryPrimary80,
+                                              //           shape: RoundedRectangleBorder(
+                                              //             borderRadius: BorderRadius.circular(12), // <-- Radius
+                                              //           ),
+                                              //         ),
+                                              //       ),
+                                              //           content:Padding(
+                                              //             padding: const EdgeInsets.symmetric(horizontal:10,vertical:20),
+                                              //             child: TextFieldDelivery(
+                                              //       controller: controller.openingBalanceInput,
+                                              //       hint: "Opening Balance",
+                                              //
+                                              //     ),
+                                              //           ),
+                                              //     );
+                                              //   },
+                                              //   child: Material(
+                                              //     elevation: 5,
+                                              //     borderRadius:
+                                              //     BorderRadius.circular(10),
+                                              //     child: DashboardItemBox(
+                                              //         title: "Open Register",
+                                              //         icon:
+                                              //         "assets/svg/quatations.svg"),
+                                              //   ),
+                                              // )
                                             ],
                                           ),
                                         ],

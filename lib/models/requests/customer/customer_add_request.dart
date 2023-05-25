@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:posdelivery/models/response/desktop/customer_list.dart';
+
 class CustomerAddRequest {
   String? name;
   String? email;
@@ -11,6 +15,9 @@ class CustomerAddRequest {
   String? postalCode;
   String? country;
   String? phone;
+  //creating this model for storing additional data long,lat,place and storing to custom field cf1 because lack of additional fields in api
+  //and use cf1 field for storing json data that contain lat,long and place data
+  AdditionalFieldsAddStore? locationData;
 
   CustomerAddRequest(
       {name,
@@ -39,6 +46,9 @@ class CustomerAddRequest {
     postalCode = json['postal_code'];
     country = json['country'];
     phone = json['phone'];
+    // if (json['cf1'] != null) {
+    // locationData = LocationData.fromJson(json['cf1']);
+    // }
   }
 
   Map<String, dynamic> toJson() {
@@ -55,6 +65,8 @@ class CustomerAddRequest {
     data['postal_code'] = postalCode;
     data['country'] = country;
     data['phone'] = phone;
+    data['cf1'] =
+        locationData == null ? null : jsonEncode(locationData!.toJson());
     return data;
   }
 }

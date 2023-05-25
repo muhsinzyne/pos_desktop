@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:get/get.dart';
 import 'package:posdelivery/app/modules/auth/contracts.dart';
 import 'package:posdelivery/app/routes/app_pages.dart';
@@ -40,12 +41,16 @@ class LicenceScreenController extends BaseGetXController implements ILicenceScre
     // onLicenceVerificationDone();
   }
 
-  @override
+
   void onLicenceVerificationDone(LicenceValidationResponse lvR) async {
-    if (lvR.api != null) {
+    // if (lvR.api != null) {
       print(lvR);
-      appService.appServer = lvR.api.toString();
+
+
+      appService.appServer ='https://demo.pos.slasah.com';
+      // appService.appServer = lvR.api.toString();
       appService.appPrefix = lvR.appPrefix.toString();
+
       Get.snackbar(
         'verified'.tr,
         'licence_verified_please_login_your_account'.tr,
@@ -56,8 +61,6 @@ class LicenceScreenController extends BaseGetXController implements ILicenceScre
       await Future.delayed(Constants.smallDuration);
       Get.offAllNamed(Routes.login);
     }
-  }
-
   @override
   void onLicenceVerificationError(ErrorMessage errMsg) {
     isLoading.value = false;
@@ -70,3 +73,6 @@ class LicenceScreenController extends BaseGetXController implements ILicenceScre
     );
   }
 }
+
+
+

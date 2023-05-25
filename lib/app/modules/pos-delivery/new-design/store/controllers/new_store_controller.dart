@@ -30,6 +30,7 @@ class NewStoreScreenController extends BaseGetXController
   //lifecycle methods
   @override
   void onInit() async {
+    Logger().wtf("messagje");
     deliveryDataProvider.newStoreCallBack = this;
     init();
     searchCtrl.addListener(() {

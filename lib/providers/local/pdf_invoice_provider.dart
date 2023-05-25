@@ -34,7 +34,36 @@ class PdfInvoiceProvider {
 
     await OpenFile.open(url);
   }
+static Future<File> generateQR(String qr)async{
+    final pdf = pw.Document();
+    pdf.addPage(pw.Page(
+pageFormat: PdfPageFormat(200,200,marginTop: 5),
+      build: (context) =>
+      pw.Center(child:
+      pw.Column(
+    crossAxisAlignment: pw.CrossAxisAlignment.center,
+      mainAxisAlignment: pw.MainAxisAlignment.center,
+      verticalDirection: pw.VerticalDirection.up,
+      children: [
+        pw.SizedBox(height: 15 * PdfPageFormat.mm),
+        pw.Align(
+          alignment: pw.Alignment.center,
+          child: pw.Container(
+              height: 150,
+              width: 150,
+              child: pw.BarcodeWidget(
+                  data: qr, barcode: pw.Barcode.qrCode())),
+        ),
+        pw.SizedBox(height: 1 * PdfPageFormat.mm),
+      ],
+    )
+      )
+    ));
 
+    return saveDocument(name: '$qr.pdf', pdf: pdf);
+
+
+}
   static Future<File> generate(InvoiceResponse invoice) async {
     final logoImage = await networkImage(invoice.logoPath);
     final pdf = pw.Document();

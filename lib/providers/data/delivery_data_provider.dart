@@ -12,6 +12,7 @@ import 'package:posdelivery/app/modules/pos-delivery/add-store-manually/contract
 import 'package:posdelivery/app/modules/pos-delivery/new-design/add-store/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/basket/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/complete-sale/contracts.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/sales-list/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/sales/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/store/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/products-for-orders/contracts.dart';
@@ -31,6 +32,7 @@ import 'package:posdelivery/models/requests/pos/product_by_code.dart';
 import 'package:posdelivery/models/requests/pos/product_list.dart';
 import 'package:posdelivery/models/requests/pos/sale_request.dart';
 import 'package:posdelivery/models/requests/pos/sale_view_request.dart';
+import 'package:posdelivery/models/requests/pos/sales_list_request.dart';
 import 'package:posdelivery/models/response/auth/my_info_response.dart';
 import 'package:posdelivery/models/response/customer/customer_add_response.dart';
 import 'package:posdelivery/models/response/customer/customer_price_group_response.dart';
@@ -40,13 +42,18 @@ import 'package:posdelivery/models/response/error_message.dart';
 import 'package:posdelivery/models/response/pos/add_sale_response.dart';
 import 'package:posdelivery/models/response/pos/invoice_response.dart';
 import 'package:posdelivery/models/response/pos/product.dart';
+import 'package:posdelivery/models/response/pos/sales_list_response.dart';
 import 'package:posdelivery/models/status_codes.dart';
 import 'package:posdelivery/models/url.dart';
 import 'package:posdelivery/providers/data/base_data_provider.dart';
-
+import 'package:posdelivery/models/response/auth/current_register_response.dart';
+import 'package:posdelivery/models/response/auth/open_register_response.dart';
+import 'package:posdelivery/models/response/auth/register_close_summary.dart';
 import '../../models/response/desktop/customer_group.dart';
 import '../../models/response/desktop/customer_list.dart';
-
+import 'package:posdelivery/models/requests/auth/open_register_request.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/dashboard/contracts.dart';
+import 'package:posdelivery/models/requests/auth/register_close_summary_request.dart';
 class DeliveryDataProvider extends BaseDataProvider {
   late ISalesPointController sPCtrl;
   late IProductListController pLCtrl;
@@ -59,6 +66,8 @@ class DeliveryDataProvider extends BaseDataProvider {
   late INewCompleteSaleScreenController newCompleteSaleCtrl;
   late INewStoreScreenController newStoreCtrl;
   late INewStoreAddScreenController newStoreAddCtrl;
+  late INewSalesListScreenController newSalesListCtrl;
+  late INewDashboardScreenController newDashboardCtrl;
 
   //delivery
   late IDeliverySalePaymentController deliverySalePaymentCtrl;
@@ -83,6 +92,13 @@ class DeliveryDataProvider extends BaseDataProvider {
   ));
 
   //new design
+  set newDashboardCallBack(INewDashboardScreenController controller) {
+    newDashboardCtrl = controller;
+  }
+    set newSalesListCallBack(INewSalesListScreenController controller) {
+    newSalesListCtrl = controller;
+  }
+
   set newSalesCallBack(INewSalesScreenController controller) {
     newSalesCtrl = controller;
   }
@@ -155,6 +171,78 @@ class DeliveryDataProvider extends BaseDataProvider {
 
   set printCtrlCallBack(IDeliverySaleInvoiceScreenController controller) {
     deliverySaleInvoiceCtrl = controller;
+  }
+  openRegister(OpenRegisterRequest opRequest) {
+    final obs = network
+        .post(NetworkURL.openRegister, data: opRequest.toJson())
+        .asStream();
+    obs.listen((data) {
+      try {
+        OpenRegisterResponse opResponse =
+        OpenRegisterResponse.fromJSON(data.data);
+        newDashboardCtrl.onOpenRegisterDone(opResponse);
+      } on Exception {
+        final ErrorMessage errMsg = ErrorMessage();
+        errMsg.message = 'could_not_open_your_register'.tr;
+        newDashboardCtrl.onOpenRegisterError(errMsg);
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+      ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      if (err.response?.statusCode == StatusCodes.status400BadRequest) {
+        newDashboardCtrl.onOpenRegisterError(errMsg);
+      } else if (err.response?.statusCode == StatusCodes.status404NotFound) {
+        newDashboardCtrl.onOpenRegisterError(errMsg);
+      }
+    });
+  }
+    //delivery
+  getInvoice(SaleViewRequest saleViewRequest) {
+    final obs = network
+        .get(NetworkURL.saleView, queryParameters: saleViewRequest.toJson())
+        .asStream();
+    obs.listen((data) {
+      log(data.toString());
+      try {
+        InvoiceResponse invoiceResponse = InvoiceResponse.fromJson(data.data);
+        newSalesListCtrl.onSaleViewFetchDone(invoiceResponse);
+        // deliverySaleInvoiceCtrl.onSaleViewFetchDone(invoiceResponse);
+      } on Exception {
+        final ErrorMessage errMsg = ErrorMessage();
+        errMsg.message = 'invalid_response'.tr;
+        newSalesListCtrl.onSaleViewError(errMsg);
+        // deliverySaleInvoiceCtrl.onSaleViewError(errMsg);
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+          ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      if (err.response?.statusCode == StatusCodes.status400BadRequest) {
+        newCompleteSaleCtrl.onSaleViewError(errMsg);
+      }
+    });
+  }
+
+  getSalesList(SalesListRequest salesListRequest) {
+    final obs = network
+        .get(NetworkURL.salesList, queryParameters: salesListRequest.toJson())
+        .asStream();
+    obs.listen((data) {
+      try {
+        SalesListResponse salesListResponse =
+            SalesListResponse.fromJSON(data.data);
+        newSalesListCtrl.onSalesListResponseDone(salesListResponse);
+      } on Exception {
+        final ErrorMessage errMsg = ErrorMessage();
+        errMsg.message = 'invalid_response'.tr;
+        newSalesListCtrl.onSalesListResponseError(errMsg);
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+          ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      if (err.response?.statusCode == StatusCodes.status400BadRequest) {
+        newSalesListCtrl.onSalesListResponseError(errMsg);
+      }
+    });
   }
 
   customerAddRequest(CustomerAddRequest customerAddRequest) {

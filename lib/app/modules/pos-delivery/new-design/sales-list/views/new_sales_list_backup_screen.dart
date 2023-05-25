@@ -144,19 +144,19 @@ class NewSalesListScreen extends GetView<NewSalesListScreenController> {
                               const SizedBox(
                                 height: 40,
                               ),
-                              Column(
-                                children: [
-                                  SalesListItem(
-                                    statusColor: Colors.green,
-                                  ),
-                                  SalesListItem(
-                                    statusColor: Colors.red,
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                ],
-                              ),
+                              // Column(
+                              //   children: [
+                              //     SalesListItem(
+                              //       statusColor: Colors.green,
+                              //     ),
+                              //     SalesListItem(
+                              //       statusColor: Colors.red,
+                              //     ),
+                              //     SizedBox(
+                              //       height: 10,
+                              //     ),
+                              //   ],
+                              // ),
                             ],
                           ),
                         ),

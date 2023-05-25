@@ -6,8 +6,6 @@ import 'package:posdelivery/app/modules/pos-delivery/new-design/store/controller
 class NewSalesListScreenBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<NewSalesListScreenController>(
-      () => NewSalesListScreenController(),
-    );
+    Get.put<NewSalesListScreenController>(NewSalesListScreenController());
   }
 }

@@ -7,11 +7,32 @@ import 'package:sizer/sizer.dart';
 
 class SalesListItem extends StatefulWidget {
   final Color statusColor;
-
-  SalesListItem({
-    required this.statusColor,
-    Key? key,
-  }) : super(key: key);
+  final String refNo;
+  final String storeName;
+  final String date;
+  final String amount;
+  final String saleStatus;
+  final String id;
+  final String paymentStatus;
+  final String paid;
+  final String balance;
+  final Function(String) downloadPdf;
+  final String grandTotal;
+  SalesListItem(
+      {required this.statusColor,
+      required this.refNo,
+      Key? key,
+      required this.storeName,
+      required this.date,
+      required this.amount,
+      required this.saleStatus,
+      required this.id,
+      required this.paymentStatus,
+      required this.paid,
+      required this.balance,
+      required this.grandTotal,
+      required this.downloadPdf})
+      : super(key: key);
 
   @override
   State<SalesListItem> createState() => _SalesListItemState();
@@ -34,128 +55,134 @@ class _SalesListItemState extends State<SalesListItem> {
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            child: ScrollOnExpand(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: widget.statusColor,
-                              shape: BoxShape.circle,
-                            ),
-                            // height: 40,
-                            // width: 40,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        flex: 6,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Store 1",
-                                  style: CustomTextStyle.common.copyWith(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 2),
-                                  child: Text(
-                                    "Completed",
-                                    style: CustomTextStyle.common.copyWith(
-                                      fontSize: 12,
+            child: ExpandableNotifier(
+              child: ScrollOnExpand(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      child: ExpandablePanel(
+                        // controller: expandableController,
+                        collapsed: ExpandableButton(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: AspectRatio(
+                                  aspectRatio: 1,
+                                  child: Container(
+                                    decoration: BoxDecoration(
                                       color: widget.statusColor,
+                                      shape: BoxShape.circle,
                                     ),
+                                    // height: 40,
+                                    // width: 40,
                                   ),
                                 ),
-                                Text(
-                                  "SALE00000058",
-                                  maxLines: 3,
-                                  overflow: TextOverflow.visible,
-                                  style: CustomTextStyle.common.copyWith(
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "6000 SAR",
-                                  style: CustomTextStyle.common.copyWith(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: widget.statusColor,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 3,
-                                ),
-                                Container(
-                                  // width: (double.maxFinite) + 8.5.sp5,
-                                  child: Text(
-                                    "06/09/2022 | 16:55:00",
-                                    maxLines: 3,
-                                    overflow: TextOverflow.visible,
-                                    style: CustomTextStyle.common.copyWith(
-                                      fontSize: 12,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                flex: 6,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          widget.storeName,
+                                          style: CustomTextStyle.common
+                                              .copyWith(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 2),
+                                          child: Text(
+                                            widget.saleStatus,
+                                            style:
+                                                CustomTextStyle.common.copyWith(
+                                              fontSize: 12,
+                                              color: widget.statusColor,
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          widget.refNo,
+                                          maxLines: 3,
+                                          overflow: TextOverflow.visible,
+                                          style:
+                                              CustomTextStyle.common.copyWith(
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Center(
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                isExpanded = expandableController.value;
-                                expandableController.toggle();
-                              });
-                            },
-                            child: isExpanded
-                                ? const Icon(
-                                    Icons.keyboard_arrow_right,
-                                    size: 38,
-                                    color: Color(0xff454E52),
-                                  )
-                                : const Icon(
-                                    Icons.keyboard_arrow_up,
-                                    size: 38,
-                                    color: Color(0xff454E52),
-                                  ),
+                              ),
+                              Expanded(
+                                flex: 4,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 4,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '${double.parse(widget.amount).toStringAsFixed(2)} SAR',
+                                            overflow: TextOverflow.visible,
+                                            style:
+                                                CustomTextStyle.common.copyWith(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: widget.statusColor,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 3,
+                                          ),
+                                          Text(
+                                            widget.date,
+                                            maxLines: 3,
+                                            overflow: TextOverflow.visible,
+                                            style:
+                                                CustomTextStyle.common.copyWith(
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
+
+                        expanded: SaleListItemInvoice(
+                          refNum: widget.refNo,
+                          saleNum: widget.id,
+                          downloadPdf: widget.downloadPdf,
+                          balance: widget.balance,
+                          paid: widget.paid,
+                          grandTotal: widget.grandTotal,
+                          date: widget.date,
+                          paymentStatus: widget.paymentStatus,
+                          status: widget.saleStatus,
+                        ),
                       ),
-                    ],
-                  ),
-                  SizedBox(
-                    child: ExpandablePanel(
-                      controller: expandableController,
-                      collapsed: Container(),
-                      expanded: SaleListItemInvoice(),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -166,8 +193,27 @@ class _SalesListItemState extends State<SalesListItem> {
 }
 
 class SaleListItemInvoice extends StatelessWidget {
+  final String refNum;
+  final String saleNum;
+  final String status;
+  final String date;
+  final String paymentStatus;
+  final String paid;
+  final Function(String) downloadPdf;
+  final String balance;
+  final String grandTotal;
+  // final String ;
   SaleListItemInvoice({
     Key? key,
+    required this.refNum,
+    required this.saleNum,
+    required this.status,
+    required this.date,
+    required this.paymentStatus,
+    required this.paid,
+    required this.balance,
+    required this.grandTotal,
+    required this.downloadPdf,
   }) : super(key: key);
 
   @override
@@ -190,7 +236,7 @@ class SaleListItemInvoice extends StatelessWidget {
             height: 5,
           ),
           Text(
-            "Reference: SALE00000058",
+            "Reference: $refNum",
             style: TextStyle(
                 color: Colors.black,
                 fontSize: 8.5.sp,
@@ -204,21 +250,21 @@ class SaleListItemInvoice extends StatelessWidget {
                 fontWeight: FontWeight.w500),
           ),
           Text(
-            "Date: 06/09/2022 16:55",
+            "Date: $date",
             style: TextStyle(
                 color: Colors.black,
                 fontSize: 8.5.sp,
                 fontWeight: FontWeight.w500),
           ),
           Text(
-            "Sale Status: Completed",
+            "Sale Status: $status",
             style: TextStyle(
                 color: Colors.black,
                 fontSize: 8.5.sp,
                 fontWeight: FontWeight.w500),
           ),
           Text(
-            "Payment Status : Pending",
+            "Payment Status : $paymentStatus",
             style: TextStyle(
                 color: Colors.black,
                 fontSize: 8.5.sp,
@@ -331,28 +377,28 @@ class SaleListItemInvoice extends StatelessWidget {
             height: 8,
           ),
           Text(
-            "Total(SR)",
+            "Total(SR): ",
             style: TextStyle(
                 color: Colors.black,
                 fontSize: 8.5.sp,
                 fontWeight: FontWeight.w500),
           ),
           Text(
-            "Total Amount(SR)",
+            "Total Amount(SR): $grandTotal",
             style: TextStyle(
                 color: Colors.black,
                 fontSize: 8.5.sp,
                 fontWeight: FontWeight.w500),
           ),
           Text(
-            "Paid(SR)",
+            "Paid(SR): $paid",
             style: TextStyle(
                 color: Colors.black,
                 fontSize: 8.5.sp,
                 fontWeight: FontWeight.w500),
           ),
           Text(
-            "Balance(SR)",
+            "Balance(SR): $balance",
             style: TextStyle(
                 color: Colors.black,
                 fontSize: 8.5.sp,
@@ -393,44 +439,49 @@ class SaleListItemInvoice extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                decoration: BoxDecoration(
-                    color: const Color(0xffC31111),
-                    borderRadius: BorderRadius.circular(10)),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                child: Row(
+              ExpandableButton(
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: const Color(0xffC31111),
+                      borderRadius: BorderRadius.circular(10)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  child: Row(
+                    children: [
+                      const Text(
+                        "Return  ",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      const Icon(
+                        Icons.reply,
+                        size: 18,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () => downloadPdf(saleNum),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      "Return  ",
+                      "PDF",
                       style: TextStyle(
-                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.newIconColor,
                       ),
                     ),
                     const Icon(
-                      Icons.reply,
-                      size: 18,
-                      color: Colors.white,
+                      Icons.file_download_outlined,
+                      size: 28,
+                      color: AppColors.newIconColor,
                     ),
                   ],
                 ),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "PDF",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.newIconColor,
-                    ),
-                  ),
-                  const Icon(
-                    Icons.file_download_outlined,
-                    size: 28,
-                    color: AppColors.newIconColor,
-                  ),
-                ],
               ),
             ],
           ),

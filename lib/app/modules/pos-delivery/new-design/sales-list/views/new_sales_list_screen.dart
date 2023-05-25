@@ -49,6 +49,7 @@ class NewSalesListScreen extends GetView<NewSalesListScreenController> {
         ],
       ),
       floatingActionButton: InkWell(
+        // onTap: () => controller.fetc,
         onTap: () => Get.toNamed(Routes.newQr),
         child: SizedBox(
           height: 60,
@@ -144,19 +145,68 @@ class NewSalesListScreen extends GetView<NewSalesListScreenController> {
                           const SizedBox(
                             height: 40,
                           ),
-                          Column(
-                            children: [
-                              SalesListItem(
-                                statusColor: Colors.green,
-                              ),
-                              SalesListItem(
-                                statusColor: Colors.red,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                            ],
-                          ),
+                          Obx(() {
+                            return Column(
+                              children: [
+                                for (int i = 0;
+                                    i < controller.filteredSalesList.length;
+                                    i++) ...[
+                                  InkWell(
+                                    child: SalesListItem(
+                                      downloadPdf: controller.fetchInvoice,
+                                      statusColor: controller
+                                                  .filteredSalesList[i]
+                                                  .saleStatus! ==
+                                              'completed'
+                                          ? Colors.green
+                                          : Colors.red,
+                                      refNo: controller
+                                          .filteredSalesList[i].referenceNo!,
+                                      amount:
+                                          controller.filteredSalesList[i].paid!,
+                                      date:
+                                          controller.filteredSalesList[i].date!,
+                                      saleStatus: controller
+                                          .filteredSalesList[i].saleStatus!,
+                                      storeName: controller
+                                          .filteredSalesList[i].customer!,
+                                      balance: controller
+                                          .filteredSalesList[i].balance!,
+                                      paid:
+                                          controller.filteredSalesList[i].paid!,
+                                      grandTotal: controller
+                                          .filteredSalesList[i].grandTotal!,
+                                      id: controller.filteredSalesList[i].id!,
+                                      paymentStatus: controller
+                                          .filteredSalesList[i].paymentStatus!,
+                                    ),
+                                    // StoreItem(
+                                    //   name: controller
+                                    //       .filteredcustomerList[i].name!,
+                                    // ),
+                                    onTap: () {
+                                      // controller.selectedStore =
+                                      //     controller.filteredcustomerList[i];
+                                      // Get.toNamed(Routes.newSales);
+                                    },
+                                  ),
+                                ],
+                              ],
+                            );
+                          }),
+                          // Column(
+                          //   children: [
+                          //     SalesListItem(
+                          //       statusColor: Colors.green,
+                          //     ),
+                          //     SalesListItem(
+                          //       statusColor: Colors.red,
+                          //     ),
+                          //     SizedBox(
+                          //       height: 10,
+                          //     ),
+                          //   ],
+                          // ),
                         ],
                       ),
                     ),

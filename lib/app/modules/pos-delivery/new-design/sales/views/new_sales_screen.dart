@@ -1,6 +1,8 @@
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
+import 'package:sizer/sizer.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/sales/controllers/new_sales_controller.dart';
@@ -164,10 +166,55 @@ class NewSalesScreen extends GetView<NewSalesScreenController> {
                                   ),
                                   Expanded(
                                       flex: 1,
-                                      child: SvgPicture.asset(
-                                        "assets/svg/barcode.svg",
-                                        height: 22,
-                                        width: 22,
+                                      child: InkWell(
+                                        onTap:(){
+                                          Get.defaultDialog( //   title: "",
+                                            title: "Scan Product Code",
+                                            content: SizedBox(
+                                              child: Column(
+                                                children: [
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  SizedBox(
+                                                    height:40.h,
+                                                      child: MobileScanner(
+                                                          allowDuplicates: false,
+                                                          onDetect: (barcode, args) {
+                                                            if (barcode.rawValue == null) {
+                                                              debugPrint('Failed to scan Barcode');
+                                                              // controller.test();
+                                                            } else {
+                                                              final String code = barcode.rawValue!.toString();
+                                                              controller.addProductViaScan(code);
+                                                            }
+                                                          })),
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  ElevatedButton(
+                                                    onPressed: Get.back,
+                                                    child: Text('OK'),
+                                                    style: ElevatedButton.styleFrom(
+                                                      backgroundColor: AppColors.deliveryPrimary80,
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(12), // <-- Radius
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: SvgPicture.asset(
+                                          "assets/svg/barcode.svg",
+                                          height: 22,
+                                          width: 22,
+                                        ),
                                       ))
                                 ],
                               ),

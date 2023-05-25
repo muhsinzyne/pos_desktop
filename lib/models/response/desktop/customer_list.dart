@@ -4,12 +4,40 @@
 
 import 'dart:convert';
 
+import 'package:flutter/widgets.dart';
+
 List<CustomerListOffResponse> customerListOffResponseFromJson(String str) =>
     List<CustomerListOffResponse>.from(
         json.decode(str).map((x) => CustomerListOffResponse.fromJson(x)));
 
 String customerListOffResponseToJson(List<CustomerListOffResponse> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+//creating this model for storing additional data long,lat,place and storing to custom field cf1 because lack of additional fields in api
+class AdditionalFieldsAddStore {
+  double? longitude;
+  double? latitude;
+  String? businessType;
+  String? qrCode;
+  AdditionalFieldsAddStore({
+    this.latitude,
+    this.longitude,
+    this.businessType,
+    this.qrCode,
+  });
+  AdditionalFieldsAddStore.fromJson(Map<String, dynamic> json) {
+    latitude = json['latitude'];
+    longitude = json['longitude'];
+    qrCode = json['qrCode'];
+    businessType = json['businessType'];
+  }
+  Map<String, dynamic> toJson() => {
+        "longitude": longitude,
+        "latitude": latitude,
+    "qrCode": qrCode,
+    "businessType": businessType,
+      };
+}
 
 class CustomerListOffResponse {
   String? id;
@@ -21,6 +49,7 @@ class CustomerListOffResponse {
   String? vatNo;
   String? account;
   String? awardPoints;
+  AdditionalFieldsAddStore? locationData;
 
   CustomerListOffResponse({
     this.id,
@@ -32,6 +61,7 @@ class CustomerListOffResponse {
     this.vatNo,
     this.account,
     this.awardPoints,
+    this.locationData,
   });
   CustomerListOffResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -43,6 +73,9 @@ class CustomerListOffResponse {
     vatNo = json['vatNo'];
     account = json['account'];
     awardPoints = json['awardPoints'];
+    if (json['cf1'] != null) {
+      locationData = AdditionalFieldsAddStore.fromJson(json['ch1']);
+    }
   }
 
   // factory CustomerListOffResponse.fromJson(Map<String, dynamic> json) =>
@@ -68,6 +101,7 @@ class CustomerListOffResponse {
         "vat_no": vatNo,
         "account": account == null ? null : account,
         "award_points": awardPoints == null ? null : awardPoints,
+        "cf1": locationData == null ? null : locationData!.toJson(),
       };
 }
 
