@@ -6,8 +6,7 @@ import 'package:posdelivery/app/modules/pos-delivery/new-design/dashboard/contro
 class NewDashboardScreenBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<NewDashboardScreenController>(
-      () => NewDashboardScreenController(),
-    );
+    Get.put<NewDashboardScreenController>(NewDashboardScreenController());
+
   }
 }

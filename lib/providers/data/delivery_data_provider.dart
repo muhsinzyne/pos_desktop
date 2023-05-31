@@ -48,10 +48,12 @@ import 'package:posdelivery/models/url.dart';
 import 'package:posdelivery/providers/data/base_data_provider.dart';
 import 'package:posdelivery/models/response/auth/current_register_response.dart';
 import 'package:posdelivery/models/response/auth/open_register_response.dart';
+import 'package:posdelivery/models/response/auth/close_register_response.dart';
 import 'package:posdelivery/models/response/auth/register_close_summary.dart';
 import '../../models/response/desktop/customer_group.dart';
 import '../../models/response/desktop/customer_list.dart';
 import 'package:posdelivery/models/requests/auth/open_register_request.dart';
+import 'package:posdelivery/models/requests/auth/close_register_request.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/dashboard/contracts.dart';
 import 'package:posdelivery/models/requests/auth/register_close_summary_request.dart';
 class DeliveryDataProvider extends BaseDataProvider {
@@ -172,6 +174,81 @@ class DeliveryDataProvider extends BaseDataProvider {
   set printCtrlCallBack(IDeliverySaleInvoiceScreenController controller) {
     deliverySaleInvoiceCtrl = controller;
   }
+  closeRegister(CloseRegisterRequest closeRequest) {
+    final obs = network
+        .post(NetworkURL.closeRegister, data: closeRequest.toJson())
+        .asStream();
+    obs.listen((data) {
+      try {
+        CloseRegisterResponse opResponse =
+        CloseRegisterResponse.fromJSON(data.data);
+        newDashboardCtrl.onCloseRegisterDone(opResponse);
+      } on Exception {
+        final ErrorMessage errMsg = ErrorMessage();
+        errMsg.message = 'could_not_close_your_register'.tr;
+        newDashboardCtrl.onCloseRegisterError(errMsg);
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+      ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      if (err.response?.statusCode == StatusCodes.status400BadRequest) {
+        newDashboardCtrl.onCloseRegisterError(errMsg);
+      } else if (err.response?.statusCode == StatusCodes.status404NotFound) {
+        newDashboardCtrl.onCloseRegisterError(errMsg);
+      }
+    });
+  }
+  registerCloseSummary(RegisterCloseSummaryRequest rReq) {
+    final obs = network
+        .get(NetworkURL.registerCloseSummary, queryParameters: rReq.toJson())
+        .asStream();
+    obs.listen((data) {
+      try {
+        RegisterCloseSummary rSummary =
+        RegisterCloseSummary.fromJson(data.data);
+        newDashboardCtrl.onRegisterCloseSummaryDone(rSummary);
+      } on Exception {
+        final ErrorMessage errMsg = ErrorMessage();
+        errMsg.message = 'register_not_opened'.tr;
+        newDashboardCtrl.onRegisterCloseSummaryError(errMsg);
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+      ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      if (err.response.statusCode == StatusCodes.status404NotFound) {
+        newDashboardCtrl.onCurrentRegisterNotOpen(errMsg);
+      } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
+        //saleListCtrl.onSalesListResponseBadRequest(errMsg);
+      }
+    });
+  }
+  myRegisterSummary() {
+    final obs = network
+        .get(
+      NetworkURL.myRegisterSummary,
+    )
+        .asStream();
+    obs.listen((data) {
+      try {
+        CurrentRegisterResponse cResponse =
+        CurrentRegisterResponse.fromJson(data.data);
+        newDashboardCtrl.onCurrentRegisterResponseDone(cResponse);
+      } on Exception {
+        final ErrorMessage errMsg = ErrorMessage();
+        errMsg.message = 'register_not_opened'.tr;
+        newDashboardCtrl.onCurrentRegisterNotOpen(errMsg);
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+      ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      if (err.response?.statusCode == StatusCodes.status404NotFound) {
+        newDashboardCtrl.onCurrentRegisterNotOpen(errMsg);
+      } else if (err.response?.statusCode == StatusCodes.status400BadRequest) {
+        //saleListCtrl.onSalesListResponseBadRequest(errMsg);
+      }
+    });
+  }
+
   openRegister(OpenRegisterRequest opRequest) {
     final obs = network
         .post(NetworkURL.openRegister, data: opRequest.toJson())
@@ -540,8 +617,6 @@ class DeliveryDataProvider extends BaseDataProvider {
     });
   }
 
-  //api not avalable in production
-  //only worrks when sending as formdata.. error when sending as json don't know why!!
   expenseAddRequestWithoutFile(ExpenseAddRequest expenseAddRequest) async {
     var formData = form.FormData.fromMap({
       'amount': expenseAddRequest.amount,

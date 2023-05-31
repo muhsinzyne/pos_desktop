@@ -31,7 +31,8 @@ class NewSalesScreenController extends BaseGetXController
     deliveryDataProvider.getProductsSales(productListRequest);
   }
 addProductViaScan(String code){
-  List<int>  chr = utf8.encode(code);
+  // List<int>  chr = utf8.encode(code);
+  Logger().w(code);
   //   Logger().w('6254000115019'==code);
 Product? product= productListTemp.firstWhereOrNull((element) => element.row!.code! == code);
 if(product !=null)
@@ -50,7 +51,6 @@ if(product !=null)
           temp.subTotal = (double.parse(product.row!.price.toString())) *qty.value;
           temp.grandTotal = temp.subTotal!;
           addedProducts.add(temp);
-          Get.back();
           Get.back();
         },
         // onPressed: Get.back,
@@ -209,10 +209,36 @@ if(product !=null)
       ),
     )
     );}else{
-      Get.defaultDialog(content: Text("Already in basket"));
+      Get.defaultDialog(content: Text("Already in basket"),cancel: ElevatedButton(
+  onPressed:(){
+
+  Get.back();
+  },
+  // onPressed: Get.back,
+  child: Text('Cancel'),
+  style: ElevatedButton.styleFrom(
+  backgroundColor: AppColors.deliveryPrimary80,
+  shape: RoundedRectangleBorder(
+  borderRadius: BorderRadius.circular(12), // <-- Radius
+  ),
+  ),
+  ));
     }
   }else{
-  Get.defaultDialog(content: Text("No Prouduct matched"));
+  Get.defaultDialog(content: Text("No Prouduct matched"),cancel:ElevatedButton(
+    onPressed:(){
+
+      Get.back();
+    },
+    // onPressed: Get.back,
+    child: Text('Cancel'),
+    style: ElevatedButton.styleFrom(
+      backgroundColor: AppColors.deliveryPrimary80,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12), // <-- Radius
+      ),
+    ),
+  ));
   }
 }
   void addToBasket(Product product) {

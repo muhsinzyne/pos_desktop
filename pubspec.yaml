@@ -39,7 +39,6 @@ dependencies:
   flutter_typeahead: ^3.2.4
   get: 4.6.1
   google_fonts: ^2.1.0
-  image_utils_class: ^2.0.0
   intl: ^0.17.0
   logging: ^0.11.3
   open_file: ^3.2.1

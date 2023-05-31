@@ -186,6 +186,7 @@ class NewSalesScreen extends GetView<NewSalesScreenController> {
                                                               // controller.test();
                                                             } else {
                                                               final String code = barcode.rawValue!.toString();
+                                                              Get.back();
                                                               controller.addProductViaScan(code);
                                                             }
                                                           })),

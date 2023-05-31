@@ -34,7 +34,7 @@ class PdfInvoiceProvider {
 
     await OpenFile.open(url);
   }
-static Future<File> generateQR(String qr)async{
+static Future<File> generateQR(String qr,String storeName)async{
     final pdf = pw.Document();
     pdf.addPage(pw.Page(
 pageFormat: PdfPageFormat(200,200,marginTop: 5),
@@ -45,7 +45,12 @@ pageFormat: PdfPageFormat(200,200,marginTop: 5),
       mainAxisAlignment: pw.MainAxisAlignment.center,
       verticalDirection: pw.VerticalDirection.up,
       children: [
-        pw.SizedBox(height: 15 * PdfPageFormat.mm),
+
+        pw.Text(storeName,
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.values[0],
+              fontSize: 22,
+            )),
         pw.Align(
           alignment: pw.Alignment.center,
           child: pw.Container(

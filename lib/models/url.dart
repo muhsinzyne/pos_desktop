@@ -19,6 +19,7 @@ class NetworkURL {
   static var addSalePayment = base + 'pos/add_sale_payment';
   static var myRegisterSummary = base + 'pos/current_register';
   static var openRegister = base + 'pos/open_register';
+  static var closeRegister = base + 'pos/close_register';
   static var registerCloseSummary = base + 'pos/register_close_summary';
   static var customerSearch = base + 'customers/customer_sujession';
   static var warehouseListOffline = base + 'offline/warehouse_list';

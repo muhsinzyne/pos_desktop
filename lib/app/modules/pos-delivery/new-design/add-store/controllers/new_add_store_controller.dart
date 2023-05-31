@@ -119,8 +119,8 @@ qrCode = DateTime.now().millisecondsSinceEpoch.toString();
   }
 
   //contracts
-downloadPdf()async{
-  File pdfFile = await PdfInvoiceProvider.generateQR(qrCode);
+downloadPdf(String name)async{
+  File pdfFile = await PdfInvoiceProvider.generateQR(qrCode,name);
   PdfInvoiceProvider.openFile(pdfFile);
 }
   @override
@@ -141,7 +141,7 @@ downloadPdf()async{
               height: 10,
             ),
             ElevatedButton(
-              onPressed: downloadPdf,
+              onPressed:()=> downloadPdf(cListRes.data!.name!),
               child: Text('Download QR'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.deliveryPrimary80,
