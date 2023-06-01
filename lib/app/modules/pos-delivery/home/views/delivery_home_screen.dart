@@ -4,6 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:posdelivery/app/modules/pos-delivery/home/controllers/delivery_home_controller.dart';
+import 'package:posdelivery/app/routes/app_pages.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/dropdown.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/infobox.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/quicklink.dart';
@@ -118,17 +119,41 @@ class DeliveryHomeScreen extends GetView<DeliveryHomeScreenController> {
                       height: 25,
                     ),
                     SizedBox(),
-                    QuickLink(
-                      title: "Stores",
-                      iconData: Icons.storefront_outlined,
+                    // InkWell(
+                    //   onTap: () {
+                    //     Get.toNamed(Routes.deliverySales);
+                    //   },
+                    //   child: QuickLink(
+                    //     title: "Sales",
+                    //     iconData: FontAwesomeIcons.tag,
+                    //   ),
+                    // ),
+                    InkWell(
+                      onTap: () {
+                        Get.toNamed(Routes.deliverySelectStore);
+                      },
+                      child: QuickLink(
+                        title: "Stores",
+                        iconData: Icons.store_rounded,
+                      ),
                     ),
-                    QuickLink(
-                      title: "Cash Register",
-                      iconData: Icons.payments_outlined,
+                    InkWell(
+                      onTap: () {
+                        Get.toNamed(Routes.deliveryCashRegister);
+                      },
+                      child: QuickLink(
+                        title: "Cash Register",
+                        iconData: Icons.payments_outlined,
+                      ),
                     ),
-                    QuickLink(
-                      title: "Stock Register",
-                      iconData: FontAwesomeIcons.clipboard,
+                    InkWell(
+                      onTap: () {
+                        Get.toNamed(Routes.deliveryExpenses);
+                      },
+                      child: QuickLink(
+                        title: "Stock Register",
+                        iconData: FontAwesomeIcons.clipboard,
+                      ),
                     ),
                     QuickLink(
                       title: "Settings",

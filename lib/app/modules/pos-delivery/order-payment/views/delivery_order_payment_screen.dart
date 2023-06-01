@@ -1,6 +1,6 @@
-// ignore_for_file: prefer_const_constructors, duplicate_ignore, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:posdelivery/app/routes/app_pages.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/text_field.dart';
 import 'package:posdelivery/app/ui/theme/app_colors.dart';
 import 'package:posdelivery/app/ui/theme/delivery_textStyle.dart';
@@ -13,6 +13,7 @@ class DeliveryOrderPaymentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: CustomScrollView(
@@ -107,18 +108,23 @@ class DeliveryOrderPaymentScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Container(
-                      height: 85,
-                      width: double.infinity,
-                      color: AppColors.deliveryPrimary,
-                      child: Center(
-                          child: Text(
-                        "Confirm",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 25,
-                            fontWeight: FontWeight.w500),
-                      )),
+                    InkWell(
+                      onTap: () {
+                        Get.toNamed(Routes.deliveryOrderInvoice);
+                      },
+                      child: Container(
+                        height: 85,
+                        width: double.infinity,
+                        color: AppColors.deliveryPrimary,
+                        child: Center(
+                            child: Text(
+                          "Confirm",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 25,
+                              fontWeight: FontWeight.w500),
+                        )),
+                      ),
                     ),
                   ]),
             ),

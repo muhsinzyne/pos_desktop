@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app/routes/app_pages.dart';
 import 'pre_app.dart';
+import 'package:sizer/sizer.dart';
 
 void main() async {
   runApp(const PreApp());
@@ -34,37 +35,39 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OverlaySupport(
-      child: GetMaterialApp(
-        //smartManagement: SmartManagement.full,
-        theme: ThemeData(
-          //platform: TargetPlatform.android,
-          fontFamily: fontFamily,
-          colorScheme: ColorScheme.light().copyWith(
-            primary: AppColors.primary,
-            secondary: AppColors.secondary,
+      child: Sizer(builder: (context, orientation, deviceType) {
+        return GetMaterialApp(
+          //smartManagement: SmartManagement.full,
+          theme: ThemeData(
+            //platform: TargetPlatform.android,
+            fontFamily: fontFamily,
+            colorScheme: ColorScheme.light().copyWith(
+              primary: AppColors.primary,
+              secondary: AppColors.secondary,
+            ),
+            appBarTheme: AppBarTheme(
+              color: AppColors.appBarColor,
+              titleTextStyle: kBaseTextStyle,
+            ),
+            scaffoldBackgroundColor: AppColors.secondary,
           ),
-          appBarTheme: AppBarTheme(
-            color: AppColors.appBarColor,
-            titleTextStyle: kBaseTextStyle,
-          ),
-          scaffoldBackgroundColor: AppColors.secondary,
-        ),
-        debugShowCheckedModeBanner: false,
-        navigatorObservers: [FlutterSmartDialog.observer],
-        builder: FlutterSmartDialog.init(),
-        /*
-          Localisation config
+          debugShowCheckedModeBanner: false,
+          navigatorObservers: [FlutterSmartDialog.observer],
+          builder: FlutterSmartDialog.init(),
+          /*
+              Localisation config
 
-         */
+             */
 
-        locale: Get.deviceLocale,
-        //locale: AppLanguages.ar_SA,
-        fallbackLocale: AppLanguages.en_US,
-        translationsKeys: AppTranslation.translations,
-        title: "app_title".tr,
-        initialRoute: AppPages.deliveryInitial,
-        getPages: AppPages.routes,
-      ),
+          locale: Get.deviceLocale,
+          //locale: AppLanguages.ar_SA,
+          fallbackLocale: AppLanguages.en_US,
+          translationsKeys: AppTranslation.translations,
+          title: "app_title".tr,
+          initialRoute: AppPages.initial,
+          getPages: AppPages.routes,
+        );
+      }),
     );
   }
 }

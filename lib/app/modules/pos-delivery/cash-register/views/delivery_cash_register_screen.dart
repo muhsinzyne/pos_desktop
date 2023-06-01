@@ -3,6 +3,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:posdelivery/app/routes/app_pages.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/infobox.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/quicklink.dart';
 import 'package:posdelivery/app/ui/theme/app_colors.dart';
@@ -14,6 +16,7 @@ class DeliveryCashRegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: CustomScrollView(
@@ -77,20 +80,35 @@ class DeliveryCashRegisterScreen extends StatelessWidget {
                             height: 25,
                           ),
                           SizedBox(),
-                          QuickLink(
-                            title: "Open Register",
-                            iconData: FontAwesomeIcons.openid,
-                            iconSize: 35,
+                          InkWell(
+                            onTap: () {
+                              Get.toNamed(Routes.deliveryOpenRegister);
+                            },
+                            child: QuickLink(
+                              title: "Open Register",
+                              iconData: FontAwesomeIcons.openid,
+                              iconSize: 35,
+                            ),
                           ),
-                          QuickLink(
-                            title: "Close Register",
-                            iconData: Icons.cancel_outlined,
-                            iconSize: 35,
+                          InkWell(
+                            onTap: () {
+                              Get.toNamed(Routes.deliveryCloseRegister);
+                            },
+                            child: QuickLink(
+                              title: "Close Register",
+                              iconData: Icons.cancel_outlined,
+                              iconSize: 35,
+                            ),
                           ),
-                          QuickLink(
-                            title: "Transfer Money",
-                            iconData: Icons.reply_all_outlined,
-                            iconSize: 35,
+                          InkWell(
+                            onTap: () {
+                              Get.toNamed(Routes.deliveryAmountTransfer);
+                            },
+                            child: QuickLink(
+                              title: "Transfer Money",
+                              iconData: Icons.reply_all_outlined,
+                              iconSize: 35,
+                            ),
                           ),
                           QuickLink(
                             title: "Register History",

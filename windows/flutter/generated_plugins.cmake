@@ -3,6 +3,11 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  flutter_pos_printer_platform
+  geolocator_windows
+  network_info_plus_windows
+  permission_handler_windows
+  printing
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

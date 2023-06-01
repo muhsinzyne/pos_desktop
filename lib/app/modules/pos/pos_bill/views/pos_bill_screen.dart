@@ -114,7 +114,8 @@ class PosBillView extends GetView<PosBillScreenController> {
                       itemBuilder: (BuildContext context, int i) {
                         ProductPurchaseInfo cInfo =
                             controller.appService.productPurchaseList[i];
-                        return Slidable(
+                        return 
+                        Slidable(
                           actionExtentRatio: .3,
                           secondaryActions: [
                             IconSlideAction(

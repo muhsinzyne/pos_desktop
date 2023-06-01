@@ -15,8 +15,18 @@ import 'package:posdelivery/models/response/error_message.dart';
 import 'package:posdelivery/models/status_codes.dart';
 import 'package:posdelivery/models/url.dart';
 import 'package:posdelivery/providers/data/base_data_provider.dart';
+import 'package:logger/logger.dart';
 
 class AuthDataProvider extends BaseDataProvider {
+  final logger = Logger(
+      printer: PrettyPrinter(
+    methodCount: 0,
+    errorMethodCount: 5,
+    lineLength: 50,
+    colors: true,
+    printEmojis: true,
+    printTime: true,
+  ));
   late ILoginController loginCtrl;
   late IOtpVerificationController otpVerCtrl;
   late ISplashScreenController homeCtrl;
@@ -94,23 +104,30 @@ class AuthDataProvider extends BaseDataProvider {
 
   /// login call
   login(LoginRequest loginRequest) {
+    logger.w(NetworkURL.login);
     final obs =
         network.post(NetworkURL.login, data: loginRequest.toJson()).asStream();
     obs.listen(
       (data) {
         try {
+          logger.w("any");
           LoginResponse loginResponse = LoginResponse.fromJSON(data.data);
           if (loginResponse.data?.token != null) {
+            logger.w("works");
             loginCtrl.onLoginDone(loginResponse);
           } else {
+            logger.e("error");
             // token null exception
             loginCtrl.onLoginError();
           }
         } on Exception {
+          logger.e("exception");
           loginCtrl.onLoginError();
         }
       },
       onError: (err) {
+        logger.e("exception");
+        loginCtrl.onLoginError();
         if (err.response?.statusCode == StatusCodes.status400BadRequest) {
           loginCtrl.onLoginError();
         }

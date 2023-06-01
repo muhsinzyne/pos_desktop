@@ -1,24 +1,60 @@
 import 'package:get/get.dart';
-import 'package:posdelivery/app/modules/pos-delivery/add-orders/bindings/delivery_add_orders_binding.dart';
-import 'package:posdelivery/app/modules/pos-delivery/add-orders/views/delivery_add_orders_screen.dart';
-import 'package:posdelivery/app/modules/pos-delivery/add-products/bindings/delivery_add_products_binding.dart';
-import 'package:posdelivery/app/modules/pos-delivery/add-products/views/delivery_add_products_screen.dart';
-import 'package:posdelivery/app/modules/pos-delivery/add-sales/bindings/delivery_add_sales_binding.dart';
-import 'package:posdelivery/app/modules/pos-delivery/add-sales/views/delivery_add_sales_screen.dart';
+import 'package:posdelivery/app/modules/add-product-offline/bindings/add_product_offline_binding.dart';
+import 'package:posdelivery/app/modules/add-product-offline/views/add_product_offline_view.dart';
+import 'package:posdelivery/app/modules/connect_printer/bindings/connect_printer_binding.dart';
+import 'package:posdelivery/app/modules/connect_printer/views/connect_printer_view.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-expenses/bindings/delivery_add_expenses_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-expenses/views/delivery_add_expenses_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-orders/bindings/delivery_orders_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-orders/views/delivery_orders_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-products-order/bindings/delivery_add_products_order_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-products-order/views/delivery_add_products_order_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-products-sales/bindings/delivery_add_products_sales_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-products-sales/views/delivery_add_products_sales_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-sales/bindings/delivery_sales_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/add-sales/views/delivery_sales_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-store-manually/bindings/delivery_add_store_manually_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/add-store-manually/views/delivery_add_store_manually_screen.dart';
-import 'package:posdelivery/app/modules/pos-delivery/add-store/bindings/delivery_add_store_binding.dart';
-import 'package:posdelivery/app/modules/pos-delivery/add-store/views/delivery_add_store_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/amount-transfer/bindings/delivery_amount_transfer_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/amount-transfer/views/delivery_amount_transfer_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/cash-register/bindings/delivery_cash_register_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/cash-register/views/delivery_cash_register_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/close-register/bindings/delivery_close_register_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/close-register/views/delivery_close_register_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/expenses/bindings/delivery_expenses_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/expenses/views/delivery_expenses_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/home/bindings/delivery_home_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/home/views/delivery_home_screen.dart';
-import 'package:posdelivery/app/modules/pos-delivery/invoice/bindings/delivery_invoice_binding.dart';
-import 'package:posdelivery/app/modules/pos-delivery/invoice/views/delivery_invoice_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/add-store/bindings/new_add_store_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/add-store/views/new_add_store_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/basket/bindings/new_basket_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/basket/views/new_basket_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/complete-sale/bindings/new_complete_sale_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/complete-sale/views/new_complete_sale_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/completed-payments/bindings/new_completed_payments_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/completed-payments/views/new_completed_payments_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/dashboard/bindings/new_dashboard_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/dashboard/views/new_dashboard_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/financial/bindings/new_financial_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/financial/views/new_financial_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/lock/bindings/new_lock_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/lock/views/new_lock_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/payment-history/bindings/new_pending_payments_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/payment-history/views/new_payment_history_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/pending-payments/bindings/new_pending_payments_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/pending-payments/views/new_pending_payments_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/print-invoice/bindings/new_print_invoice_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/print-invoice/views/new_print_invoice_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/qr-scanning/bindings/new_add_store_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/qr-scanning/views/new_qr_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/quotations/bindings/new_quotations_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/quotations/views/new_quotations_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/sales/bindings/new_sales_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/sales/views/new_sales_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/sales-list/bindings/new_sales_list_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/sales-list/views/new_sales_list_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/store/bindings/new_store_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/store/views/new_store_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/open-register/bindings/delivery_open_register_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/open-register/views/delivery_open_register_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/order-invoice/bindings/delivery_order_invoice_binding.dart';
@@ -41,8 +77,12 @@ import 'package:posdelivery/app/modules/pos-delivery/products-for-sales/bindings
 import 'package:posdelivery/app/modules/pos-delivery/products-for-sales/views/delivery_products_for_sales_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/register-history/bindings/delivery_register_history_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/register-history/views/delivery_register_history_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/sale-invoice/bindings/delivery_sale_invoice_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/sale-invoice/views/delivery_sale_invoice_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/sales-payment/bindings/delivery_sales_payment_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/sales-payment/views/delivery_sales_payment_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/select-store/bindings/delivery_select_store_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/select-store/views/delivery_select_store_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/splash/bindings/delivery_splash_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/splash/views/delvery_splash_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/store-details/bindings/delivery_store_details_binding.dart';
@@ -114,6 +154,83 @@ class AppPages {
   static const deliveryInitial = Routes.deliverySplash;
 
   static final routes = [
+    //new design
+    GetPage(
+      name: _Paths.newLock,
+      page: () => NewLockScreen(),
+      binding: NewLockScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newQr,
+      page: () => NewQRScreen(),
+      binding: NewQRScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newPaymentHistory,
+      page: () => NewPaymentHistoryScreen(),
+      binding: NewPaymentHistoryScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newFinancial,
+      page: () => NewFinancialScreen(),
+      binding: NewFinancialScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newCompletedPayments,
+      page: () => NewCompletedPaymentsScreen(),
+      binding: NewCompletedPaymentsScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newPendingPayments,
+      page: () => NewPendingPaymentsScreen(),
+      binding: NewPendingPaymentsScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newQuotations,
+      page: () => NewQuotationsScreen(),
+      binding: NewQuotationsScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newSalesList,
+      page: () => NewSalesListScreen(),
+      binding: NewSalesListScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newCompleteSale,
+      page: () => NewCompleteSaleScreen(),
+      binding: NewCompleteSaleScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newBasket,
+      page: () => NewBasketScreen(),
+      binding: NewBasketScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newStore,
+      page: () => NewStoreScreen(),
+      binding: NewStoreScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newSales,
+      page: () => NewSalesScreen(),
+      binding: NewSalesScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newAddStore,
+      page: () => NewAddStoreScreen(),
+      binding: NewAddStoreScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newDashboard,
+      page: () => NewDashboardScreen(),
+      binding: NewDashboardScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newPrintInvoice,
+      page: () => NewPrintInvoiceScreen(),
+      binding: NewPrintInvoiceScreenBinding(),
+    ),
+
     //pos-delivrey routes
     GetPage(
       name: _Paths.deliverySplash,
@@ -126,53 +243,53 @@ class AppPages {
       binding: DeliveryHomeScreenBinding(),
     ),
     GetPage(
-      name: _Paths.deliveryAddStoreManually,
+      name: _Paths.deliveryAddStore,
       page: () => DeliveryAddStoreManuallyScreen(),
       binding: DeliveryAddStoreManuallyScreenBinding(),
     ),
     GetPage(
-      name: _Paths.deliveryAddStore,
+      name: _Paths.deliverySelectStore,
       page: () => DeliveryAddStoreScreen(),
-      binding: DeliveryAddStoreScreenBinding(),
+      binding: DeliverySelectStoreScreenBinding(),
     ),
     GetPage(
       name: _Paths.deliveryStoreDetails,
-      page: () => DeliveryStoreDetailsScreen(),
+      page: () => const DeliveryStoreDetailsScreen(),
       binding: DeliveryStoreDetailsScreenBinding(),
     ),
     GetPage(
       name: _Paths.deliverySalesPayment,
-      page: () => DeliverySalesPaymentScreen(),
+      page: () => const DeliverySalesPaymentScreen(),
       binding: DeliverySalesPaymentScreenBinding(),
     ),
     GetPage(
-      name: _Paths.deliveryAddSales,
-      page: () => DeliveryAddSalesScreen(),
-      binding: DeliveryAddSalesScreenBinding(),
+      name: _Paths.deliverySales,
+      page: () => const DeliverySalesScreen(),
+      binding: DeliverySalesScreenBinding(),
     ),
     GetPage(
-      name: _Paths.deliveryAddProducts,
-      page: () => DeliveryAddProductsScreen(),
-      binding: DeliveryAddProductsScreenBinding(),
+      name: _Paths.deliveryAddProductsSales,
+      page: () => const DeliveryAddProductsSalesScreen(),
+      binding: DeliveryAddProductsSalesScreenBinding(),
     ),
     GetPage(
-      name: _Paths.deliveryInvoice,
-      page: () => DeliveryInvoiceScreen(),
-      binding: DeliveryInvoiceScreenBinding(),
+      name: _Paths.deliverySaleInvoice,
+      page: () => const DeliverySaleInvoiceScreen(),
+      binding: DeliverySaleInvoiceScreenBinding(),
     ),
     GetPage(
       name: _Paths.deliveryPaymentHome,
-      page: () => DeliveryPaymentHomeScreen(),
+      page: () => const DeliveryPaymentHomeScreen(),
       binding: DeliveryPaymentHomeScreenBinding(),
     ),
     GetPage(
       name: _Paths.deliveryPaymentDue,
-      page: () => DeliveryPaymentDueScreen(),
+      page: () => const DeliveryPaymentDueScreen(),
       binding: DeliveryPaymentDueScreenBinding(),
     ),
     GetPage(
       name: _Paths.deliveryPaymentInvoice,
-      page: () => DeliveryPaymentInvoiceScreen(),
+      page: () => const DeliveryPaymentInvoiceScreen(),
       binding: DeliveryPaymentInvoiceScreenBinding(),
     ),
     GetPage(
@@ -187,7 +304,7 @@ class AppPages {
     ),
     GetPage(
         name: _Paths.deliveryCashRegister,
-        page: () => DeliveryCashRegisterScreen(),
+        page: () => const DeliveryCashRegisterScreen(),
         binding: DeliveryCashRegisterScreenBinding()),
     GetPage(
         name: _Paths.deliveryOpenRegister,
@@ -207,11 +324,11 @@ class AppPages {
         binding: DeliveryPendingPaymentScreenBinding()),
     GetPage(
         name: _Paths.deliveryOrderPayment,
-        page: () => DeliveryOrderPaymentScreen(),
+        page: () => const DeliveryOrderPaymentScreen(),
         binding: DeliveryOrderPaymentScreenBinding()),
     GetPage(
         name: _Paths.deliveryOrderInvoice,
-        page: () => DeliveryOrderInvoiceScreen(),
+        page: () => const DeliveryOrderInvoiceScreen(),
         binding: DeliveryOrderInvoiceScreenBinding()),
     GetPage(
         name: _Paths.deliveryProductsForSales,
@@ -222,11 +339,34 @@ class AppPages {
         page: () => DeliveryProductsForOrdersScreen(),
         binding: DeliveryProductsForOrdersScreenBinding()),
     GetPage(
-        name: _Paths.deliveryAddOrders,
-        page: () => DeliveryAddOrdersScreen(),
-        binding: DeliveryAddOrdersScreenBinding()),
+        name: _Paths.deliveryOrders,
+        page: () => const DeliveryOrdersScreen(),
+        binding: DeliveryOrdersScreenBinding()),
+    GetPage(
+        name: _Paths.deliveryAddExpenses,
+        page: () => DeliveryAddExpensesScreen(),
+        binding: DeliveryAddExpensesScreenBinding()),
+    GetPage(
+        name: _Paths.deliveryExpenses,
+        page: () => DeliveryExpensesScreen(),
+        binding: DeliveryExpensesScreenBinding()),
+    GetPage(
+      name: _Paths.deliveryAddProductsOrder,
+      page: () => const DeliveryAddProductsOrderScreen(),
+      binding: DeliveryAddProductsOrderScreenBinding(),
+    ),
 
     //pos-desktop
+    GetPage(
+      name: _Paths.connectPrinter,
+      page: () => ConnectPrinterView(),
+      binding: ConnectPrinterBinding(),
+    ),
+    GetPage(
+      name: _Paths.addProductOffline,
+      page: () => AddProductOfflineView(),
+      binding: AddProductOfflineBinding(),
+    ),
     GetPage(
       name: _Paths.home,
       page: () => SplashScreen(),

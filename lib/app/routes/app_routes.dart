@@ -3,16 +3,33 @@ part of 'app_pages.dart';
 
 abstract class Routes {
   Routes._();
+  //new design
+  static const newAddStore = _Paths.newAddStore;
+  static const newDashboard = _Paths.newDashboard;
+  static const newStore = _Paths.newStore;
+  static const newSales = _Paths.newSales;
+  static const newBasket = _Paths.newBasket;
+  static const newCompleteSale = _Paths.newCompleteSale;
+  static const newSalesList = _Paths.newSalesList;
+  static const newQuotations = _Paths.newQuotations;
+  static const newPendingPayments = _Paths.newPendingPayments;
+  static const newCompletedPayments = _Paths.newCompletedPayments;
+  static const newFinancial = _Paths.newFinancial;
+  static const newPaymentHistory = _Paths.newPaymentHistory;
+  static const newQr = _Paths.newQr;
+  static const newLock = _Paths.newLock;
+  static const newPrintInvoice = _Paths.newPrintInvoice;
+
   //pos-delivery
   static const deliverySplash = _Paths.deliverySplash;
   static const deliveryHome = _Paths.deliveryHome;
+  static const deliverySelectStore = _Paths.deliverySelectStore;
   static const deliveryAddStore = _Paths.deliveryAddStore;
-  static const deliveryAddStoreManullay = _Paths.deliveryAddStoreManually;
   static const deliveryStoreDetails = _Paths.deliveryStoreDetails;
   static const deliverySalesPayment = _Paths.deliverySalesPayment;
-  static const deliveryAddSales = _Paths.deliveryAddSales;
-  static const deliveryAddProducts = _Paths.deliveryAddProducts;
-  static const deliveryInvoice = _Paths.deliveryInvoice;
+  static const deliverySales = _Paths.deliverySales;
+  static const deliveryAddProductsSales = _Paths.deliveryAddProductsSales;
+  static const deliverySaleInvoice = _Paths.deliverySaleInvoice;
   static const deliveryPaymentHome = _Paths.deliveryPaymentHome;
   static const deliveryPaymentDue = _Paths.deliveryPaymentDue;
   static const deliveryPaymentInvoice = _Paths.deliveryPaymentInvoice;
@@ -27,9 +44,14 @@ abstract class Routes {
   static const deliveryOrderInvoice = _Paths.deliveryOrderInvoice;
   static const deliveryProductsForSales = _Paths.deliveryProductsForSales;
   static const deliveryProductsForOrders = _Paths.deliveryProductsForOrders;
-  static const deliveryAddOrders = _Paths.deliveryAddOrders;
+  static const deliveryOrders = _Paths.deliveryOrders;
+  static const deliveryAddExpenses = _Paths.deliveryAddExpenses;
+  static const deliveryExpenses = _Paths.deliveryExpenses;
+  static const deliveryAddProductsOrder = _Paths.deliveryAddProductsOrder;
 
   //pos-desktop
+  static const connectPrinter = _Paths.connectPrinter;
+  static const addProductOffline = _Paths.addProductOffline;
   static const home = _Paths.home;
   static const login = _Paths.login;
   static const dashboard = _Paths.dashboard;
@@ -61,16 +83,33 @@ abstract class Routes {
 }
 
 abstract class _Paths {
+  //new design
+  static const newAddStore = '/new-addStore';
+  static const newDashboard = '/new-dashboard';
+  static const newStore = '/new-store';
+  static const newSales = '/new-sales';
+  static const newBasket = '/new-basket';
+  static const newCompleteSale = '/new-completeSale';
+  static const newSalesList = '/new-salesList';
+  static const newQuotations = '/new-quotations';
+  static const newPendingPayments = '/new-pendingPayments';
+  static const newCompletedPayments = '/new-completedPayments';
+  static const newFinancial = '/new-financial';
+  static const newPaymentHistory = '/new-paymentHistory';
+  static const newQr = '/new-qr';
+  static const newLock = '/new-lock';
+  static const newPrintInvoice = '/new-printInvoice';
+
   //pos-delivery routes
   static const deliverySplash = '/delivery-splash';
   static const deliveryHome = '/delivery-home';
-  static const deliveryAddStoreManually = '/delivery-addStoreManually';
   static const deliveryAddStore = '/delivery-addStore';
+  static const deliverySelectStore = '/delivery-selectStore';
   static const deliveryStoreDetails = '/delivery-storDetails';
   static const deliverySalesPayment = '/delivery-salesPayment';
-  static const deliveryAddSales = '/delivery-AddSales';
-  static const deliveryAddProducts = '/delivery-AddProducts';
-  static const deliveryInvoice = '/delivery-invoice';
+  static const deliverySales = '/delivery-sales';
+  static const deliveryAddProductsSales = '/delivery-addProductsSales';
+  static const deliverySaleInvoice = '/delivery-saleInvoice';
   static const deliveryPaymentHome = '/delivery-paymentHome';
   static const deliveryPaymentDue = '/delivery-paymentDue';
   static const deliveryPaymentInvoice = '/delivery-paymentInvoice';
@@ -85,8 +124,13 @@ abstract class _Paths {
   static const deliveryOrderInvoice = '/delivery-orderInvoice';
   static const deliveryProductsForSales = '/delivery-productsForSale';
   static const deliveryProductsForOrders = '/delivery-productsForOrders';
-  static const deliveryAddOrders = '/delivery-AddOrders';
+  static const deliveryOrders = '/delivery-orders';
+  static const deliveryAddExpenses = '/delivery-addExpenses';
+  static const deliveryExpenses = '/delivery-expenses';
+  static const deliveryAddProductsOrder = '/delivery-addProductsOrder';
 
+  static const connectPrinter = '/connect-printer';
+  static const addProductOffline = '/add-product-offline';
   static const home = '/splash';
   static const login = '/login';
   static const dashboard = '/dashboard';

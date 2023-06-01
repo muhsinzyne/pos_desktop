@@ -3,6 +3,7 @@ class SaleRequest {
   String? customer;
   String? warehouse;
   String? addItem;
+  String? due_date;
   List<String> productId = [];
   List<String> productType = [];
   List<String> productCode = [];
@@ -39,13 +40,196 @@ class SaleRequest {
   String? rPaidBy;
   String? totalItems;
   SaleRequest();
-  SaleRequest.fromJSON(Map<String, dynamic> parsedJson) {
-    test = parsedJson['test'];
+  SaleRequest.fromJson(Map<String, dynamic> json) {
+    test = json['test'];
+    customer = json['customer'];
+    warehouse = json['warehouse'];
+    due_date = json['due_date'];
+    addItem = json['addItem'];
+
+    if (json['product_id'] != null) {
+      productId = <String>[];
+      json['product_id'].forEach((v) {
+        productId.add(v);
+      });
+    }
+    if (json['product_type'] != null) {
+      productType = <String>[];
+      json['product_type'].forEach((v) {
+        productType.add(v);
+      });
+    }
+    if (json['product_code'] != null) {
+      productCode = <String>[];
+      json['product_code'].forEach((v) {
+        productCode.add(v);
+      });
+    }
+    if (json['product_name'] != null) {
+      productName = <String>[];
+      json['product_name'].forEach((v) {
+        productName.add(v);
+      });
+    }
+    if (json['product_option'] != null) {
+      productOption = <String>[];
+      json['product_option'].forEach((v) {
+        productOption.add(v);
+      });
+    }
+    if (json['product_comment'] != null) {
+      productComment = <String>[];
+      json['product_comment'].forEach((v) {
+        productComment.add(v);
+      });
+    }
+    if (json['serial'] != null) {
+      serial = <String>[];
+      json['serial'].forEach((v) {
+        serial.add(v);
+      });
+    }
+    if (json['product_discount'] != null) {
+      productDiscount = <String>[];
+      json['product_discount'].forEach((v) {
+        productDiscount.add(v);
+      });
+    }
+    if (json['product_tax'] != null) {
+      productTax = <String>[];
+      json['product_tax'].forEach((v) {
+        productTax.add(v);
+      });
+    }
+    if (json['net_price'] != null) {
+      netPrice = <String>[];
+      json['net_price'].forEach((v) {
+        netPrice.add(v);
+      });
+    }
+    if (json['unit_price'] != null) {
+      unitPrice = <String>[];
+      json['unit_price'].forEach((v) {
+        unitPrice.add(v);
+      });
+    }
+    if (json['real_unit_price'] != null) {
+      realUnitPrice = <String>[];
+      json['real_unit_price'].forEach((v) {
+        realUnitPrice.add(v);
+      });
+    }
+    if (json['quantity'] != null) {
+      quantity = <String>[];
+      json['quantity'].forEach((v) {
+        quantity.add(v);
+      });
+    }
+    if (json['product_unit'] != null) {
+      productUnit = <String>[];
+      json['product_unit'].forEach((v) {
+        productUnit.add(v);
+      });
+    }
+    if (json['product_base_quantity'] != null) {
+      productBaseQuantity = <String>[];
+      json['product_base_quantity'].forEach((v) {
+        productBaseQuantity.add(v);
+      });
+    }
+    biller = json['biller'];
+    posNote = json['pos_note'];
+    staffNote = json['staff_note'];
+    if (json['amount'] != null) {
+      amount = <String>[];
+      json['amount'].forEach((v) {
+        amount.add(v);
+      });
+    }
+    if (json['balance_amount'] != null) {
+      balanceAmount = <String>[];
+      json['balance_amount'].forEach((v) {
+        balanceAmount.add(v);
+      });
+    }
+    if (json['paid_by'] != null) {
+      paidBy = <String>[];
+      json['paid_by'].forEach((v) {
+        paidBy.add(v);
+      });
+    }
+    if (json['cc_no'] != null) {
+      ccNo = <String>[];
+      json['cc_no'].forEach((v) {
+        ccNo.add(v);
+      });
+    }
+    if (json['paying_gift_card_no'] != null) {
+      payingGiftCardNo = <String>[];
+      json['paying_gift_card_no'].forEach((v) {
+        payingGiftCardNo.add(v);
+      });
+    }
+    if (json['cc_holder'] != null) {
+      ccHolder = <String>[];
+      json['cc_holder'].forEach((v) {
+        ccHolder.add(v);
+      });
+    }
+    if (json['cheque_no'] != null) {
+      chequeNo = <String>[];
+      json['cheque_no'].forEach((v) {
+        chequeNo.add(v);
+      });
+    }
+    if (json['cheque_no'] != null) {
+      chequeNo = <String>[];
+      json['cheque_no'].forEach((v) {
+        chequeNo.add(v);
+      });
+    }
+    if (json['cc_month'] != null) {
+      ccMonth = <String>[];
+      json['cc_month'].forEach((v) {
+        ccMonth.add(v);
+      });
+    }
+    if (json['cc_year'] != null) {
+      ccYear = <String>[];
+      json['cc_year'].forEach((v) {
+        ccYear.add(v);
+      });
+    }
+    if (json['cc_type'] != null) {
+      ccType = <String>[];
+      json['cc_type'].forEach((v) {
+        ccType.add(v);
+      });
+    }
+    if (json['cc_cvv2'] != null) {
+      ccCvv2 = <String>[];
+      json['cc_cvv2'].forEach((v) {
+        ccCvv2.add(v);
+      });
+    }
+    if (json['paymnet_note'] != null) {
+      paymentNote = <String>[];
+      json['paymnet_note'].forEach((v) {
+        paymentNote.add(v);
+      });
+    }
+    orderTax = json['order_tax'];
+    discount = json['discount'];
+    discount = json['discount'];
+    shipping = json['shipping'];
+    rPaidBy = json['rpaidby'];
+    totalItems = json['total_items'];
   }
 
   Map<String, dynamic> toJson() => <String, dynamic>{
         'test': test,
         'customer': customer,
+        'due_date': due_date,
         'warehouse': warehouse,
         'add_item': addItem,
         'product_id': productId,

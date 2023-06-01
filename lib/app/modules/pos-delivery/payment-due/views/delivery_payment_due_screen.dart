@@ -2,16 +2,20 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:posdelivery/app/modules/pos-delivery/payment-due/controllers/delivery_payment_due_controller.dart';
 import 'package:posdelivery/app/ui/components/pos-delivery/text_field.dart';
 import 'package:posdelivery/app/ui/theme/app_colors.dart';
 import 'package:posdelivery/app/ui/theme/delivery_textStyle.dart';
 import 'package:posdelivery/models/constants.dart';
 
-class DeliveryPaymentDueScreen extends StatelessWidget {
+class DeliveryPaymentDueScreen
+    extends GetView<DeliveryPaymentDueScreenController> {
   const DeliveryPaymentDueScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: CustomScrollView(
@@ -118,18 +122,21 @@ class DeliveryPaymentDueScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Container(
-                      height: 85,
-                      width: double.infinity,
-                      color: AppColors.deliveryPrimary,
-                      child: Center(
-                          child: Text(
-                        "Confirm",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 25,
-                            fontWeight: FontWeight.w500),
-                      )),
+                    InkWell(
+                      onTap: controller.cacheOrInsert,
+                      child: Container(
+                        height: 85,
+                        width: double.infinity,
+                        color: AppColors.deliveryPrimary,
+                        child: Center(
+                            child: Text(
+                          "Confirm",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 25,
+                              fontWeight: FontWeight.w500),
+                        )),
+                      ),
                     ),
                   ]),
             ),

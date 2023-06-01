@@ -98,7 +98,7 @@ class RegisterCloseSummary {
         : null;
     expenses =
         json['expenses'] != null ? Returns.fromJson(json['expenses']) : null;
-    suspendedBills = json['suspended_bills'];
+    // suspendedBills = json['suspended_bills'];
     userId = json['user_id'];
     saleCount = json['sale_count'];
   }

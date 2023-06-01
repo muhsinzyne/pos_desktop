@@ -62,11 +62,24 @@ class Constants {
   static const Duration oneSecDuration = Duration(seconds: 1);
   static const Duration fourSec = Duration(seconds: 4);
   static const databaseFileName = 'pos_desktop.json';
-  static const productsStore = 'products_warehouse';
+  static const desktopAddSale = "desktop_add_sale";
+  //stores
+  static const productsStore = 'products_list';
   static const warehouseListStore = "warehouse_list";
   static const customerListStore = "customer_list";
-  static const customerGroupeStore = "customer_group";
-  static const warehouseProductsStore = "warehouse_products";
+  static const customerGroupeStore = "customer_group_list";
+  static const warehouseProductsStore = "warehouse_products_list";
+  static const productsOfflineStore = "products_offline_list";
+  static const expensesStore = 'expenses_list';
+
+  //pos-delivery
+  static const deliveryDatabaseFileName = 'pos_delivery.db';
+  static const deliveryAddStoreForm = 'add_store_form';
+  static const deliveryAddSaleForm = 'add_sale_form';
+  static const deliveryAddExpenseForm = 'add_expense_form';
+  static const deliveryAddOrderForm = 'add_order_form';
+  static const deliveryProductsSales = 'delivery_products_sales';
+  static const deliveryCartProducts = 'delivery_cart_products';
 
   static double screenHeight =
       window.physicalSize.height / window.devicePixelRatio;

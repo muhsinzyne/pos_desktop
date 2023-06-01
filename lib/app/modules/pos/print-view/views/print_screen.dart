@@ -58,7 +58,7 @@ class PrintScreen extends GetView<PrintScreenController> {
       ],
     ));
     List<TaxSummaryList> taxSummaryList = [];
-    for (Rows element in controller.invoiceResponse.value.rows) {
+    for (ProductRows element in controller.invoiceResponse.value.rows) {
       if (element.taxName != Constants.none || element.taxCode != null) {
         var taxIndex =
             taxSummaryList.indexWhere((tax) => tax.id == element.taxRateId);
@@ -362,7 +362,7 @@ class PrintScreen extends GetView<PrintScreenController> {
                                 itemCount: controller
                                     .invoiceResponse.value.rows.length,
                                 itemBuilder: (BuildContext context, int i) {
-                                  final Rows saleProduct =
+                                  final ProductRows saleProduct =
                                       controller.invoiceResponse.value.rows[i];
                                   var serialNo = (i + 1).toString();
                                   return ItemsListTile(

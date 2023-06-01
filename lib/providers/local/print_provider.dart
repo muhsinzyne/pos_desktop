@@ -200,7 +200,7 @@ class PrintProvider extends BasePrintProvider {
       bluetooth.printCustom("-------------------------------------", 0, 1);
       List<TaxSummaryList> taxSummaryList = [];
       for (int i = 0; i < invoiceResponse.rows.length; i++) {
-        Rows cRows = invoiceResponse.rows[i];
+        ProductRows cRows = invoiceResponse.rows[i];
         if (cRows.taxName != Constants.none || cRows.taxCode != null) {
           var taxIndex =
               taxSummaryList.indexWhere((tax) => tax.id == cRows.taxRateId);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:posdelivery/app/config/flavor/src/flavor.dart';
 import 'package:posdelivery/app/modules/auth/contracts.dart';
 import 'package:posdelivery/app/ui/components/ui_notification.dart';
