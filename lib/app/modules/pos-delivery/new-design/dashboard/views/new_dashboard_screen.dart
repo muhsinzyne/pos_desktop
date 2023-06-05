@@ -126,8 +126,7 @@ class NewDashboardScreen extends GetView<NewDashboardScreenController> {
                                               //   width: 2,
                                               // ),
                                               InkWell(
-                                                onTap: () => Get.toNamed(
-                                                    Routes.newFinancial),
+                                                onTap: controller.actionOnFinancialClick,
                                                 child: Material(
                                                   elevation: 5,
                                                   borderRadius:
@@ -147,14 +146,17 @@ class NewDashboardScreen extends GetView<NewDashboardScreenController> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Material(
-                                                elevation: 5,
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: DashboardItemBox(
-                                                    title: "Stock",
-                                                    icon:
-                                                        "assets/svg/truck.svg"),
+                                              InkWell(
+                                                onTap:()=>Get.toNamed(Routes.newStock),
+                                                child: Material(
+                                                  elevation: 5,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: DashboardItemBox(
+                                                      title: "Stock",
+                                                      icon:
+                                                          "assets/svg/truck.svg"),
+                                                ),
                                               ),
                                               // SizedBox(
                                               //   width: 2,

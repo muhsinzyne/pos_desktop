@@ -266,7 +266,7 @@ if(product !=null)
       if (searchCtrl.text.isEmpty) {
         results = productListTemp;
       } else {
-        results = filteredProducts
+        results = productListTemp
             .where((product) => product.label!
                 .toLowerCase()
                 .contains(searchCtrl.text.toLowerCase()))
