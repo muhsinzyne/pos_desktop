@@ -60,7 +60,7 @@ class CacheSembastDeliveryService extends BaseGetXService {
     );
     List<SaleRequest> result = [];
     for (var record in records) {
-      result.add(SaleRequest.fromJson(record.value));
+      result.add(SaleRequest.fromJson(record.value as Map<String, dynamic>));
     }
     return result;
   }
@@ -105,7 +105,7 @@ class CacheSembastDeliveryService extends BaseGetXService {
     StoreRef store = localStorage.getMapStore(Constants.deliveryCartProducts);
     Database? db = await localStorage.db;
     var record = await store.record(key).get(db!);
-    return CartProduct.fromJson(record);
+    return CartProduct.fromJson(record as Map<String, dynamic>);
   }
 
   Future getCartProductData(String key) async {
@@ -116,7 +116,7 @@ class CacheSembastDeliveryService extends BaseGetXService {
     logger.wtf(record);
     // var record = await store.record(key).get(db!);
     if (record != null) {
-      return CartProduct.fromJson(record.value);
+      return CartProduct.fromJson(record.value as Map<String, dynamic>);
     } else {
       return null;
     }
@@ -147,7 +147,7 @@ class CacheSembastDeliveryService extends BaseGetXService {
     );
     List<CartProduct> result = [];
     for (var record in records) {
-      result.add(CartProduct.fromJson(record.value));
+      result.add(CartProduct.fromJson(record.value as Map<String, dynamic>));
       // result.add(jsonEncode(record.value));
       // result.add(CartProduct.fromJson(record.value));
     }
@@ -161,7 +161,7 @@ class CacheSembastDeliveryService extends BaseGetXService {
     await db!.transaction((transaction) async {
       // await store.record(key).put(transaction, item.toJson())
       var id = await store.add(transaction, item.toJson());
-      item.key = id;
+      item.key = id as int;
       await store.record(id).put(transaction, item.toJson());
     });
     return item;
@@ -186,7 +186,8 @@ class CacheSembastDeliveryService extends BaseGetXService {
     );
     List<OrderAddRequest> result = [];
     for (var record in records) {
-      result.add(OrderAddRequest.fromJson(record.value));
+      result
+          .add(OrderAddRequest.fromJson(record.value as Map<String, dynamic>));
     }
     return result;
   }
@@ -215,7 +216,8 @@ class CacheSembastDeliveryService extends BaseGetXService {
     );
     List<ExpenseAddRequest> result = [];
     for (var record in records) {
-      result.add(ExpenseAddRequest.fromJson(record.value));
+      result.add(
+          ExpenseAddRequest.fromJson(record.value as Map<String, dynamic>));
     }
     return result;
   }
@@ -251,7 +253,8 @@ class CacheSembastDeliveryService extends BaseGetXService {
     );
     List<StoreAddRequest> result = [];
     for (var record in records) {
-      result.add(StoreAddRequest.fromJson(record.value));
+      result
+          .add(StoreAddRequest.fromJson(record.value as Map<String, dynamic>));
     }
     return result;
   }
@@ -306,7 +309,8 @@ class CacheSembastDeliveryService extends BaseGetXService {
     );
     List<WarehouseProductsResponse> result = [];
     for (var record in records) {
-      result.add(WarehouseProductsResponse.fromJson(record.value));
+      result.add(WarehouseProductsResponse.fromJson(
+          record.value as Map<String, dynamic>));
     }
     return result;
   }
@@ -344,7 +348,8 @@ class CacheSembastDeliveryService extends BaseGetXService {
     );
     List<WarehouseListResponse> result = [];
     for (var record in records) {
-      result.add(WarehouseListResponse.fromJson(record.value));
+      result.add(
+          WarehouseListResponse.fromJson(record.value as Map<String, dynamic>));
     }
     return result;
   }
@@ -367,7 +372,7 @@ class CacheSembastDeliveryService extends BaseGetXService {
     CustomerListOffResponse data;
     logger.e(record);
     //CustomerListOffResponse();
-    data = CustomerListOffResponse.fromJson(record);
+    data = CustomerListOffResponse.fromJson(record as Map<String, dynamic>);
     return data;
   }
 
@@ -382,7 +387,8 @@ class CacheSembastDeliveryService extends BaseGetXService {
     );
     List<CustomerListOffResponse> result = [];
     for (var record in records) {
-      result.add(CustomerListOffResponse.fromJson(record.value));
+      result.add(CustomerListOffResponse.fromJson(
+          record.value as Map<String, dynamic>));
     }
     return result;
   }
@@ -403,7 +409,7 @@ class CacheSembastDeliveryService extends BaseGetXService {
     Database? db = await localStorage.db;
     var record = await store.record(key).get(db!);
     // if (record != null) {
-    return Product.fromJson(record);
+    return Product.fromJson(record as Map<String, dynamic>);
     // }
     // else {
     //   return null;
@@ -421,7 +427,7 @@ class CacheSembastDeliveryService extends BaseGetXService {
     );
     List<Product> result = [];
     for (var record in records) {
-      result.add(Product.fromJson(record.value));
+      result.add(Product.fromJson(record.value as Map<String, dynamic>));
     }
     return result;
   }

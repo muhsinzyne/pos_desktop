@@ -56,7 +56,8 @@ class CacheSembastService extends BaseGetXService {
     );
     List<ExpenseAddRequest> result = [];
     for (var record in records) {
-      result.add(ExpenseAddRequest.fromJson(record.value));
+      result.add(
+          ExpenseAddRequest.fromJson(record.value as Map<String, dynamic>));
     }
     return result;
   }
@@ -82,7 +83,7 @@ class CacheSembastService extends BaseGetXService {
     );
     List<ProductOffline> result = [];
     for (var record in records) {
-      result.add(ProductOffline.fromJson(record.value));
+      result.add(ProductOffline.fromJson(record.value as Map<String, dynamic>));
     }
     return result;
   }
@@ -133,7 +134,8 @@ class CacheSembastService extends BaseGetXService {
     );
     List<WarehouseProductsResponse> result = [];
     for (var record in records) {
-      result.add(WarehouseProductsResponse.fromJson(record.value));
+      result.add(WarehouseProductsResponse.fromJson(
+          record.value as Map<String, dynamic>));
     }
     return result;
   }
@@ -171,7 +173,8 @@ class CacheSembastService extends BaseGetXService {
     );
     List<WarehouseListResponse> result = [];
     for (var record in records) {
-      result.add(WarehouseListResponse.fromJson(record.value));
+      result.add(
+          WarehouseListResponse.fromJson(record.value as Map<String, dynamic>));
     }
     return result;
   }
@@ -194,7 +197,7 @@ class CacheSembastService extends BaseGetXService {
     CustomerListOffResponse data;
     logger.e(record);
     //CustomerListOffResponse();
-    data = CustomerListOffResponse.fromJson(record);
+    data = CustomerListOffResponse.fromJson(record as Map<String, dynamic>);
     return data;
   }
 
@@ -209,7 +212,8 @@ class CacheSembastService extends BaseGetXService {
     );
     List<CustomerListOffResponse> result = [];
     for (var record in records) {
-      result.add(CustomerListOffResponse.fromJson(record.value));
+      result.add(CustomerListOffResponse.fromJson(
+          record.value as Map<String, dynamic>));
     }
     return result;
   }
@@ -247,7 +251,7 @@ class CacheSembastService extends BaseGetXService {
     );
     List<Product> result = [];
     for (var record in records) {
-      result.add(Product.fromJson(record.value));
+      result.add(Product.fromJson(record.value as Map<String, dynamic>));
     }
     return result;
   }
@@ -284,7 +288,7 @@ class CacheSembastService extends BaseGetXService {
     );
     List<SaleRequest> result = [];
     for (var record in records) {
-      result.add(SaleRequest.fromJson(record.value));
+      result.add(SaleRequest.fromJson(record.value as Map<String, dynamic>));
     }
     return result;
   }

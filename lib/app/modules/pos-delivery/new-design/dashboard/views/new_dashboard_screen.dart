@@ -110,7 +110,8 @@ class NewDashboardScreen extends GetView<NewDashboardScreenController> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               InkWell(
-                                                onTap: controller.actionOnStoreClick ,
+                                                onTap: controller
+                                                    .actionOnStoreClick,
                                                 child: Material(
                                                   elevation: 5,
                                                   borderRadius:
@@ -196,27 +197,30 @@ class NewDashboardScreen extends GetView<NewDashboardScreenController> {
                                               SizedBox(
                                                 width: 2,
                                               ),
-                                              Obx(
-                                                 () {
-                                                  return controller.isRegisterOpen.value? InkWell(
-                                                    onTap: () {
-
-                                                    },
-                                                    child: InkWell(
-                                                      onTap:controller.actionOnCloseRegisterClick,
-                                                      child: Material(
-                                                        elevation: 5,
-                                                        borderRadius:
-                                                            BorderRadius.circular(10),
-                                                        child: DashboardItemBox(
-                                                            title: "Close Register",
-                                                            icon:
-                                                                "assets/svg/quatations.svg"),
-                                                      ),
-                                                    ),
-                                                  ):Container();
-                                                }
-                                              )
+                                              Obx(() {
+                                                return controller
+                                                        .isRegisterOpen.value
+                                                    ? InkWell(
+                                                        onTap: () {},
+                                                        child: InkWell(
+                                                          onTap: controller
+                                                              .actionOnCloseRegisterClick,
+                                                          child: Material(
+                                                            elevation: 5,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                            child: DashboardItemBox(
+                                                                title:
+                                                                    "Close Register",
+                                                                icon:
+                                                                    "assets/svg/quatations.svg"),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : Container();
+                                              })
                                             ],
                                           ),
                                         ],
