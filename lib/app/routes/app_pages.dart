@@ -50,7 +50,9 @@ import 'package:posdelivery/app/modules/pos-delivery/new-design/qr-scanning/view
 import 'package:posdelivery/app/modules/pos-delivery/new-design/quotations/bindings/new_quotations_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/quotations/views/new_quotations_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/sales/bindings/new_sales_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/stock/bindings/new_stock_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/sales/views/new_sales_screen.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/stock/views/new_stock_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/sales-list/bindings/new_sales_list_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/sales-list/views/new_sales_list_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/store/bindings/new_store_binding.dart';
@@ -209,6 +211,11 @@ class AppPages {
       name: _Paths.newStore,
       page: () => NewStoreScreen(),
       binding: NewStoreScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newStock,
+      page: () => NewStockScreen(),
+      binding: NewStockScreenBinding(),
     ),
     GetPage(
       name: _Paths.newSales,

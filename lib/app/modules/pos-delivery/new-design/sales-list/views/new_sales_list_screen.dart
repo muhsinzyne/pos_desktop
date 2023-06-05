@@ -161,24 +161,24 @@ class NewSalesListScreen extends GetView<NewSalesListScreenController> {
                                           ? Colors.green
                                           : Colors.red,
                                       refNo: controller
-                                          .filteredSalesList[i].referenceNo!,
+                                          .filteredSalesList[i].referenceNo??'',
                                       amount:
-                                          controller.filteredSalesList[i].paid!,
+                                          controller.filteredSalesList[i].paid??'',
                                       date:
-                                          controller.filteredSalesList[i].date!,
+                                          controller.filteredSalesList[i].date??'',
                                       saleStatus: controller
-                                          .filteredSalesList[i].saleStatus!,
+                                          .filteredSalesList[i].saleStatus??'',
                                       storeName: controller
-                                          .filteredSalesList[i].customer!,
+                                          .filteredSalesList[i].customer??'',
                                       balance: controller
-                                          .filteredSalesList[i].balance!,
+                                          .filteredSalesList[i].balance??'',
                                       paid:
-                                          controller.filteredSalesList[i].paid!,
+                                          controller.filteredSalesList[i].paid??'',
                                       grandTotal: controller
-                                          .filteredSalesList[i].grandTotal!,
-                                      id: controller.filteredSalesList[i].id!,
+                                          .filteredSalesList[i].grandTotal??'',
+                                      id: controller.filteredSalesList[i].id??'',
                                       paymentStatus: controller
-                                          .filteredSalesList[i].paymentStatus!,
+                                          .filteredSalesList[i].paymentStatus??'',
                                     ),
                                     // StoreItem(
                                     //   name: controller

@@ -12,8 +12,10 @@ import 'package:posdelivery/app/modules/pos-delivery/add-store-manually/contract
 import 'package:posdelivery/app/modules/pos-delivery/new-design/add-store/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/basket/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/complete-sale/contracts.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/financial/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/sales-list/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/sales/contracts.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/stock/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/store/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/products-for-orders/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/products-for-sales/contracts.dart';
@@ -64,6 +66,8 @@ class DeliveryDataProvider extends BaseDataProvider {
 
   //new design
   late INewSalesScreenController newSalesCtrl;
+  late INewFinancialScreenController newFinancialCtrl;
+  late INewStockScreenController newStockCtrl;
   late INewSalePaymentController newSalePaymentCtrl;
   late INewCompleteSaleScreenController newCompleteSaleCtrl;
   late INewStoreScreenController newStoreCtrl;
@@ -94,11 +98,17 @@ class DeliveryDataProvider extends BaseDataProvider {
   ));
 
   //new design
+  set newFinancialCallBack(INewFinancialScreenController controller) {
+    newFinancialCtrl = controller;
+  }
   set newDashboardCallBack(INewDashboardScreenController controller) {
     newDashboardCtrl = controller;
   }
     set newSalesListCallBack(INewSalesListScreenController controller) {
     newSalesListCtrl = controller;
+  }
+  set newStockCallBack(INewStockScreenController controller) {
+    newStockCtrl = controller;
   }
 
   set newSalesCallBack(INewSalesScreenController controller) {
@@ -173,6 +183,63 @@ class DeliveryDataProvider extends BaseDataProvider {
 
   set printCtrlCallBack(IDeliverySaleInvoiceScreenController controller) {
     deliverySaleInvoiceCtrl = controller;
+  }
+  registerCloseSummaryFinancial(RegisterCloseSummaryRequest rReq) {
+    final obs = network
+        .get(NetworkURL.registerCloseSummary, queryParameters: rReq.toJson())
+        .asStream();
+    obs.listen((data) {
+      try {
+        RegisterCloseSummary rSummary =
+        RegisterCloseSummary.fromJson(data.data);
+        newFinancialCtrl.onRegisterCloseSummaryDone(rSummary);
+      } on Exception {
+        final ErrorMessage errMsg = ErrorMessage();
+        errMsg.message = 'register_not_opened'.tr;
+        newFinancialCtrl.onRegisterCloseSummaryError(errMsg);
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+      ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      // if (err.response.statusCode == StatusCodes.status404NotFound) {
+        newFinancialCtrl.onRegisterCloseSummaryError(errMsg);
+      // } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
+        //saleListCtrl.onSalesListResponseBadRequest(errMsg);
+      // }
+    });
+  }
+
+  getProductsStock(ProductListRequest productListRequest) {
+    final obs = network
+        .get(NetworkURL.products, queryParameters: productListRequest.toJson())
+        .asStream();
+    obs.listen((data) {
+      try {
+        List<Product> product = productFromJson(jsonEncode(data.data));
+        newStockCtrl.onProductListDone(product);
+        // deliveryProductForSaleCtrl.onProductListDone(product);
+      } on Exception {
+        logger.wtf("error 1");
+        final ErrorMessage errMsg = ErrorMessage();
+        errMsg.message = 'warehouse_not_loaded'.tr;
+      }
+    }, onError: (err) {
+      final ErrorMessage errMsg =
+      ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+      logger.wtf("error 2");
+      if (err.response.statusCode == StatusCodes.status404NotFound) {
+        newStockCtrl.onProductListError(errMsg);
+        // deliveryProductForOrderCtrl.onProductListError(errMsg);
+      } else if (err.response.statusCode == StatusCodes.status400BadRequest) {
+        logger.e("error 3");
+        newStockCtrl.onProductListError(errMsg);
+        // deliveryProductForOrderCtrl.onProductListError(errMsg);
+      } else {
+        logger.e("error 4");
+        newStockCtrl.onProductListError(errMsg);
+        // deliveryProductForOrderCtrl.onProductListError(errMsg);
+      }
+    });
   }
   closeRegister(CloseRegisterRequest closeRequest) {
     final obs = network
