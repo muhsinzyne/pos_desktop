@@ -34,7 +34,10 @@ class NewDashboardScreenController extends BaseGetXController
     implements INewDashboardScreenController {
   final TextEditingController openingBalanceInput =  TextEditingController();
 RxBool isRegisterOpen = false.obs;
+bool isOpeningStore = true;
 String registerId= '';
+  RegisterCloseSummary registerCloseSummaryData = RegisterCloseSummary();
+CurrentRegisterResponse? currentRegister;
   DeliveryDataProvider deliveryDataProvider = Get.find<DeliveryDataProvider>();
   OpenRegisterRequest openRegisterRequest = OpenRegisterRequest();
   RegisterCloseSummaryRequest registerCloseSummaryRequest = RegisterCloseSummaryRequest();
@@ -56,11 +59,41 @@ String registerId= '';
 
   actionOnCloseRegisterClick(){
     UINotification.showLoading();
-    registerCloseSummaryRequest.registerId = registerId;
+    registerCloseSummaryRequest.registerId = currentRegister!.id!;
     deliveryDataProvider.registerCloseSummary(registerCloseSummaryRequest);
 
   }
+  actionOnFinancialClick(){
+    isOpeningStore = false;
+    if(isRegisterOpen.value){
+      Get.toNamed(Routes.newFinancial);
+    }
+    else{
+      Get.defaultDialog(
+        contentPadding: EdgeInsets.all(10),
+        title: "Open Register",
+        confirm:  ElevatedButton(
+          onPressed:openRegister,
+          child: Text('Submit'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.deliveryPrimary80,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12), // <-- Radius
+            ),
+          ),
+        ),
+        content:Padding(
+          padding: const EdgeInsets.symmetric(horizontal:10,vertical:20),
+          child: TextFieldDelivery(
+            controller: openingBalanceInput,
+            hint: "Opening Balance",
+          ),
+        ),
+      );
+    }
+  }
   actionOnStoreClick(){
+    isOpeningStore = true;
     if(isRegisterOpen.value){
       Get.toNamed(Routes.newStore);
     }else{
@@ -99,7 +132,7 @@ closeRegisterDialogue(RegisterCloseSummary response){
     EdgeInsets.all(10),
     title: "Close Register",
     confirm: ElevatedButton(
-      onPressed:()=> closeRegister(response),
+      onPressed:()=> closeRegister(),
       child: Text('Submit'),
       style: ElevatedButton
           .styleFrom(
@@ -229,25 +262,32 @@ closeRegisterDialogue(RegisterCloseSummary response){
     ),
   );
 }
-closeRegister(RegisterCloseSummary response){
+closeRegister(){
   UINotification.showLoading();
   CloseRegisterRequest closeRegisterRequest = CloseRegisterRequest();
-  closeRegisterRequest.registerid = int.parse(registerId);
-  closeRegisterRequest.closeregister ='';
-  closeRegisterRequest.note='';
-  closeRegisterRequest.totalcash='0';
-  closeRegisterRequest.totalcashsubmitted='0';
-  closeRegisterRequest.totalccslips='0';
-  closeRegisterRequest.totalccslipssubmitted='0';
-  closeRegisterRequest.totalcheques='0';
-  closeRegisterRequest.totalchequessubmitted='0';
-  deliveryDataProvider.closeRegister(closeRegisterRequest);
+  if(currentRegister!=null){
+    closeRegisterRequest.registerid = int.parse(currentRegister!.id!);
+    closeRegisterRequest.closeregister ='';
+    closeRegisterRequest.note=currentRegister?.note??'';
+    closeRegisterRequest.totalcash=currentRegister?.totalCash??'0';
+    closeRegisterRequest.totalcashsubmitted=currentRegister?.totalCashSubmitted??'0';
+    closeRegisterRequest.totalccslips=currentRegister?.totalCcSlips??'0';
+    closeRegisterRequest.totalccslipssubmitted=currentRegister?.totalCcSlipsSubmitted??'0';
+    closeRegisterRequest.totalcheques=currentRegister?.totalCheques??'0';
+    closeRegisterRequest.totalchequessubmitted=currentRegister?.totalChequesSubmitted??'0';
+    Logger().w(closeRegisterRequest.toJson());
+    deliveryDataProvider.closeRegister(closeRegisterRequest);
+  }
 }
   @override
   onOpenRegisterDone(OpenRegisterResponse openRegisterResponse) {
     deliveryDataProvider.myRegisterSummary();
     UINotification.hideLoading();
-    Get.toNamed(Routes.newStore);
+    if(isOpeningStore){
+      Get.toNamed(Routes.newStore);
+    }else{
+      Get.toNamed(Routes.newFinancial);
+    }
   }
 
   @override
@@ -265,15 +305,15 @@ closeRegister(RegisterCloseSummary response){
   @override
   onCurrentRegisterResponseDone(CurrentRegisterResponse currentRegisterResponse) {
     UINotification.hideLoading();
-
-    registerId=currentRegisterResponse.id!;
+currentRegister = currentRegisterResponse;
     isRegisterOpen.value = true;
   }
 
   @override
   onRegisterCloseSummaryDone(RegisterCloseSummary rSummary) {
-    UINotification.hideLoading();
     Logger().w(rSummary.toJson());
+    deliveryDataProvider.myRegisterSummary();
+
     closeRegisterDialogue(rSummary);
   }
 
@@ -286,7 +326,7 @@ closeRegister(RegisterCloseSummary response){
   @override
   onCloseRegisterDone(CloseRegisterResponse closeRegisterResponse) {
     isRegisterOpen.value= false;
-    registerId = '';
+    currentRegister = null;
     UINotification.hideLoading();
     Get.back();
     Logger().w('closed');

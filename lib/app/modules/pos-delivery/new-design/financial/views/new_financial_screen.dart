@@ -249,32 +249,42 @@ class NewFinancialScreen extends GetView<NewFinancialScreenController> {
                                     ),
                                     padding: const EdgeInsets.only(
                                         right: 10, left: 10, top: 50),
-                                    child: Wrap(
-                                      spacing: 7,
-                                      runSpacing: 10,
-                                      // crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        FinancialItem(
-                                          text: "Cash in Hand",
-                                          color: AppColors.newPrimary,
-                                        ),
-                                        FinancialItem(
-                                          text: "Sales Value",
-                                          color: Colors.green,
-                                        ),
-                                        FinancialItem(
-                                            text: "Stock Value",
-                                            color: AppColors.newPrimary),
-                                        FinancialItem(
-                                            text: "Return Value",
-                                            color: Colors.red),
-                                        FinancialItem(
-                                            text: "Due Payment",
-                                            color: AppColors.newPrimary),
-                                        FinancialItem(
-                                            text: "Stores Served",
-                                            color: AppColors.newBlue),
-                                      ],
+                                    child: Obx(
+                                       () {
+                                        return Wrap(
+                                          spacing: 7,
+                                          runSpacing: 10,
+                                          // crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            FinancialItem(
+                                              text: "Cash in Hand",
+                                              value: controller.cashInHand.value,
+                                              color: AppColors.newPrimary,
+                                            ),
+                                            FinancialItem(
+                                              text: "Sales Value",
+                                              value: controller.salesValue.value,
+                                              color: Colors.green,
+                                            ),
+                                            FinancialItem(
+                                                text: "Stock Value",
+                                                value: controller.stockValue.value,
+                                                color: AppColors.newPrimary),
+                                            FinancialItem(
+                                                text: "Return Value",
+                                                value: controller.returnValue.value,
+                                                color: Colors.red),
+                                            FinancialItem(
+                                                text: "Due Payment",
+                                                value: controller.duePayment.value,
+                                                color: AppColors.newPrimary),
+                                            FinancialItem(
+                                                text: "Stores Served",
+                                                value: controller.storesServed.value,
+                                                color: AppColors.newBlue),
+                                          ],
+                                        );
+                                      }
                                     ),
                                   ),
                                 ),
@@ -296,9 +306,11 @@ class NewFinancialScreen extends GetView<NewFinancialScreenController> {
 class FinancialItem extends StatelessWidget {
   final Color color;
   final String text;
+  final String value;
   const FinancialItem({
     Key? key,
     required this.color,
+    required this.value,
     required this.text,
   }) : super(key: key);
 
@@ -328,7 +340,7 @@ class FinancialItem extends StatelessWidget {
           ),
           Container(
             child: Text(
-              "2523.22",
+              value,
               style: CustomTextStyle.mainTitle
                   .copyWith(fontSize: 17, color: AppColors.newPrimary),
             ),
