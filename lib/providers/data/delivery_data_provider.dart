@@ -13,6 +13,7 @@ import 'package:posdelivery/app/modules/pos-delivery/new-design/add-store/contra
 import 'package:posdelivery/app/modules/pos-delivery/new-design/basket/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/complete-sale/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/financial/contracts.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/profile/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/sales-list/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/sales/contracts.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/stock/contracts.dart';
@@ -64,7 +65,7 @@ class DeliveryDataProvider extends BaseDataProvider {
   // late IStoreAddController cAddCtrl;
   late IDashboardScreenController dashboardCtrl;
 
-  //new design
+  //symotion-prefix)a new design
   late INewSalesScreenController newSalesCtrl;
   late INewFinancialScreenController newFinancialCtrl;
   late INewStockScreenController newStockCtrl;
@@ -74,6 +75,7 @@ class DeliveryDataProvider extends BaseDataProvider {
   late INewStoreAddScreenController newStoreAddCtrl;
   late INewSalesListScreenController newSalesListCtrl;
   late INewDashboardScreenController newDashboardCtrl;
+  late INewProfileScreenController newProfileCtrl;
 
   //delivery
   late IDeliverySalePaymentController deliverySalePaymentCtrl;
@@ -98,6 +100,9 @@ class DeliveryDataProvider extends BaseDataProvider {
   ));
 
   //new design
+  set newProfileCallBack(INewProfileScreenController controller) {
+    newProfileCtrl = controller;
+  }
   set newFinancialCallBack(INewFinancialScreenController controller) {
     newFinancialCtrl = controller;
   }
@@ -183,6 +188,28 @@ class DeliveryDataProvider extends BaseDataProvider {
 
   set printCtrlCallBack(IDeliverySaleInvoiceScreenController controller) {
     deliverySaleInvoiceCtrl = controller;
+  }
+  getProfileInfo() {
+    final obs = network.get(NetworkURL.myInfo).asStream();
+    obs.listen(
+          (data) {
+        try {
+          MyInfoResponse myInfo = MyInfoResponse.fromJSON(data.data);
+          newProfileCtrl.onMyInfoResponseDone(myInfo);
+        } on Exception catch (e) {
+          final ErrorMessage errMsg = ErrorMessage();
+          errMsg.message = 'something went wrong';
+          newFinancialCtrl.onRegisterCloseSummaryError(errMsg);
+        }
+      },
+      onError: (err) {
+        if (err.response?.statusCode == StatusCodes.status401Unauthorized) {
+         final ErrorMessage errMsg =
+      ErrorMessage.fromJSON(jsonDecode(err.response.toString()));
+         newFinancialCtrl.onRegisterCloseSummaryError(errMsg);
+        }
+      },
+    );
   }
   registerCloseSummaryFinancial(RegisterCloseSummaryRequest rReq) {
     final obs = network

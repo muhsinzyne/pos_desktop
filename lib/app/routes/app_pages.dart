@@ -50,6 +50,8 @@ import 'package:posdelivery/app/modules/pos-delivery/new-design/qr-scanning/view
 import 'package:posdelivery/app/modules/pos-delivery/new-design/quotations/bindings/new_quotations_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/quotations/views/new_quotations_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/sales/bindings/new_sales_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/profile/bindings/new_profile_binding.dart';
+import 'package:posdelivery/app/modules/pos-delivery/new-design/profile/views/new_profile_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/stock/bindings/new_stock_binding.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/sales/views/new_sales_screen.dart';
 import 'package:posdelivery/app/modules/pos-delivery/new-design/stock/views/new_stock_screen.dart';
@@ -153,7 +155,7 @@ class AppPages {
   AppPages._();
 
   static const initial = Routes.home;
-  static const deliveryInitial = Routes.deliverySplash;
+  static const deliveryInitial = Routes.newProfile;
 
   static final routes = [
     //new design
@@ -226,6 +228,11 @@ class AppPages {
       name: _Paths.newAddStore,
       page: () => NewAddStoreScreen(),
       binding: NewAddStoreScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.newProfile,
+      page: () => NewProfileScreen(),
+      binding: NewProfileScreenBinding(),
     ),
     GetPage(
       name: _Paths.newDashboard,
